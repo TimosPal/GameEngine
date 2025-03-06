@@ -26,7 +26,7 @@ public:
 	void update();
 
 	// NOTE: This is slow due to sorting in O(N) time.
-	bool addComponent(std::unique_ptr<ComponentBase> component);
+	bool addComponent(std::unique_ptr<ComponentBase>&& component);
 
 	template<typename T>
 	ComponentBase* getComponent() {

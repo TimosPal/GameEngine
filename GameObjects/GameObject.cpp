@@ -34,7 +34,7 @@ void GameObject::update() {
 	}
 }
 
-bool GameObject::addComponent(std::unique_ptr<ComponentBase> component) {
+bool GameObject::addComponent(std::unique_ptr<ComponentBase>&& component) {
 	if (component == nullptr) {
 		return false;
 	}
