@@ -28,6 +28,8 @@ public:
 	// NOTE: This is slow due to sorting in O(N) time.
 	bool addComponent(std::unique_ptr<ComponentBase>&& component);
 
+	Identifier getInstanceID() const { return m_id; }
+
 	template<typename T>
 	ComponentBase* getComponent() {
 		Identifier id = Component<T>::getTypeID();
@@ -56,7 +58,7 @@ public:
 
 		// Remove from raw list. 
 		for (auto it = m_componentsRaw.begin(); it != m_componentsRaw.end(); ++it) {
-			if ((*it)->getID() == id) {
+			if ((*it)->getInstanceID() == id) {
 				m_componentsRaw.erase(it);
 				return true;
 			}
@@ -69,6 +71,7 @@ private:
 	std::vector<std::unique_ptr<ComponentBase>> m_componentsRaw;
 	std::unordered_map<Identifier, ComponentBase*> m_componentsDictionary;
 
+	Identifier m_id;
 };
 
 } // namespace GameObjects

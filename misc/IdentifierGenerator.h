@@ -6,27 +6,33 @@ namespace Engine
 
 using Identifier = int;
 
-template<typename>
+template<typename B>
 class IdentifierGenerator
 {
 public:
 
-	template<typename>
-    inline static Identifier getID() {
-		// Generate a unique id for each type
-		static Identifier id = generateID();
-		return id;
+    // Generate a unique ID for a specific type (e.g., ComponentA, ComponentB)
+    template<typename C = B>
+    inline static Identifier getTypeID() {
+        static Identifier id = generateTypeID();
+        return id;
+    }
+
+	// Generate a unique ID for each instance (e.g., GameObject1, GameObject2)
+    static Identifier getInstanceID() {
+        static Identifier id = 0;
+        return id++;
     }
 
 private:
-	IdentifierGenerator() = delete;
-	~IdentifierGenerator() = delete;
+    IdentifierGenerator() = delete;
+    ~IdentifierGenerator() = delete;
 
-	inline static Identifier generateID() {
-		static Identifier id = 0;
-		return id++;
-	}
-
+    // This generates unique type-based IDs for different types
+    inline static Identifier generateTypeID() {
+        static Identifier id = 0;
+        return id++;
+    }
 };
 
 }
