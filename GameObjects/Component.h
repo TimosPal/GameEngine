@@ -24,12 +24,12 @@ public:
 
    virtual void update() = 0;  
 
-   Identifier getID() const override {
+   inline Identifier getID() const override {
 	   // Returns the same value, but can be queried from polymorphic objects
 	   return Component<Derived>::getTypeID();
    }  
 
-   static Identifier getTypeID() {
+   inline static Identifier getTypeID() {
        return IdentifierGenerator<ComponentBase>::template getID<Derived>();
    }
 

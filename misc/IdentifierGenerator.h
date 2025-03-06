@@ -12,7 +12,7 @@ class IdentifierGenerator
 public:
 
 	template<typename>
-    static Identifier getID() {
+    inline static Identifier getID() {
 		// Generate a unique id for each type
 		static Identifier id = generateID();
 		return id;
@@ -22,7 +22,7 @@ private:
 	IdentifierGenerator() = delete;
 	~IdentifierGenerator() = delete;
 
-	static Identifier generateID() {
+	inline static Identifier generateID() {
 		static Identifier id = 0;
 		return id++;
 	}
