@@ -8,10 +8,12 @@ namespace GameObjects {
 
 class ComponentBase  
 {  
-public:  
-   virtual ~ComponentBase() = default;  
-   virtual void update() = 0;  
-   virtual Identifier getInstanceID() const = 0;  
+public:
+	virtual ~ComponentBase() = default;  
+
+	virtual void update() = 0;  
+	virtual Identifier getInstanceID() const = 0;  
+	virtual std::unique_ptr<ComponentBase> clone() const = 0;
 
 private:  
 };  
@@ -20,18 +22,22 @@ template<typename Derived>
 class Component : public ComponentBase  
 {  
 public:  
-   virtual ~Component() = default;  
 
-   virtual void update() = 0;  
+	inline Identifier getInstanceID() const override
+	{
+		// Returns the same value, but can be queried from polymorphic objects
+		return Component<Derived>::getTypeID();
+	}  
 
-   inline Identifier getInstanceID() const override {
-	   // Returns the same value, but can be queried from polymorphic objects
-	   return Component<Derived>::getTypeID();
-   }  
+	inline static Identifier getTypeID() 
+	{
+		return IdentifierGenerator<ComponentBase>::template getTypeID<Derived>();
+	}
 
-   inline static Identifier getTypeID() {
-       return IdentifierGenerator<ComponentBase>::template getTypeID<Derived>();
-   }
+	inline std::unique_ptr<ComponentBase> clone() const override
+	{
+		return std::make_unique<Derived>(static_cast<const Derived&>(*this));
+	}
 
 private:  
 };  

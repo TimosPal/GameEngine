@@ -20,8 +20,13 @@ class GameObject
 {
 public:
 	GameObject();
+	GameObject(const GameObject& other);
+	GameObject(GameObject&& other) noexcept;
 	GameObject(std::vector<std::unique_ptr<ComponentBase>>&& components);
 	~GameObject();
+	
+	GameObject& operator=(const GameObject& other);
+	bool operator==(const GameObject& other) const { return m_id == other.m_id; }
 
 	void update();
 
@@ -31,7 +36,8 @@ public:
 	Identifier getInstanceID() const { return m_id; }
 
 	template<typename T>
-	ComponentBase* getComponent() {
+	ComponentBase* getComponent()
+	{
 		Identifier id = Component<T>::getTypeID();
 			
 		auto it = m_componentsDictionary.find(id);
@@ -44,7 +50,8 @@ public:
 
 	// NOTE: This is slow due to O(N) search.
 	template<typename T>
-	bool removeComponent() {
+	bool removeComponent() 
+	{
 		Identifier id = Component<T>::getTypeID();
 
 		// Remove from dictionary.

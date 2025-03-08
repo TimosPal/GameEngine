@@ -9,6 +9,7 @@ file(GLOB SOURCES
     "GameEngine.cpp"
     "GameObjects/*.cpp"
     "GameObjects/*.h"
+    "misc/*.cpp"
     "misc/*.h"
 )
 

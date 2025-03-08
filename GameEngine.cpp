@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory> // Include memory header for std::unique_ptr
 
-#include "GameObjects/GameObject.h"
+#include "GameObjects/GameObjectManager.h"
 
 using namespace std;
 using namespace Engine;
@@ -15,7 +15,7 @@ public:
 	// Inherited via Component
 	void update() override
 	{
-		std::cout << getID() << std::endl;
+		std::cout << getInstanceID() << std::endl;
 	}
 };
 
@@ -27,32 +27,18 @@ public:
 	// Inherited via Component
 	void update() override
 	{
-		std::cout << getID() << std::endl;
+		std::cout << getInstanceID() << std::endl;
 	}
 };
 
 int main()
 {
-	{
-		std::vector<std::unique_ptr<Engine::GameObjects::ComponentBase>> components;
-		components.emplace_back(std::make_unique<Transform>());
-		components.emplace_back(std::make_unique<Transform2>());
-
-		GameObjects::GameObject obj(std::move(components));
-		obj.update();
-
-
-		obj.removeComponent<Transform>();
-		obj.addComponent(std::make_unique<Transform>());
-
-		obj.update();
-
-		obj.removeComponent<Transform>();
-
-		if (obj.getComponent<Transform>() == nullptr) {
-			std::cout << "Component not found" << std::endl;
-		}
-	}
+	GameObjects::GameObjectManager manager;
+	
+	std::vector<std::unique_ptr<Engine::GameObjects::ComponentBase>> components;
+	components.emplace_back(std::make_unique<Transform>());
+	components.emplace_back(std::make_unique<Transform2>());
+	manager.addGameObject(std::move(components));
 
 	return 0;
 }

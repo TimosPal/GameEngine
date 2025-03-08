@@ -13,7 +13,8 @@ public:
 
     // Generate a unique ID for a specific type (e.g., ComponentA, ComponentB)
     template<typename C = B>
-    inline static Identifier getTypeID() {
+    inline static Identifier getTypeID() 
+    {
         static Identifier id = generateTypeID();
         return id;
     }
@@ -29,7 +30,8 @@ private:
     ~IdentifierGenerator() = delete;
 
     // This generates unique type-based IDs for different types
-    inline static Identifier generateTypeID() {
+    inline static Identifier generateTypeID() 
+    {
         static Identifier id = 0;
         return id++;
     }
