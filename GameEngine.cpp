@@ -12,6 +12,11 @@ class Transform : public Engine::GameObjects::Component<Transform>
 public:
 	Transform() = default;
 
+	void start() override 
+	{
+		std::cout << "Init " << getInstanceID() << std::endl;
+	}
+
 	// Inherited via Component
 	void update() override
 	{
@@ -24,6 +29,11 @@ class Transform2 : public Engine::GameObjects::Component<Transform2>
 public:
 	Transform2() = default;
 
+	void start() override
+	{
+		std::cout << "Init " << getInstanceID() << std::endl;
+	}
+
 	// Inherited via Component
 	void update() override
 	{
@@ -34,10 +44,17 @@ public:
 int main()
 {
 	Engine::GameObjects::GameObjectManager gm;
-	auto t1 = std::make_unique<Transform>(Transform());
-	Engine::GameObjects::GameObject go(t1);
 
-	go.update();
+	Transform t1;
+	Transform2 t2;
+	
+	gm.addGameObject(t1, t2);
+	gm.addGameObject(t1);
+	gm.addGameObject(t2);
+	gm.addGameObject(t1, t2);
+
+
+	gm.upodateGameObjects();
 
 	return 0;
 }

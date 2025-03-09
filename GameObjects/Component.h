@@ -11,7 +11,9 @@ class ComponentBase
 public:
 	virtual ~ComponentBase() = default;  
 
-	virtual void update() = 0;  
+	virtual void update() {};
+	virtual void start() {};
+
 	virtual Identifier getInstanceID() const = 0;  
 	virtual std::unique_ptr<ComponentBase> clone() const = 0;
 

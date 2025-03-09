@@ -49,6 +49,7 @@ public:
 	GameObject& operator=(const GameObject& other);
 	bool operator==(const GameObject& other) const { return m_id == other.m_id; }
 
+	void start();
 	void update();
 
 	// NOTE: This is slow due to sorting in O(N) time.

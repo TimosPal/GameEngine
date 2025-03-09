@@ -52,7 +52,14 @@ GameObject& GameObject::operator=(const GameObject& other)
 	return *this;
 }
 
-void GameObject::update() 
+void GameObject::start()
+{
+	for (auto& component : m_componentsRaw) {
+		component->start();
+	}
+}
+
+void GameObject::update()
 {
 	// Components should already be in proper order of prefeared excecution.
 	// eg: consistent within objects.

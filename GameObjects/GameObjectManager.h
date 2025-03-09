@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "GameObject.h"
+#include "Component.h"
 
 namespace Engine {
 namespace GameObjects {
@@ -14,7 +15,14 @@ public:
 	GameObjectManager();
 	~GameObjectManager();
 
-	void addGameObject(GameObject&& gameObject);
+	template<typename... component>
+	void addGameObject(const component&... components)
+	{
+		GameObject go(std::make_unique<component>(components)...);
+		go.start();
+		m_gameObjects.emplace_back(std::move(go));
+	}
+
 	bool removeGameObject(const GameObject& gameObject);
 	void upodateGameObjects();
 

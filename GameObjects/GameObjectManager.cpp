@@ -13,10 +13,6 @@ GameObjectManager::~GameObjectManager()
 {
 }
 
-void GameObjectManager::addGameObject(GameObject&& gameObject)
-{
-}
-
 bool GameObjectManager::removeGameObject(const GameObject& gameObject)
 {
 	// Swap last element with current position then pop_back
