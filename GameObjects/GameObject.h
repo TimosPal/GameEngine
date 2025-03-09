@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H
 
 #include <unordered_map>
+#include <algorithm>
 #include <memory>
 
 #include "./Component.h"
@@ -22,7 +23,27 @@ public:
 	GameObject();
 	GameObject(const GameObject& other);
 	GameObject(GameObject&& other) noexcept;
-	GameObject(std::vector<std::unique_ptr<ComponentBase>>&& components);
+
+	template<typename... UniquePtr>
+	GameObject(UniquePtr&&... ptrs)
+		: m_id(IdentifierGenerator<GameObject>::getInstanceID())
+	{
+		(m_componentsRaw.emplace_back(std::move(ptrs)), ...);
+		std::sort(m_componentsRaw.begin(), m_componentsRaw.end(), 
+			[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
+			return a->getInstanceID() < b->getInstanceID();
+			});
+	
+		for (auto& component : m_componentsRaw) {
+			// Ensure component is not already in the dictionary.
+			if (m_componentsDictionary.find(component->getInstanceID()) != m_componentsDictionary.end()) {
+				continue;
+			}
+
+			m_componentsDictionary[component->getInstanceID()] = component.get();
+		}
+	}
+
 	~GameObject();
 	
 	GameObject& operator=(const GameObject& other);

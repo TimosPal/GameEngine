@@ -1,7 +1,6 @@
 #include "./GameObject.h"
 
-#include <algorithm>
-#include <memory> // Include memory header for std::make_unique
+#include <memory>
 
 #include <misc/IdentifierGenerator.h>
 
@@ -40,23 +39,6 @@ GameObject::GameObject(GameObject&& other) noexcept
 	m_componentsDictionary = std::move(other.m_componentsDictionary);
 }
 
-GameObject::GameObject(std::vector<std::unique_ptr<ComponentBase>>&& components)
-:
-	m_componentsRaw(std::move(components)),
-	m_id(IdentifierGenerator<GameObject>::getInstanceID())
-{
-	// Sort components by id.
-	std::sort(m_componentsRaw.begin(), m_componentsRaw.end(),
-		[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
-			return a->getInstanceID() < b->getInstanceID();
-		});
-
-	// Populate dictionary with component ids for fast lookup.
-	for (auto& component : m_componentsRaw) {
-		m_componentsDictionary[component->getInstanceID()] = component.get();
-	}
-}
-
 GameObject::~GameObject() {}
 
 GameObject& GameObject::operator=(const GameObject& other)
@@ -92,13 +74,13 @@ bool GameObject::addComponent(std::unique_ptr<ComponentBase>&& component)
 		return false;
 	}
 
+	m_componentsDictionary[component->getInstanceID()] = component.get();
+
 	// Find the correct insertion position to keep the vector sorted
 	auto it = std::lower_bound(m_componentsRaw.begin(), m_componentsRaw.end(), component,
 		[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
 			return a->getInstanceID() < b->getInstanceID();
 		});
-
-	m_componentsDictionary[component->getInstanceID()] = component.get();
 	// Insert the script at the found position
 	m_componentsRaw.insert(it, std::move(component));
 	

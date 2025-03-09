@@ -13,9 +13,8 @@ GameObjectManager::~GameObjectManager()
 {
 }
 
-void GameObjectManager::addGameObject(std::vector<std::unique_ptr<ComponentBase>>&& components)
+void GameObjectManager::addGameObject(GameObject&& gameObject)
 {
-	m_gameObjects.emplace_back(std::move(components));
 }
 
 bool GameObjectManager::removeGameObject(const GameObject& gameObject)

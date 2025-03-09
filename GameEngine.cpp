@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <vector>
-#include <memory> // Include memory header for std::unique_ptr
+#include <memory>
 
 #include "GameObjects/GameObjectManager.h"
 
@@ -33,12 +33,11 @@ public:
 
 int main()
 {
-	GameObjects::GameObjectManager manager;
-	
-	std::vector<std::unique_ptr<Engine::GameObjects::ComponentBase>> components;
-	components.emplace_back(std::make_unique<Transform>());
-	components.emplace_back(std::make_unique<Transform2>());
-	manager.addGameObject(std::move(components));
+	Engine::GameObjects::GameObjectManager gm;
+	auto t1 = std::make_unique<Transform>(Transform());
+	Engine::GameObjects::GameObject go(t1);
+
+	go.update();
 
 	return 0;
 }

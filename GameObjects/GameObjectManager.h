@@ -14,7 +14,7 @@ public:
 	GameObjectManager();
 	~GameObjectManager();
 
-	void addGameObject(std::vector<std::unique_ptr<ComponentBase>>&& components);
+	void addGameObject(GameObject&& gameObject);
 	bool removeGameObject(const GameObject& gameObject);
 	void upodateGameObjects();
 
@@ -22,7 +22,7 @@ private:
 	std::vector<GameObject> m_gameObjects;
 };
 
-}
-}
+} // namespace GameObjects
+} // namespace Engine
 
 #endif 
