@@ -24,11 +24,11 @@ public:
 	GameObject(const GameObject& other);
 	GameObject(GameObject&& other) noexcept;
 
-	template<typename... UniquePtr>
-	GameObject(UniquePtr&&... ptrs)
+	template<typename... Component>
+	GameObject(const Component&... components)
 		: m_id(IdentifierGenerator<GameObject>::getInstanceID())
 	{
-		(m_componentsRaw.emplace_back(std::move(ptrs)), ...);
+		(m_componentsRaw.emplace_back(std::make_unique<Component>(components)), ...);
 		std::sort(m_componentsRaw.begin(), m_componentsRaw.end(), 
 			[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
 			return a->getInstanceID() < b->getInstanceID();
@@ -53,7 +53,30 @@ public:
 	void update();
 
 	// NOTE: This is slow due to sorting in O(N) time.
-	bool addComponent(std::unique_ptr<ComponentBase>&& component);
+	template<typename Component>
+	bool addComponent(const Component& component)
+	{
+		std::unique_ptr<ComponentBase> comp_ptr = std::make_unique<Component>(component);
+		
+		// Check if component already exists.
+		int id = comp_ptr->getInstanceID();
+		if (m_componentsDictionary.find(id) != m_componentsDictionary.end())
+		{
+			return false;
+		}
+
+		m_componentsDictionary[id] = comp_ptr.get();
+
+		// Find the correct insertion position to keep the vector sorted
+		auto it = std::lower_bound(m_componentsRaw.begin(), m_componentsRaw.end(), comp_ptr,
+			[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
+				return a->getInstanceID() < b->getInstanceID();
+			});
+		// Insert the script at the found position
+		m_componentsRaw.insert(it, std::move(comp_ptr));
+
+		return true;
+	}
 
 	Identifier getInstanceID() const { return m_id; }
 

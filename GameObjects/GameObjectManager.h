@@ -15,10 +15,10 @@ public:
 	GameObjectManager();
 	~GameObjectManager();
 
-	template<typename... component>
-	void addGameObject(const component&... components)
+	template<typename... Component>
+	void addGameObject(const Component&... components)
 	{
-		GameObject go(std::make_unique<component>(components)...);
+		GameObject go(components...);
 		go.start();
 		m_gameObjects.emplace_back(std::move(go));
 	}
