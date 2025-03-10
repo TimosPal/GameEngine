@@ -20,10 +20,10 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE) # Force static linking
 
 # Add GLFW as a subdirectory
-add_subdirectory(${CMAKE_SOURCE_DIR}/external/glfw)
+add_subdirectory(external/glfw)
 
 # Link GameEngine with GLFW and OpenGL
-target_link_libraries(GameEngine PRIVATE glfw)
+target_link_libraries(GameEngine glfw)
 
 # Include directories
 target_include_directories(GameEngine PRIVATE
