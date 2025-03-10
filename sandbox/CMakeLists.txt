@@ -1,0 +1,10 @@
+# Define the sandbox executable
+add_executable(Sandbox main.cpp)
+
+# Link the GameEngine library to the Sandbox executable
+target_link_libraries(Sandbox PRIVATE GameEngine)
+
+# Include directories for Sandbox
+target_include_directories(Sandbox PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+)

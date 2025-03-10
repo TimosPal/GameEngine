@@ -1,24 +1,34 @@
 ﻿cmake_minimum_required(VERSION 3.12)
 
-# TODO: Hot reload support
+project(GameEngine)
 
-project ("GameEngine")
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find source files
-file(GLOB SOURCES 
-    "GameEngine.cpp"
-    "GameObjects/*.cpp"
-    "GameObjects/*.h"
-    "misc/*.cpp"
-    "misc/*.h"
-)
+# Recursively find all .cpp and .hpp files in src directory
+file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE ENGINE_HEADERS CONFIGURE_DEPENDS src/*.hpp)
+set(ENGINE_FILES ${ENGINE_SOURCES} ${ENGINE_HEADERS})
 
-# Add source to this project's executable.
-add_executable(GameEngine ${SOURCES})
+# Create GameEngine as a library
+add_library(GameEngine ${ENGINE_FILES})
 
-set_property(TARGET GameEngine PROPERTY CXX_STANDARD 20)
+# GLFW Build Options
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE) # Force static linking
 
+# Add GLFW as a subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/external/glfw)
+
+# Link GameEngine with GLFW and OpenGL
+target_link_libraries(GameEngine PRIVATE glfw)
+
+# Include directories
 target_include_directories(GameEngine PRIVATE
-    ${CMAKE_SOURCE_DIR}
-    # Add any other directories you need here
+    ${CMAKE_SOURCE_DIR}/src
 )
+
+# Add the Sandbox subdirectory
+add_subdirectory(sandbox)

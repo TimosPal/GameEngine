@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <misc/IdentifierGenerator.h>
+#include <Utility/IdentifierGenerator.h>
 
 namespace Engine {
 namespace GameObjects {

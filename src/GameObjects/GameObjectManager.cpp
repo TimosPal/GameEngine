@@ -13,6 +13,12 @@ GameObjectManager::~GameObjectManager()
 {
 }
 
+GameObject& GameObjectManager::createGameObject(const GameObject& obj)
+{
+	m_gameObjects.emplace_back(obj);
+	return m_gameObjects.back();
+}
+
 bool GameObjectManager::removeGameObject(const GameObject& gameObject)
 {
 	// Swap last element with current position then pop_back
@@ -22,7 +28,7 @@ bool GameObjectManager::removeGameObject(const GameObject& gameObject)
 		std::iter_swap(it, m_gameObjects.end() - 1);
 		m_gameObjects.pop_back();
 		return true;
-	}
+	} 
 
 	return false;
 }

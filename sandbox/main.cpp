@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 
-#include "GameObjects/GameObjectManager.h"
+#include <GameObjects/GameObjectManager.h>
 
 using namespace std;
 using namespace Engine;
@@ -41,25 +41,23 @@ public:
 	}
 };
 
-int main()
-{
+static void test() {
 	Engine::GameObjects::GameObjectManager gm;
 
 	Transform t1;
 	Transform2 t2;
-	
-	gm.addGameObject(t1, t2);
-	gm.addGameObject(t1);
-	gm.addGameObject(t2);
-	gm.addGameObject(t1, t2);
+
+	gm.createGameObject(t1, t2);
+
+	Engine::GameObjects::GameObject g1(t1);
+	gm.createGameObject(g1);
 
 	gm.upodateGameObjects();
+}
 
-	Engine::GameObjects::GameObject g1;
-	g1.addComponent(t1);
-	g1.update();
-	g1.removeComponent<Transform>();
-	g1.update();
+int main()
+{
+	test();
 
 	return 0;
 }

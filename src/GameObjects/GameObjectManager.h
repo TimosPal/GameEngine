@@ -15,8 +15,10 @@ public:
 	GameObjectManager();
 	~GameObjectManager();
 
+	GameObject& createGameObject(const GameObject& obj);
+
 	template<typename... Component>
-	void addGameObject(const Component&... components)
+	void createGameObject(const Component&... components)
 	{
 		GameObject go(components...);
 		go.start();
