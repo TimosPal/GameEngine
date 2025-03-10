@@ -1,42 +1,42 @@
-#ifndef COMPONENT_H  
-#define COMPONENT_H  
+#ifndef ICOMPONENT_H  
+#define ICOMPONENT_H  
 
 #include <Utility/IdentifierGenerator.h>
 
 namespace Engine {  
 namespace GameObjects {  
 
-class ComponentBase  
+class IComponentBase  
 {  
 public:
-	virtual ~ComponentBase() = default;  
+	virtual ~IComponentBase() = default;  
 
 	virtual void update() {};
 	virtual void start() {};
 
 	virtual Identifier getInstanceID() const = 0;  
-	virtual std::unique_ptr<ComponentBase> clone() const = 0;
+	virtual std::unique_ptr<IComponentBase> clone() const = 0;
 
 private:  
 };  
 
 template<typename Derived>  
-class Component : public ComponentBase  
+class IComponent : public IComponentBase  
 {  
 public:  
 
 	inline Identifier getInstanceID() const override
 	{
 		// Returns the same value, but can be queried from polymorphic objects
-		return Component<Derived>::getTypeID();
+		return IComponent<Derived>::getTypeID();
 	}  
 
 	inline static Identifier getTypeID() 
 	{
-		return IdentifierGenerator<ComponentBase>::template getTypeID<Derived>();
+		return IdentifierGenerator<IComponentBase>::template getTypeID<Derived>();
 	}
 
-	inline std::unique_ptr<ComponentBase> clone() const override
+	inline std::unique_ptr<IComponentBase> clone() const override
 	{
 		return std::make_unique<Derived>(static_cast<const Derived&>(*this));
 	}

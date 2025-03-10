@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "GameObject.h"
-#include "Component.h"
+#include "IComponent.h"
 
 namespace Engine {
 namespace GameObjects {
@@ -17,8 +17,8 @@ public:
 
 	GameObject& createGameObject(const GameObject& obj);
 
-	template<typename... Component>
-	void createGameObject(const Component&... components)
+	template<typename... IComponent>
+	void createGameObject(const IComponent&... components)
 	{
 		GameObject go(components...);
 		go.start();
