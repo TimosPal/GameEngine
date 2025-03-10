@@ -14,7 +14,7 @@ public:
 
 	void start() override 
 	{
-		//std::cout << "Init " << getInstanceID() << std::endl;
+		std::cout << "Init " << getInstanceID() << std::endl;
 	}
 
 	// Inherited via Component
@@ -31,7 +31,7 @@ public:
 
 	void start() override
 	{
-		//std::cout << "Init " << getInstanceID() << std::endl;
+		std::cout << "Init " << getInstanceID() << std::endl;
 	}
 
 	// Inherited via Component
@@ -53,7 +53,7 @@ int main()
 	gm.addGameObject(t2);
 	gm.addGameObject(t1, t2);
 
-	//gm.upodateGameObjects();
+	gm.upodateGameObjects();
 
 	Engine::GameObjects::GameObject g1;
 	g1.addComponent(t1);

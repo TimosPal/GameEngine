@@ -23,7 +23,7 @@ GameObject::GameObject(const GameObject& other)
 
 	// Populate dictionary with component ids for fast lookup.
 	for (auto& component : m_componentsRaw) {
-		m_componentsDictionary[component->getInstanceID()] = component.get();
+		m_componentsDictionary[component->getInstanceID()] = std::weak_ptr<ComponentBase>(component);
 	}
 }
 

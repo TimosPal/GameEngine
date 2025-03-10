@@ -30,8 +30,8 @@ public:
 	{
 		(m_componentsRaw.emplace_back(std::make_unique<Component>(components)), ...);
 		std::sort(m_componentsRaw.begin(), m_componentsRaw.end(), 
-			[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
-			return a->getInstanceID() < b->getInstanceID();
+			[](const std::shared_ptr<ComponentBase>& a, const std::shared_ptr<ComponentBase>& b) {
+				return a->getInstanceID() < b->getInstanceID();
 			});
 	
 		for (auto& component : m_componentsRaw) {
@@ -40,7 +40,7 @@ public:
 				continue;
 			}
 
-			m_componentsDictionary[component->getInstanceID()] = component.get();
+			m_componentsDictionary[component->getInstanceID()] = std::weak_ptr<ComponentBase>(component);
 		}
 	}
 
@@ -56,7 +56,7 @@ public:
 	template<typename Component>
 	bool addComponent(const Component& component)
 	{
-		std::unique_ptr<ComponentBase> comp_ptr = std::make_unique<Component>(component);
+		std::shared_ptr<ComponentBase> comp_ptr = std::make_shared<Component>(component);
 		
 		// Check if component already exists.
 		int id = comp_ptr->getInstanceID();
@@ -65,11 +65,11 @@ public:
 			return false;
 		}
 
-		m_componentsDictionary[id] = comp_ptr.get();
+		m_componentsDictionary[id] = std::weak_ptr<ComponentBase>(comp_ptr);
 
 		// Find the correct insertion position to keep the vector sorted
 		auto it = std::lower_bound(m_componentsRaw.begin(), m_componentsRaw.end(), comp_ptr,
-			[](const std::unique_ptr<ComponentBase>& a, const std::unique_ptr<ComponentBase>& b) {
+			[](const std::shared_ptr<ComponentBase>& a, const std::shared_ptr<ComponentBase>& b) {
 				return a->getInstanceID() < b->getInstanceID();
 			});
 		// Insert the script at the found position
@@ -81,7 +81,7 @@ public:
 	Identifier getInstanceID() const { return m_id; }
 
 	template<typename T>
-	ComponentBase* getComponent()
+	std::weak_ptr<ComponentBase> getComponent()
 	{
 		Identifier id = Component<T>::getTypeID();
 			
@@ -120,8 +120,8 @@ public:
 	}
 
 private:
-	std::vector<std::unique_ptr<ComponentBase>> m_componentsRaw;
-	std::unordered_map<Identifier, ComponentBase*> m_componentsDictionary;
+	std::vector<std::shared_ptr<ComponentBase>> m_componentsRaw;
+	std::unordered_map<Identifier, std::weak_ptr<ComponentBase>> m_componentsDictionary;
 
 	Identifier m_id;
 };
