@@ -10,6 +10,7 @@ public:
     virtual ~IWindow() = default;
 
     virtual bool Init() = 0;
+    virtual void Terminate() {};
 
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height;}

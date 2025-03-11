@@ -5,18 +5,18 @@
 #include "Application.h"
 
 #define CREATE_APPLICATION(AppClass, Config) \
-    Engine::Application* createApplication() { return new AppClass(Config); }
+    std::unique_ptr<Engine::Application> createApplication() { return std::make_unique<AppClass>(Config); }
 
-extern Engine::Application* createApplication();
+extern std::unique_ptr<Engine::Application> createApplication();
 
 using namespace std;
 using namespace Engine;
 
 int main()
 {
-	Engine::Application* app = createApplication();
+	auto app = createApplication();
 	app->Init();
-	delete app;
+	app->Terminate();
 
 	return 0;
 }

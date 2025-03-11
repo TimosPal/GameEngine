@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include <memory>
-#include <Core/GLFWWindow.h>
+#include <Window/GLFWWindow.h>
 
 namespace Engine {
 
@@ -13,8 +13,13 @@ Application::~Application() {}
 
 void Application::Init()
 {
-	std::unique_ptr<IWindow> window = std::make_unique<GLFWWindow>(m_config.width, m_config.height, m_config.title);
-	window->Init();
+	m_window = std::make_unique<GLFWWindow>(m_config.width, m_config.height, m_config.title);
+	m_window->Init();
+}
+
+void Application::Terminate()
+{
+	m_window->Terminate();
 }
 
 } // Engine
