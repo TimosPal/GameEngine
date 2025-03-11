@@ -2,6 +2,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+
 namespace Engine {
 
 // TODO: refactor
@@ -16,11 +18,12 @@ GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 
 bool GLFWWindow::Init()
 {
+	std::cout << "Creating window: " << m_title << std::endl;
+
 	glfwSetErrorCallback(error_callback);
-	GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(m_width, m_height, m_title.c_str(), NULL, NULL);
 	if (!window)
 	{
-		// Window or OpenGL context creation failed
 		return false;
 	}
 

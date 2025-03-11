@@ -1,5 +1,5 @@
 # Define the sandbox executable
-add_executable(Sandbox main.cpp)
+add_executable(Sandbox "test.cpp")
 
 # Link the GameEngine library to the Sandbox executable
 target_link_libraries(Sandbox PRIVATE GameEngine)
