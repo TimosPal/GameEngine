@@ -21,9 +21,10 @@ set(GLFW_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE) # Force static linking
 
 # Add GLFW as a subdirectory
 add_subdirectory(external/glfw)
+add_subdirectory(external/spdlog)
 
 # Link GameEngine with GLFW and OpenGL
-target_link_libraries(GameEngine glfw)
+target_link_libraries(GameEngine PUBLIC glfw spdlog::spdlog)
 
 # Include directories
 target_include_directories(GameEngine PRIVATE
