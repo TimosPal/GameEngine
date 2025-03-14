@@ -16,6 +16,7 @@ public:
 	~Application();
 
 	void Init();
+	void Run();
 	void Terminate();
 
 private:

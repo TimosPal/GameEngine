@@ -16,6 +16,7 @@ int main()
 {
 	auto app = createApplication();
 	app->Init();
+	app->Run();
 	app->Terminate();
 
 	return 0;

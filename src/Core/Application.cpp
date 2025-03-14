@@ -17,6 +17,15 @@ void Application::Init()
 	m_window->Init();
 }
 
+void Application::Run()
+{
+	while (!m_window->ShouldClose())
+	{
+
+		m_window->PollEvents();
+	}
+}
+
 void Application::Terminate()
 {
 	m_window->Terminate();

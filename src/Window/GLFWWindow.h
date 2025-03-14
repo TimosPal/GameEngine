@@ -14,10 +14,13 @@ public:
 	GLFWWindow(int width, int height, const std::string& title);
 
 	bool Init() override;
+	void PollEvents() override;
+	bool ShouldClose() override;
 	void Terminate() override;
 
 private:
 	GLFWwindow* m_window;
+
 };
 
 } // Engine

@@ -34,6 +34,7 @@ bool GLFWWindow::Init()
 		return false;
 	}
 
+	m_isActive = true;
 	return true;
 }
 
@@ -42,6 +43,18 @@ void GLFWWindow::Terminate()
 	Logger::log_info("Closing window " + m_title);
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
+
+	m_isActive = false;
+}
+
+void GLFWWindow::PollEvents()
+{
+	glfwPollEvents();
+}
+
+bool GLFWWindow::ShouldClose()
+{
+	return glfwWindowShouldClose(m_window);
 }
 
 } // Engine
