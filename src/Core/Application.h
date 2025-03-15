@@ -8,7 +8,6 @@
 
 namespace Engine {
 
-
 class Application
 {
 public:
@@ -18,6 +17,9 @@ public:
 	void Init();
 	void Run();
 	void Terminate();
+
+	// Use this method for custom app startup configurations.
+	virtual void Start() {}
 
 private:
 	Configuration m_config;

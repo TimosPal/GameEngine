@@ -3,6 +3,8 @@
 #include <memory>
 #include <Window/GLFWWindow.h>
 
+#include <Utility/Logger.h>
+
 namespace Engine {
 
 Application::Application(const Configuration& config)

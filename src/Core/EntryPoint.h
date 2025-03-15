@@ -3,9 +3,10 @@
 #include <memory>
 
 #include "Application.h"
+#include <Utility/Logger.h>
 
-#define CREATE_APPLICATION(AppClass, Config) \
-    std::unique_ptr<Engine::Application> createApplication() { return std::make_unique<AppClass>(Config); }
+#define CREATE_APPLICATION(AppClass) \
+    std::unique_ptr<Engine::Application> createApplication() { return std::make_unique<AppClass>(); }
 
 extern std::unique_ptr<Engine::Application> createApplication();
 
@@ -16,6 +17,7 @@ int main()
 {
 	auto app = createApplication();
 	app->Init();
+	app->Start();
 	app->Run();
 	app->Terminate();
 

@@ -1,3 +1,5 @@
 1) Could change IWindow to be polymorphic template to reduce overhead of virtual calls.
 2) Same for application (?)
 3) Same for logger (?)
+4) Code own window lib (?)
+5) Change from int to specific types (?)
