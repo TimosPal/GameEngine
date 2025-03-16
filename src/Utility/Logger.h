@@ -13,11 +13,6 @@ namespace Engine {
 class Logger {
 public:
 
-    Logger()
-    {
-        spdlog::set_pattern("%^[%l]%$ %v");
-    }
-
     static Logger& getInstance()
     {
         static Logger instance;
@@ -33,7 +28,7 @@ public:
 
     template <typename... Args>
     inline void logError(std::format_string<Args...> message, Args&&... args)
-{
+    {
         std::string formatted_message = std::format(message, std::forward<Args>(args)...);
         spdlog::error(formatted_message);
     }
@@ -47,9 +42,16 @@ public:
 
     template <typename... Args>
     inline void logCritical(std::format_string<Args...> message, Args&&... args)
-{
+    {
         std::string formatted_message = std::format(message, std::forward<Args>(args)...);
         spdlog::critical(formatted_message);
+    }
+
+private:
+
+    Logger()
+    {
+        spdlog::set_pattern("%^[%l]%$ %v");
     }
 
 };

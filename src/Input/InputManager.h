@@ -5,18 +5,41 @@
 #include <string>
 
 #include "Action.h"
+#include "KeyState.h"
 
 namespace Engine {
 
 class InputManager
 {
 public:
-	static bool registerAction(const Action& action);
-	static Action getAction(const std::string& actionName);
-	static std::vector<Action> getActions();
+	static InputManager& getInstance()
+	{
+		static InputManager instance;
+		return instance;
+	}
+
+	bool registerAction(const Action& action);
+	Action getAction(const std::string& actionName);
+	std::vector<Action> getActions();
+
+	bool isKeyPressed(KeyCode key);
+	bool isKeyReleased(KeyCode key);
+	bool isKeyDown(KeyCode key);
+
+	void onKeyEvent(KeyCode key, KeyState::Type action);
+	void resetReleasedKeys();
+	void setHoldKeys();
 
 private:
-	static std::unordered_map<std::string, Action> m_registeredActions;
+	InputManager() {}
+
+	KeyState& getKeyState(KeyCode key);
+
+	std::unordered_map<std::string, Action> m_registeredActions;
+
+	std::unordered_map <KeyCode, KeyState> m_keyStates;
+	std::vector<KeyState*> m_activeKeys;
+
 };
 
 } // Engine

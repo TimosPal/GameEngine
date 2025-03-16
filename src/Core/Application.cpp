@@ -4,6 +4,7 @@
 #include <Window/GLFWWindow.h>
 
 #include <Utility/Logger.h>
+#include <Input/InputManager.h>
 
 namespace Engine {
 
@@ -23,8 +24,16 @@ void Application::Run()
 {
 	while (!m_window->ShouldClose())
 	{
-
+		InputManager::getInstance().resetReleasedKeys();
+		InputManager::getInstance().setHoldKeys();
 		m_window->PollEvents();
+
+		if (InputManager::getInstance().isKeyPressed(Key::B))
+			LOG_INFO("pressed");
+		if (InputManager::getInstance().isKeyDown(Key::B))
+			LOG_INFO("hold");
+		if (InputManager::getInstance().isKeyReleased(Key::B))
+			LOG_INFO("release");
 	}
 }
 

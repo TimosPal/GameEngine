@@ -1,14 +1,34 @@
 #include "GLFWWindow.h"
 
 #include <Utility/Logger.h>
+#include <Input/InputManager.h>
 
 #include <iostream>
 
 namespace Engine {
 
-static void error_callback(int error, const char* description)
+static void errorCallback(int error, const char* description)
 {
 	LOG_CRITICAL("Error: {}", std::string(description));
+}
+
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	KeyState::Type stateType;
+	switch (action)
+	{
+	case GLFW_PRESS:
+		stateType = KeyState::Type::Pressed;
+		break;
+	case GLFW_RELEASE:
+		stateType = KeyState::Type::Released;
+		break;
+	default:
+		stateType = KeyState::Type::NotPressed;
+		break;
+	}
+
+	InputManager::getInstance().onKeyEvent(key, stateType);
 }
 
 GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
@@ -25,12 +45,14 @@ bool GLFWWindow::Init()
 		return false;
 	}
 
-	glfwSetErrorCallback(error_callback);
+	glfwSetErrorCallback(errorCallback);
 	m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), NULL, NULL);
 	if (!m_window)
 	{
 		return false;
 	}
+
+	glfwSetKeyCallback(m_window, keyCallback);
 
 	m_isActive = true;
 	return true;

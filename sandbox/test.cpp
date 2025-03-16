@@ -13,15 +13,6 @@ public:
 
 	void Start() override
 	{
-		InputManager::registerAction(Action("MoveUP", Key::Up));
-		InputManager::registerAction(Action("MoveDown", Key::Down));
-		InputManager::registerAction(Action("MoveLeft", Key::Left));
-		InputManager::registerAction(Action("MoveRight", Key::Right));
-
-		for (const auto& i : InputManager::getActions())
-		{
-			LOG_INFO("{} -> {}", i.name, i.keyCodeID);
-		}
 	}
 };
 

@@ -1,8 +1,10 @@
 #include "InputManager.h"
 
-namespace Engine {
+#include "Utility/Logger.h"
 
-std::unordered_map<std::string, Action> InputManager::m_registeredActions;
+#include <GLFW/glfw3.h>
+
+namespace Engine {
 
 bool InputManager::registerAction(const Action& action)
 {
@@ -37,6 +39,74 @@ std::vector<Action> InputManager::getActions()
 	}
 
 	return actions;
+}
+
+bool InputManager::isKeyPressed(KeyCode key)
+{
+	KeyState& state = getKeyState(key);
+	return state.type == KeyState::Type::Pressed;
+}
+
+bool InputManager::isKeyReleased(KeyCode key)
+{
+	KeyState& state = getKeyState(key);
+	return state.type == KeyState::Type::Released;
+}
+
+bool InputManager::isKeyDown(KeyCode key)
+{
+	KeyState& state = getKeyState(key);
+	return state.type == KeyState::Type::Pressed || state.type == KeyState::Type::Hold;
+}
+
+KeyState& InputManager::getKeyState(KeyCode key)
+{
+	auto [it, inserted] = m_keyStates.try_emplace(key, KeyState()); // Inserts only if missing
+	return it->second;
+}
+
+void InputManager::setHoldKeys()
+{
+	for (auto state : m_activeKeys)
+	{
+		if (state->type == KeyState::Type::Pressed)
+		{
+			state->type = KeyState::Type::Hold;
+		}
+	}
+}
+
+void InputManager::resetReleasedKeys() // TODO: can be done faster. (Slow removal)
+{
+	for (auto it = m_activeKeys.begin(); it != m_activeKeys.end(); )
+	{
+		if ((*it)->type == KeyState::Type::Released)
+		{
+			(*it)->type = KeyState::Type::NotPressed;
+			it = m_activeKeys.erase(it); // Erase returns the next valid iterator
+		}
+		else
+		{
+			++it; // Only increment if not erasing
+		}
+	}
+}
+
+void InputManager::onKeyEvent(KeyCode key, KeyState::Type action)
+{
+	KeyState& state = getKeyState(key);
+	switch (action)
+	{
+	case KeyState::Type::Pressed:
+		state.type = KeyState::Type::Pressed;
+		m_activeKeys.push_back(&state);
+		break;
+	case KeyState::Type::Released:
+		state.type = KeyState::Type::Released;
+		break;
+	default:
+		break;
+	}
 }
 
 } // Engine
