@@ -22,16 +22,21 @@ public:
 	Action getAction(const std::string& actionName);
 	std::vector<Action> getActions();
 
+	bool isActionTriggered(const Action& action);
+
 	bool isKeyPressed(KeyCode key);
 	bool isKeyReleased(KeyCode key);
 	bool isKeyDown(KeyCode key);
 
 	void onKeyEvent(KeyCode key, KeyState::Type action);
-	void resetReleasedKeys();
-	void setHoldKeys();
+
+	void update();
 
 private:
 	InputManager() {}
+
+	void resetReleasedKeys();
+	void setHoldKeys();
 
 	KeyState& getKeyState(KeyCode key);
 

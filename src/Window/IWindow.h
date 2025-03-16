@@ -9,8 +9,8 @@ class IWindow {
 public:
     virtual ~IWindow() = default;
 
-    virtual bool Init() = 0;
-    virtual void Terminate() = 0;
+    virtual bool init() = 0;
+    virtual void terminate() = 0;
     virtual void PollEvents() = 0;
     virtual bool ShouldClose() = 0;
 

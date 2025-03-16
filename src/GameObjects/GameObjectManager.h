@@ -26,7 +26,7 @@ public:
 	}
 
 	bool removeGameObject(const GameObject& gameObject);
-	void upodateGameObjects();
+	void updateGameObjects();
 
 private:
 	std::vector<GameObject> m_gameObjects;

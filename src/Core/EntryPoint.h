@@ -16,10 +16,10 @@ using namespace Engine;
 int main()
 {
 	auto app = createApplication();
-	app->Init();
-	app->Start();
-	app->Run();
-	app->Terminate();
+	app->init();
+	app->start();
+	app->run();
+	app->terminate();
 
 	return 0;
 }

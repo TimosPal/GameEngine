@@ -35,7 +35,7 @@ GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 	: IWindow(width, height, title), m_window(nullptr)
 {}
 
-bool GLFWWindow::Init()
+bool GLFWWindow::init()
 {
 	LOG_INFO("Creating window {}", m_title);
 
@@ -58,7 +58,7 @@ bool GLFWWindow::Init()
 	return true;
 }
 
-void GLFWWindow::Terminate()
+void GLFWWindow::terminate()
 {
 	LOG_INFO("Closing window {}", m_title);
 	glfwDestroyWindow(m_window);

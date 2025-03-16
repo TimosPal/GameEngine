@@ -33,7 +33,7 @@ bool GameObjectManager::removeGameObject(const GameObject& gameObject)
 	return false;
 }
 
-void GameObjectManager::upodateGameObjects()
+void GameObjectManager::updateGameObjects()
 {
 	// Udapte all game objects
 	for (auto& gameObject : m_gameObjects)

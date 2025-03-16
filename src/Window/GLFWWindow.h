@@ -13,10 +13,10 @@ class GLFWWindow : public IWindow {
 public:
 	GLFWWindow(int width, int height, const std::string& title);
 
-	bool Init() override;
+	bool init() override;
 	void PollEvents() override;
 	bool ShouldClose() override;
-	void Terminate() override;
+	void terminate() override;
 
 private:
 	GLFWwindow* m_window;

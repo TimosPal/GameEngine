@@ -41,6 +41,22 @@ std::vector<Action> InputManager::getActions()
 	return actions;
 }
 
+bool InputManager::isActionTriggered(const Action& action)
+{
+	switch (action.type)
+	{
+	case KeyState::Type::Pressed:
+		return isKeyPressed(action.keyCodeID);
+	case KeyState::Type::Released:
+		return isKeyReleased(action.keyCodeID);
+	case KeyState::Type::Hold:
+		return isKeyDown(action.keyCodeID);
+	default:
+		break;
+	}
+	return false;
+}
+
 bool InputManager::isKeyPressed(KeyCode key)
 {
 	KeyState& state = getKeyState(key);
@@ -107,6 +123,12 @@ void InputManager::onKeyEvent(KeyCode key, KeyState::Type action)
 	default:
 		break;
 	}
+}
+
+void InputManager::update()
+{
+	resetReleasedKeys();
+	setHoldKeys();
 }
 
 } // Engine

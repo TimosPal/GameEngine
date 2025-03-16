@@ -14,32 +14,26 @@ Application::Application(const Configuration& config)
 
 Application::~Application() {}
 
-void Application::Init()
+void Application::init()
 {
 	m_window = std::make_unique<GLFWWindow>(m_config.width, m_config.height, m_config.title);
-	m_window->Init();
+	m_window->init();
 }
 
-void Application::Run()
+void Application::run()
 {
 	while (!m_window->ShouldClose())
 	{
-		InputManager::getInstance().resetReleasedKeys();
-		InputManager::getInstance().setHoldKeys();
+		InputManager::getInstance().update();
 		m_window->PollEvents();
 
-		if (InputManager::getInstance().isKeyPressed(Key::B))
-			LOG_INFO("pressed");
-		if (InputManager::getInstance().isKeyDown(Key::B))
-			LOG_INFO("hold");
-		if (InputManager::getInstance().isKeyReleased(Key::B))
-			LOG_INFO("release");
+		m_world.update();
 	}
 }
 
-void Application::Terminate()
+void Application::terminate()
 {
-	m_window->Terminate();
+	m_window->terminate();
 }
 
 } // Engine

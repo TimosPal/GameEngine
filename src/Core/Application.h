@@ -6,6 +6,8 @@
 
 #include "Configuration.h"
 
+#include <Core/World.h>
+
 namespace Engine {
 
 class Application
@@ -14,16 +16,20 @@ public:
 	Application(const Configuration& config);
 	~Application();
 
-	void Init();
-	void Run();
-	void Terminate();
+	World& getWorld() { return m_world; }
+
+	void init();
+	void run();
+	void terminate();
 
 	// Use this method for custom app startup configurations.
-	virtual void Start() {}
+	virtual void start() {}
 
 private:
 	Configuration m_config;
 	std::unique_ptr<IWindow> m_window;
+
+	World m_world;
 };
 
 } // Engine
