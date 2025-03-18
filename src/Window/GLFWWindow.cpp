@@ -31,6 +31,21 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	InputManager::getInstance().onKeyEvent(key, stateType);
 }
 
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	keyCallback(window, button, 0, action, mods);
+}
+
+static void scrollCallback(GLFWwindow* window, double xoffset, double yOffset)
+{
+	InputManager::getInstance().onScrollEvent(yOffset);
+}
+
+static void mousePositionCallback(GLFWwindow* window, double xPos, double yPos)
+{
+	InputManager::getInstance().onMouseMoveEvent(xPos, yPos);
+}
+
 GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 	: IWindow(width, height, title), m_window(nullptr)
 {}
@@ -53,6 +68,9 @@ bool GLFWWindow::init()
 	}
 
 	glfwSetKeyCallback(m_window, keyCallback);
+	glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
+	glfwSetScrollCallback(m_window, scrollCallback);
+	glfwSetCursorPosCallback(m_window, mousePositionCallback);
 
 	m_isActive = true;
 	return true;

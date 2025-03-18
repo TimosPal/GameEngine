@@ -28,7 +28,13 @@ public:
 	bool isKeyReleased(KeyCode key);
 	bool isKeyDown(KeyCode key);
 
+	int getScrollOffset() const { return m_scrollWheelYOffset; }
+	int getMousePosX() const { return m_mousePosX; }
+	int getMousePosY() const { return m_mousePosY; }
+
 	void onKeyEvent(KeyCode key, KeyState::Type action);
+	void onScrollEvent(int yOffset);
+	void onMouseMoveEvent(double xPos, double yPos);
 
 	void update();
 
@@ -44,6 +50,12 @@ private:
 
 	std::unordered_map <KeyCode, KeyState> m_keyStates;
 	std::vector<KeyState*> m_activeKeys;
+
+	// TODO: integrate to actions system
+	// Add vec2 in the future.
+	int m_scrollWheelYOffset = 0;
+	double m_mousePosX = 0;
+	double m_mousePosY = 0;
 
 };
 

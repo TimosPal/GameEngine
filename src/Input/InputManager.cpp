@@ -125,6 +125,17 @@ void InputManager::onKeyEvent(KeyCode key, KeyState::Type action)
 	}
 }
 
+void InputManager::onScrollEvent(int yOffset)
+{
+	m_scrollWheelYOffset = yOffset;
+}
+
+void InputManager::onMouseMoveEvent(double xPos, double yPos)
+{
+	m_mousePosX = xPos;
+	m_mousePosY = yPos;
+}
+
 void InputManager::update()
 {
 	resetReleasedKeys();

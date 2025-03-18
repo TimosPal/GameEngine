@@ -8,7 +8,7 @@ using KeyCode = int;
 namespace Key {
 
 enum : KeyCode {
-	Invalid = 0,
+	Invalid = -1,
 
 	Space = 32,
 	Apostrophe = 39, /* ' */
@@ -139,7 +139,13 @@ enum : KeyCode {
 	RightControl = 345,
 	RightAlt = 346,
 	RightSuper = 347,
-	Menu = 348
+	Menu = 348,
+
+	/* Mouse */
+	LeftClick = 0,
+	RightClick = 1,
+	MiddleClick = 2
+
 };
 
 } // Key
