@@ -13,7 +13,7 @@ namespace Engine {
 
 static void errorCallback(int error, const char* description)
 {
-	LOG_CRITICAL("Error: {}", std::string(description));
+	LOG_ERROR("errorCode {}: {}", error, std::string(description));
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -75,6 +75,8 @@ bool GLFWWindow::init()
 	{
 		return false;
 	}
+
+	glfwMakeContextCurrent(m_window);
 
 	// Input
 	glfwSetKeyCallback(m_window, keyCallback);

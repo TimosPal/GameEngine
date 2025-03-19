@@ -8,6 +8,9 @@
 - Change from int to specific types (uint32 etc)
 - vec2 for mouse cords
 - IO utility abstract to 1 class if possible, no need to re-write clone/getID funcs like in IEvent / IComponent
+- Add assertions [x]
+- Abstract window and API types in APP. [x]
 
 # Features
-- Support combos in actions system.
+- combos in actions system.
+- more callback support (key, mouse)

@@ -11,6 +11,8 @@
 #include <Events/WindowResizeEvent.h>
 #include <Utility/Logger.h>
 
+#include <Graphics/IRenderer.h>
+
 namespace Engine {
 
 class Application
@@ -69,6 +71,8 @@ private:
 	EventQueue m_generalQueue;
 
 	World m_world;
+
+	std::unique_ptr<IRenderer> m_renderer;
 };
 
 } // Engine
