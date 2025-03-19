@@ -28,12 +28,12 @@ public:
 	bool isKeyReleased(KeyCode key);
 	bool isKeyDown(KeyCode key);
 
-	int getScrollOffset() const { return m_scrollWheelYOffset; }
-	int getMousePosX() const { return m_mousePosX; }
-	int getMousePosY() const { return m_mousePosY; }
+	double getScrollOffset() const { return m_scrollWheelYOffset; }
+	double getMousePosX() const { return m_mousePosX; }
+	double getMousePosY() const { return m_mousePosY; }
 
 	void onKeyEvent(KeyCode key, KeyState::Type action);
-	void onScrollEvent(int yOffset);
+	void onScrollEvent(double yOffset);
 	void onMouseMoveEvent(double xPos, double yPos);
 
 	void update();
@@ -53,7 +53,7 @@ private:
 
 	// TODO: integrate to actions system
 	// Add vec2 in the future.
-	int m_scrollWheelYOffset = 0;
+	double m_scrollWheelYOffset = 0;
 	double m_mousePosX = 0;
 	double m_mousePosY = 0;
 

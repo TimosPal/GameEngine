@@ -1,5 +1,11 @@
-1) Could change IWindow to be polymorphic template to reduce overhead of virtual calls.
-2) Same for application (?)
-3) Same for logger (?)
-4) Code own window lib (?)
-5) Change from int to specific types (?)
+# Perfomance ideas
+- Could change IWindow, Application, Logger to be polymorphic template to reduce overhead of virtual calls.
+- Where i use IDS + maps i could use just arrays if i never use any other ID func (1,2,...,n) -> maybe not beneficial
+
+# Refactoring
+- Change from int to specific types (uint32 etc)
+- vec2 for mouse cords
+- IO utility abstract to 1 class if possible, no need to re-write clone/getID funcs like in IEvent / IComponent
+
+# Features
+- Support combos in actions system.

@@ -16,8 +16,6 @@ public:
 
 	virtual Identifier getInstanceID() const = 0;  
 	virtual std::unique_ptr<IComponentBase> clone() const = 0;
-
-private:  
 };  
 
 template<typename Derived>  
@@ -40,8 +38,6 @@ public:
 	{
 		return std::make_unique<Derived>(static_cast<const Derived&>(*this));
 	}
-
-private:  
 };  
 
 } // namespace GameObjects  

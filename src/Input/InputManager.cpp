@@ -125,7 +125,7 @@ void InputManager::onKeyEvent(KeyCode key, KeyState::Type action)
 	}
 }
 
-void InputManager::onScrollEvent(int yOffset)
+void InputManager::onScrollEvent(double yOffset)
 {
 	m_scrollWheelYOffset = yOffset;
 }

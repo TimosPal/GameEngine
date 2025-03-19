@@ -5,6 +5,8 @@
 #include <Utility/Logger.h>
 #include <GameObjects/IComponent.h>
 
+#include <Events/EventQueue.h>
+
 Configuration config{ 800, 600, "MyAppTest" };
 
 class PlayerComponent : public GameObjects::IComponent<PlayerComponent>
@@ -33,6 +35,24 @@ class PlayerComponent : public GameObjects::IComponent<PlayerComponent>
 	};
 };
 
+class EventA : public IEvent<EventA> {
+public:
+	EventA(int a) { x = a; }
+	~EventA() {}
+
+	int x;
+};
+
+void foo(const EventA& e)
+{
+	LOG_INFO("TEST 1 {}", e.x);
+}
+
+void foo2(const EventA& e)
+{
+	LOG_INFO("TEST 2 {}", e.x);
+}
+
 class Test : public Application
 {
 public:
@@ -44,6 +64,16 @@ public:
 
 		PlayerComponent playerComp;
 		getWorld().getGOManager().createGameObject(playerComp);
+
+		EventQueue q;
+		
+		q.subscribe<EventA>(foo);
+		q.subscribe<EventA>(foo2);
+
+		q.add(EventA(10));
+		q.add(EventA(20));
+
+		q.dispatch();
 	}
 
 };
