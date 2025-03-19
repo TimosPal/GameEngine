@@ -5,10 +5,11 @@
 #include <Utility/Logger.h>
 #include <GameObjects/IComponent.h>
 
-#include <Events/EventQueue.h>
+#include <Events/WindowResizeEvent.h>
 
 Configuration config{ 800, 600, "MyAppTest" };
 
+/*
 class PlayerComponent : public GameObjects::IComponent<PlayerComponent>
 {
 	virtual void start() 
@@ -34,23 +35,11 @@ class PlayerComponent : public GameObjects::IComponent<PlayerComponent>
 		}
 	};
 };
+*/
 
-class EventA : public IEvent<EventA> {
-public:
-	EventA(int a) { x = a; }
-	~EventA() {}
-
-	int x;
-};
-
-void foo(const EventA& e)
+void windowResize(const WindowResizeEvent& e)
 {
-	LOG_INFO("TEST 1 {}", e.x);
-}
-
-void foo2(const EventA& e)
-{
-	LOG_INFO("TEST 2 {}", e.x);
+	LOG_INFO("Window resize {} {}", e.width, e.height);
 }
 
 class Test : public Application
@@ -60,20 +49,14 @@ public:
 
 	void start() override
 	{
+		/*
 		InputManager::getInstance().registerAction(Action("Bloop", Key::LeftClick, KeyState::Type::Pressed));
 
 		PlayerComponent playerComp;
 		getWorld().getGOManager().createGameObject(playerComp);
+		*/
 
-		EventQueue q;
-		
-		q.subscribe<EventA>(foo);
-		q.subscribe<EventA>(foo2);
-
-		q.add(EventA(10));
-		q.add(EventA(20));
-
-		q.dispatch();
+		subscribe<WindowResizeEvent>(windowResize);
 	}
 
 };

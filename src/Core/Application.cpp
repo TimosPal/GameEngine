@@ -8,6 +8,8 @@
 
 namespace Engine {
 
+Application* Application::m_instance = nullptr;
+
 Application::Application(const Configuration& config)
 	: m_config(config)
 {}
@@ -16,6 +18,8 @@ Application::~Application() {}
 
 void Application::init()
 {
+	m_instance = this;
+
 	m_window = std::make_unique<GLFWWindow>(m_config.width, m_config.height, m_config.title);
 	m_window->init();
 }
@@ -26,6 +30,9 @@ void Application::run()
 	{
 		InputManager::getInstance().update();
 		m_window->PollEvents();
+
+		m_systemQueue.dispatch();
+		m_generalQueue.dispatch();
 
 		m_world.update();
 	}

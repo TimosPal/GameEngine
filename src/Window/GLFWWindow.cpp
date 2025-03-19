@@ -5,6 +5,10 @@
 
 #include <iostream>
 
+#include <Core/Application.h>
+
+#include <Events/WindowResizeEvent.h>
+
 namespace Engine {
 
 static void errorCallback(int error, const char* description)
@@ -46,6 +50,11 @@ static void mousePositionCallback(GLFWwindow* window, double xPos, double yPos)
 	InputManager::getInstance().onMouseMoveEvent(xPos, yPos);
 }
 
+static void windowSizeCallback(GLFWwindow* window, int width, int height)
+{
+	Application::getInstance()->addEvent<WindowResizeEvent>(WindowResizeEvent(width, height));
+}
+
 GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 	: IWindow(width, height, title), m_window(nullptr)
 {}
@@ -67,10 +76,14 @@ bool GLFWWindow::init()
 		return false;
 	}
 
+	// Input
 	glfwSetKeyCallback(m_window, keyCallback);
 	glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 	glfwSetScrollCallback(m_window, scrollCallback);
 	glfwSetCursorPosCallback(m_window, mousePositionCallback);
+
+	// Window events
+	glfwSetWindowSizeCallback(m_window, windowSizeCallback);
 
 	m_isActive = true;
 	return true;

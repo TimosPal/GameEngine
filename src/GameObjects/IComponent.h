@@ -2,6 +2,7 @@
 #define ICOMPONENT_H  
 
 #include <Utility/IdentifierGenerator.h>
+#include <Utility/Util.h>
 
 namespace Engine {  
 namespace GameObjects {  
@@ -16,6 +17,12 @@ public:
 
 	virtual Identifier getInstanceID() const = 0;  
 	virtual std::unique_ptr<IComponentBase> clone() const = 0;
+
+	virtual std::string toString() const {
+		// TODO: cache result.
+		std::string name = classToString(*this);
+		return name;
+	}
 };  
 
 template<typename Derived>  

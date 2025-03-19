@@ -1,6 +1,8 @@
 # Perfomance ideas
 - Could change IWindow, Application, Logger to be polymorphic template to reduce overhead of virtual calls.
 - Where i use IDS + maps i could use just arrays if i never use any other ID func (1,2,...,n) -> maybe not beneficial
+- Cache class string name per class
+- Switch cases for event handling if ids were constexpr
 
 # Refactoring
 - Change from int to specific types (uint32 etc)
