@@ -11,8 +11,9 @@ public:
 
     virtual bool init() = 0;
     virtual void terminate() = 0;
-    virtual void PollEvents() = 0;
-    virtual bool ShouldClose() = 0;
+    virtual void pollEvents() = 0;
+    virtual void swapBuffers() = 0;
+    virtual bool shouldClose() = 0;
 
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height; }

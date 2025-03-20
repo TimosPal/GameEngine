@@ -100,14 +100,19 @@ void GLFWWindow::terminate()
 	m_isActive = false;
 }
 
-void GLFWWindow::PollEvents()
+void GLFWWindow::pollEvents()
 {
 	glfwPollEvents();
 }
 
-bool GLFWWindow::ShouldClose()
+bool GLFWWindow::shouldClose()
 {
 	return glfwWindowShouldClose(m_window);
+}
+
+void GLFWWindow::swapBuffers()
+{
+	glfwSwapBuffers(m_window);
 }
 
 } // Engine

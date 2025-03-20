@@ -6,7 +6,8 @@ namespace Engine {
 class IRenderer
 {
 public:
-	virtual bool init() { return true; };
+	virtual bool init() = 0;
+	virtual void clear() = 0;
 
 private:
 

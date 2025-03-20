@@ -14,8 +14,9 @@ public:
 	GLFWWindow(int width, int height, const std::string& title);
 
 	bool init() override;
-	void PollEvents() override;
-	bool ShouldClose() override;
+	void pollEvents() override;
+	bool shouldClose() override;
+	void swapBuffers() override;
 	void terminate() override;
 
 private:

@@ -10,14 +10,14 @@
 	#include <Graphics/OpenGL/OpenGLRenderer.h>
 	using RendererAPI = Engine::OpenGLRenderer;
 #else
-	STATIC_ASSERT_FALSE("Invalid graphics API");
+	#error Invalid graphics API
 #endif
 
-#if WINDOW_LIBRARY == WINDOW_LIBRARY
-#include <Window/GLFWWindow.h>
+#if WINDOW_LIBRARY == WINDOW_GLFW
+	#include <Window/GLFWWindow.h>
 	using WindowLib = Engine::GLFWWindow;
 #else
-	STATIC_ASSERT_FALSE("Invalid window library");
+	#error Invalid window library
 #endif
 
 namespace Engine {
@@ -43,15 +43,18 @@ void Application::init()
 
 void Application::run()
 {
-	while (!m_window->ShouldClose())
+	while (!m_window->shouldClose())
 	{
 		InputManager::getInstance().update();
-		m_window->PollEvents();
+		m_window->pollEvents();
 
 		m_systemQueue.dispatch();
 		m_generalQueue.dispatch();
 
 		m_world.update();
+
+		m_renderer->clear();
+		m_window->swapBuffers();
 	}
 }
 
