@@ -10,6 +10,7 @@
 - IO utility abstract to 1 class if possible, no need to re-write clone/getID funcs like in IEvent / IComponent
 - Add assertions [x]
 - Abstract window and API types in APP. [x]
+- Instead of using derived classes for renderer and window lib can utilize CRTP (eg Window<GLFWWindow> m_window), better interface abstraction.
 
 # Features
 - combos in actions system.

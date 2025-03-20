@@ -13,6 +13,20 @@
 
 #include <Graphics/IRenderer.h>
 
+#if GRAPHICS_API == API_OPENGL
+	#include <Graphics/OpenGL/OpenGLRenderer.h>	
+	using RendererAPI = Engine::OpenGLRenderer;
+#else
+	#error Invalid graphics API
+#endif
+
+#if WINDOW_LIBRARY == WINDOW_GLFW
+	#include <Window/GLFWWindow.h>
+	using WindowLib = Engine::GLFWWindow;
+#else
+	#error Invalid window library
+#endif
+
 namespace Engine {
 
 class Application
@@ -65,14 +79,14 @@ private:
 	static Application* m_instance;
 
 	Configuration m_config;
-	std::unique_ptr<IWindow> m_window;
+	WindowLib m_window;
+
+	RendererAPI m_renderer;
 
 	EventQueue m_systemQueue;
 	EventQueue m_generalQueue;
 
 	World m_world;
-
-	std::unique_ptr<IRenderer> m_renderer;
 };
 
 } // Engine
