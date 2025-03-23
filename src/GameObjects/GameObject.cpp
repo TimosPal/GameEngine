@@ -9,13 +9,15 @@ namespace GameObjects {
 
 std::set<Identifier> GameObject::m_componentTypes;
 
-GameObject::GameObject() : m_id(IdentifierGenerator<GameObject>::getInstanceID())
+GameObject::GameObject() : m_id(IdentifierGenerator<GameObject>::getInstanceID()), m_state(State::New)
 {}
 
 GameObject::GameObject(const GameObject& other)
 {
 	// Copy id
 	m_id = other.m_id;
+
+	m_state = other.m_state;
 
 	// Populate dictionary with component ids for fast lookup.
 	for (const auto& [id, component] : other.m_components) {
@@ -27,6 +29,8 @@ GameObject::GameObject(GameObject&& other) noexcept
 {
 	// Move id
 	m_id = other.m_id;
+
+	m_state = other.m_state;
 
 	// Populate dictionary with component ids for fast lookup.
 	m_components = std::move(other.m_components);

@@ -7,7 +7,6 @@
 #include <set>
 
 #include "./IComponent.h"
-#include <Utility/Logger.h>
 
 namespace Engine {
 namespace GameObjects {
@@ -20,6 +19,10 @@ due to data sparsity within the structure.
 class GameObject
 {
 public:
+	enum class State {
+		New, Dirty, Active
+	};
+
 	GameObject();
 	GameObject(const GameObject& other);
 	GameObject(GameObject&& other) noexcept;
@@ -32,6 +35,9 @@ public:
 	}
 
 	~GameObject();
+
+	State getState() const { return m_state; }
+	void setState(const State& state) { m_state = state; }
 	
 	GameObject& operator=(const GameObject& other);
 	bool operator==(const GameObject& other) const { return m_id == other.m_id; }
@@ -47,7 +53,6 @@ public:
 	{
 		// Check if component already exists.
 		int id = ComponentDerived::getTypeID();
-		LOG_INFO("{}", id);
 		if (m_components.find(id) != m_components.end())
 		{
 			return false;
@@ -96,6 +101,7 @@ private:
 
 	std::unordered_map<Identifier, std::shared_ptr<IComponentBase>> m_components;
 	Identifier m_id;
+	State m_state;
 };
 
 } // namespace GameObjects

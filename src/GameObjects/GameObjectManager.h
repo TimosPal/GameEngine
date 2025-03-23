@@ -24,10 +24,16 @@ public:
 	}
 
 	bool removeGameObject(const GameObject& gameObject);
+
+	void startGameObjects();
 	void updateGameObjects();
 
 private:
-	std::vector<GameObject> m_gameObjects;
+	std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+
+	std::vector<GameObject*> m_newGameObjects;
+	std::vector<GameObject*> m_dirtyGameObjects;
+	std::vector<GameObject*> m_activeGameObjects;
 };
 
 } // namespace GameObjects

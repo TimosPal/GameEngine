@@ -16,6 +16,7 @@ public:
 
 	void update()
 	{
+		m_GOManager.startGameObjects();
 		m_GOManager.updateGameObjects();
 	}
 
