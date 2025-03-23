@@ -36,9 +36,17 @@ bool GameObjectManager::removeGameObject(const GameObject& gameObject)
 void GameObjectManager::updateGameObjects()
 {
 	// Udapte all game objects
-	for (auto& gameObject : m_gameObjects)
+	for (Identifier id : GameObject::getComponentTypes())
 	{
-		gameObject.update();
+		for (auto& gameObject : m_gameObjects)
+		{
+			// TODO: O(N^2) due to component lookup. (SLOW!) 
+			auto comp = gameObject.getComponent(id);
+			if (comp != nullptr)
+			{
+				comp->update();
+			}
+		}
 	}
 }
 

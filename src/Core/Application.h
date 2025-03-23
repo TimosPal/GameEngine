@@ -8,7 +8,7 @@
 
 #include <Core/World.h>
 #include <Events/EventQueue.h>
-#include <Events/WindowResizeEvent.h>
+#include <Events/FrameBufferResizeEvent.h>
 #include <Utility/Logger.h>
 
 #include <Graphics/IRenderer.h>
@@ -47,7 +47,7 @@ public:
 	void addEvent(const EventType& event) // TODO: could be made into a switch if ids were constexpr
 	{
 		Identifier id = event.getInstanceID();
-		if (id == WindowResizeEvent::getTypeID())
+		if (id == FrameBufferResizeEvent::getTypeID())
 		{
 			m_systemQueue.add(event);
 		}
@@ -62,7 +62,7 @@ public:
 	void subscribe(EventQueue::Callback<EventType> cb) // TODO: could be made into a switch if ids were constexpr
 	{
 		Identifier id = EventType::getTypeID();
-		if (id == WindowResizeEvent::getTypeID())
+		if (id == FrameBufferResizeEvent::getTypeID())
 		{
 			m_systemQueue.subscribe<EventType>(cb);
 		}

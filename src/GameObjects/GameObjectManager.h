@@ -17,12 +17,10 @@ public:
 
 	GameObject& createGameObject(const GameObject& obj);
 
-	template<typename... IComponent>
-	void createGameObject(const IComponent&... components)
+	template<typename... ComponentDerived>
+	GameObject& createGameObject(const ComponentDerived&... components)
 	{
-		GameObject go(components...);
-		go.start();
-		m_gameObjects.emplace_back(std::move(go));
+		return createGameObject(GameObject(components...));
 	}
 
 	bool removeGameObject(const GameObject& gameObject);

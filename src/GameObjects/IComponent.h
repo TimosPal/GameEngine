@@ -15,7 +15,7 @@ public:
 	virtual void start() {};
 	virtual void update() {};
 
-	virtual Identifier getInstanceID() const = 0;  
+	virtual Identifier getInstanceTypeID() const = 0;  
 	virtual std::unique_ptr<IComponentBase> clone() const = 0;
 
 	virtual std::string toString() const {
@@ -30,7 +30,7 @@ class IComponent : public IComponentBase
 {  
 public:  
 
-	inline Identifier getInstanceID() const override
+	inline Identifier getInstanceTypeID() const override
 	{
 		// Returns the same value, but can be queried from polymorphic objects
 		return IComponent<Derived>::getTypeID();
@@ -45,6 +45,7 @@ public:
 	{
 		return std::make_unique<Derived>(static_cast<const Derived&>(*this));
 	}
+
 };  
 
 } // namespace GameObjects  

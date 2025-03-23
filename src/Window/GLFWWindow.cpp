@@ -8,6 +8,7 @@
 #include <Core/Application.h>
 
 #include <Events/WindowResizeEvent.h>
+#include <Events/FrameBufferResizeEvent.h>
 
 namespace Engine {
 
@@ -55,6 +56,11 @@ static void windowSizeCallback(GLFWwindow* window, int width, int height)
 	Application::getInstance()->addEvent<WindowResizeEvent>(WindowResizeEvent(width, height));
 }
 
+static void frameBufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+	Application::getInstance()->addEvent<FrameBufferResizeEvent>(FrameBufferResizeEvent(width, height));
+}
+
 GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 	: IWindow(width, height, title), m_window(nullptr)
 {}
@@ -85,7 +91,11 @@ bool GLFWWindow::init()
 	glfwSetCursorPosCallback(m_window, mousePositionCallback);
 
 	// Window events
-	glfwSetWindowSizeCallback(m_window, windowSizeCallback);
+	//glfwSetWindowSizeCallback(m_window, windowSizeCallback);
+	glfwSetFramebufferSizeCallback(m_window, frameBufferSizeCallback);
+
+	// To be handled for the first init of renderer
+	Application::getInstance()->addEvent<FrameBufferResizeEvent>(FrameBufferResizeEvent(m_width, m_height));
 
 	m_isActive = true;
 	return true;
@@ -107,6 +117,7 @@ void GLFWWindow::pollEvents()
 
 bool GLFWWindow::shouldClose()
 {
+	// TODO: could be handled via callbacks.
 	return glfwWindowShouldClose(m_window);
 }
 

@@ -7,6 +7,8 @@
 namespace Engine {
 namespace GameObjects {
 
+std::set<Identifier> GameObject::m_componentTypes;
+
 GameObject::GameObject() : m_id(IdentifierGenerator<GameObject>::getInstanceID())
 {}
 
@@ -15,15 +17,9 @@ GameObject::GameObject(const GameObject& other)
 	// Copy id
 	m_id = other.m_id;
 
-	// Copy
-	m_componentsRaw.reserve(other.m_componentsRaw.size());
-	for (auto& component : other.m_componentsRaw) {
-		m_componentsRaw.emplace_back(std::move(component->clone()));
-	}
-
 	// Populate dictionary with component ids for fast lookup.
-	for (auto& component : m_componentsRaw) {
-		m_componentsDictionary[component->getInstanceID()] = std::weak_ptr<IComponentBase>(component);
+	for (const auto& [id, component] : other.m_components) {
+		m_components[id] = std::move(component->clone());
 	}
 }
 
@@ -32,11 +28,8 @@ GameObject::GameObject(GameObject&& other) noexcept
 	// Move id
 	m_id = other.m_id;
 
-	// Move
-	m_componentsRaw = std::move(other.m_componentsRaw);
-
 	// Populate dictionary with component ids for fast lookup.
-	m_componentsDictionary = std::move(other.m_componentsDictionary);
+	m_components = std::move(other.m_components);
 }
 
 GameObject::~GameObject() {}
@@ -52,20 +45,19 @@ GameObject& GameObject::operator=(const GameObject& other)
 	return *this;
 }
 
-void GameObject::start()
+std::set<Identifier> GameObject::getComponentTypes()
 {
-	for (auto& component : m_componentsRaw) {
-		component->start();
-	}
+	return m_componentTypes;
 }
 
-void GameObject::update()
+std::shared_ptr<IComponentBase> GameObject::getComponent(Identifier id)
 {
-	// Components should already be in proper order of prefeared excecution.
-	// eg: consistent within objects.
-	for (auto& component : m_componentsRaw) {
-		component->update();
+	auto it = m_components.find(id);
+	if (it != m_components.end()) {
+		return it->second;
 	}
+
+	return std::shared_ptr<IComponentBase>();
 }
 
 } // namespace GameObjects
