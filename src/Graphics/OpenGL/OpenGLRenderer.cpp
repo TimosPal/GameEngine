@@ -4,6 +4,8 @@
 #include <Utility/Logger.h>
 #include <Events/FrameBufferResizeEvent.h>
 #include <Core/Application.h>
+#include "Shader.h"
+#include "Program.h"
 
 #include <Resources/ResourceManager.h>
 #include <Resources/ShaderResource.h>
@@ -62,51 +64,13 @@ void OpenGLRenderer::clear()
 	auto& fragmentResource = ResourceManager<ShaderResource>::getInstance().load("defaultFrag", "./assets/shaders/default.frag");
 	const char* fragmentShaderSource = fragmentResource.getString().c_str();
 
+	Shader vertShader(vertexResource, Shader::Type::Vertex);
+	vertShader.init();
+	Shader fragShader(fragmentResource, Shader::Type::Fragment);
+	fragShader.init();
 
-
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	int  success;
-	char infoLog[512];
-
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		LOG_ERROR("ERROR::SHADER::VERTEX::COMPILATION_FAILED: {}", infoLog);
-	}
-
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		LOG_ERROR("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED: {}", infoLog);
-	}
-
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		LOG_ERROR("ERROR::SHADER::LINKING::COMPILATION_FAILED: {}", infoLog);
-	}
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	Program prog(vertShader, fragShader);
+	prog.init();
 
 	// VAO
 	float vertices[6];
@@ -131,8 +95,10 @@ void OpenGLRenderer::clear()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	
-	glUseProgram(shaderProgram);
+	glUseProgram(prog.getGLID());
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+	
+	prog.destroy();
 }
 
 } // Engine
