@@ -20,6 +20,7 @@ public:
     }
 
 	// Generate a unique ID for each instance (e.g., GameObject1, GameObject2)
+    template<typename C = B>
     static Identifier getInstanceID() {
         static Identifier id = 0;
         return id++;

@@ -8,6 +8,7 @@ namespace Engine {
 
 struct ShaderResource : public Resource
 {
+public:
     ShaderResource();
     ShaderResource(const std::string& name, const std::string& path);
     ShaderResource(const ShaderResource& other);
@@ -15,11 +16,13 @@ struct ShaderResource : public Resource
     ShaderResource(ShaderResource&& other) noexcept;
     ShaderResource& operator=(ShaderResource&& other) noexcept;
 
-    std::string getString();
-    void unload();
+    const std::string& getString();
+    void unload() override;
 
 private:
     std::string m_data;
+
+    void load() override;
 };
 
 } // Engine

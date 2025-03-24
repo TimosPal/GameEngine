@@ -5,7 +5,7 @@ namespace Engine {
 ShaderResource::ShaderResource() : Resource::Resource() {}
 
 ShaderResource::ShaderResource(const std::string& name, const std::string& path)
-    : Resource(name, path, Resource::Type::Shader, IdentifierGenerator<Resource>::getTypeID<ShaderResource>())
+    : Resource(name, path, Resource::Type::Shader, IdentifierGenerator<Resource>::getInstanceID<ShaderResource>())
 {
 }
 
@@ -37,22 +37,29 @@ ShaderResource& ShaderResource::operator=(ShaderResource&& other) noexcept
     return *this;
 }
 
-std::string ShaderResource::getString()
+const std::string& ShaderResource::getString()
 {
     if (!m_loaded)
     {
-        bool openedFile;
-        m_data = fileToString(path, openedFile);
-
-        m_loaded = openedFile;
+        load();
     }
 
     return m_data;
 }
 
+void ShaderResource::load()
+{
+    bool openedFile;
+    m_data = fileToString(m_path, openedFile);
+
+    m_loaded = openedFile;
+}
+
 void ShaderResource::unload()
 {
     m_loaded = false;
+
+    m_data = "";
 }
 
 

@@ -18,7 +18,7 @@ public:
 		return instance;
 	}
 
-	const ResourceType& load(const std::string& name, const std::string& path)
+	ResourceType& load(const std::string& name, const std::string& path)
 	{
 		// Try to find handle.
 		auto resource = m_handles.find(name);
@@ -31,7 +31,7 @@ public:
 		{
 			// Needs loading.
 			ResourceType newResource = ResourceType(name, path);
-			Identifier id = newResource.id;
+			Identifier id = newResource.getID();
 			m_handles[name] = id;
 			m_resources[id] = std::move(newResource);
 
@@ -39,7 +39,7 @@ public:
 		}
 	}
 
-	const ResourceType& load(const std::string& name)
+	ResourceType& load(const std::string& name)
 	{
 		// Try to find handle.
 		auto resource = m_handles.find(name);
@@ -55,7 +55,7 @@ public:
 		}
 	}
 
-	const ResourceType& load(Identifier id)
+	ResourceType& load(Identifier id)
 	{
 		// Try to find resource.
 		auto resource = m_resources.find(id);

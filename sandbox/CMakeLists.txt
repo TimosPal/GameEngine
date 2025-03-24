@@ -9,4 +9,12 @@ target_include_directories(Sandbox PRIVATE
     ${CMAKE_SOURCE_DIR}/src
 )
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR}/sandbox)
+# Ensure assets copy every time
+add_custom_target(CopyAssets ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+    ${CMAKE_BINARY_DIR}/sandbox/assets
+)
+
+# Make sure the assets are copied before Sandbox builds
+add_dependencies(Sandbox CopyAssets)
