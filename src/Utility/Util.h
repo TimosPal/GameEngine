@@ -2,6 +2,9 @@
 #define UTIL_H
 
 #include <string>
+#include <fstream>
+#include <sstream>
+#include "Logger.h"
 
 namespace Engine {
 
@@ -21,6 +24,8 @@ std::string classToString(const T& obj) {
 
     return name;
 }
+
+std::string fileToString(const std::string& filename, bool& openedFile);
 
 } // Engine
 

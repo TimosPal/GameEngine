@@ -1,9 +1,11 @@
-# Perfomance ideas
+# Perfomance
 - Could change IWindow, Application, Logger to be polymorphic template to reduce overhead of virtual calls.
 - Where i use IDS + maps i could use just arrays if i never use any other ID func (1,2,...,n) -> maybe not beneficial
 - Cache class string name per class
 - Switch cases for event handling if ids were constexpr
 - In event queue, define unique event types (eg resize event spamming shouldnt be avoided)
+- GO manager removal 3 vecs too slow
+- GO manager forced to use heap allocations to return valid ptrs in createNewGO func
 
 # Refactoring
 - Change from int to specific types (uint32 etc)
@@ -18,7 +20,9 @@
 
 # Bugs
 - currently there is no way to update window width and height when an update occures. Should make an instance function to retrieve the object and set data in callback
-- Components in GOs update method is wrong! Shouldnt run each update per go like this.
+- Components in GOs update method is wrong! Shouldnt run each update per go like this. [x]
+- go manager does not handle object creation within start and update methods properly [x]
+- With current implementation, if user stores GO in global state, after internal moving the reference will be invalid ptr. How to store GOs without losing reference. [x]
 
 # Features
 - combos in actions system.

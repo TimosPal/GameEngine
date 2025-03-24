@@ -8,3 +8,5 @@ target_link_libraries(Sandbox PRIVATE GameEngine)
 target_include_directories(Sandbox PRIVATE
     ${CMAKE_SOURCE_DIR}/src
 )
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR}/sandbox)

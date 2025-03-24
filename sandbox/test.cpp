@@ -1,46 +1,10 @@
 ﻿#include <Core/EntryPoint.h>
 #include <iostream>
 
-#include <Input/InputManager.h>
-#include <Utility/Logger.h>
-#include <GameObjects/IComponent.h>
-
-#include <Events/WindowResizeEvent.h>
+#include <Resources/ResourceManager.h>
+#include <Resources/ShaderResource.h>
 
 Configuration config{ 800, 600, "MyAppTest" };
-
-/*
-class PlayerComponent : public GameObjects::IComponent<PlayerComponent>
-{
-	virtual void start() 
-	{
-		LOG_INFO("Init Player");
-	};
-
-	virtual void update() 
-	{
-		auto action = InputManager::getInstance().getAction("Bloop");
-		if (InputManager::getInstance().isActionTriggered(action)) {
-			LOG_INFO("pressed");
-			
-			double x = InputManager::getInstance().getMousePosX();
-			double y = InputManager::getInstance().getMousePosY();
-			LOG_INFO("{} {}", x, y);
-		}
-
-		bool aKey = InputManager::getInstance().isKeyPressed(Key::A);
-		bool sKey = InputManager::getInstance().isKeyPressed(Key::S);
-		if (aKey && sKey) {
-			LOG_INFO("COMBO");
-		}
-	};
-};
-*/
-
-void windowResize(const WindowResizeEvent& e)
-{
-	LOG_INFO("Window resize {} {}", e.width, e.height);
-}
 
 class Test : public Application
 {
@@ -49,14 +13,8 @@ public:
 
 	void start() override
 	{
-		/*
-		InputManager::getInstance().registerAction(Action("Bloop", Key::LeftClick, KeyState::Type::Pressed));
-
-		PlayerComponent playerComp;
-		getWorld().getGOManager().createGameObject(playerComp);
-		*/
-
-		subscribe<WindowResizeEvent>(windowResize);
+		auto t = ResourceManager<ShaderResource>::getInstance().load("test", "./assets/test.p");
+		LOG_INFO("{}", t.getString());
 	}
 
 };
