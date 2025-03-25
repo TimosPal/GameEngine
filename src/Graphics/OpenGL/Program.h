@@ -3,8 +3,6 @@
 
 #include "Shader.h"
 
-#include <glad/glad.h>
-
 namespace Engine {
 
 // NOTE: This class could be abstracted in the future, if more APIs are to be used.
@@ -12,10 +10,10 @@ class Program
 {
 public:
 	Program(Shader& vert, Shader& frag);
-	bool init();
-	void destroy();
+	~Program();
 
-	unsigned int getGLID() const { return m_glProgram; }
+	bool init();
+	void use();
 
 private:
 	bool m_isActive;
@@ -24,6 +22,8 @@ private:
 	Shader m_frag;
 
 	unsigned int m_glProgram;
+	
+	void destroy();
 };
 
 } // Engine

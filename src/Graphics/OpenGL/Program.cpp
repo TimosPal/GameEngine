@@ -1,10 +1,18 @@
 #include "Program.h"
+#include "Program.h"
+
+#include <glad/glad.h>
 
 namespace Engine {
 
 Program::Program(Shader& vert, Shader& frag)
 	: m_vert(vert), m_frag(frag), m_isActive(false)
 {
+}
+
+Program::~Program()
+{
+	destroy();
 }
 
 bool Program::init()
@@ -37,8 +45,15 @@ bool Program::init()
 
 void Program::destroy()
 {
-	// Not sure how and if programs are deletable.
+	glDeleteProgram(m_glProgram);
+
+	// Shaders are already deleted from the init function.
 	m_isActive = false;
+}
+
+void Program::use()
+{
+	glUseProgram(m_glProgram);
 }
 
 } // Engine

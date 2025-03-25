@@ -6,6 +6,8 @@
 #include <Core/Application.h>
 #include "Shader.h"
 #include "Program.h"
+#include "VBO.h"
+#include "VAO.h"
 
 #include <Resources/ResourceManager.h>
 #include <Resources/ShaderResource.h>
@@ -72,33 +74,24 @@ void OpenGLRenderer::clear()
 	Program prog(vertShader, fragShader);
 	prog.init();
 
-	// VAO
-	float vertices[6];
+	std::vector<float> vertices(6);
 	vertices[0] = randomFloat(-1.0f, 1.0f); // x1
 	vertices[1] = randomFloat(-1.0f, 1.0f); // y1
-
+	
 	vertices[2] = randomFloat(-1.0f, 1.0f); // x2
 	vertices[3] = randomFloat(-1.0f, 1.0f); // y2
-
+	
 	vertices[4] = randomFloat(-1.0f, 1.0f); // x3
 	vertices[5] = randomFloat(-1.0f, 1.0f); // y3
-
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
 	
-	glUseProgram(prog.getGLID());
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	VAO vao;
+	vao.bind();
+
+	VBO<float> vbo(vertices, 0, 2);
+	vbo.init();
 	
-	prog.destroy();
+	prog.use();
+	glDrawArrays(GL_TRIANGLES, 0, vbo.getVertCount());
 }
 
 } // Engine

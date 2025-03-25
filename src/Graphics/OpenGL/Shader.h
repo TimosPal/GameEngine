@@ -14,6 +14,7 @@ public:
 	};
 
 	Shader(ShaderResource& shader, Type type);
+	~Shader();
 
 	bool init();
 	void destroy();

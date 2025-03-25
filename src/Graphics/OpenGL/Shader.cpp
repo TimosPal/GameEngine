@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include "Shader.h"
 
 #include <glad/glad.h>
 
@@ -7,6 +8,11 @@ namespace Engine {
 Shader::Shader(ShaderResource& shader, Type type)
 	: m_shader(shader), m_isActive(false), m_type(type)
 {}
+
+Shader::~Shader()
+{
+	destroy();
+}
 
 bool Shader::init()
 {
