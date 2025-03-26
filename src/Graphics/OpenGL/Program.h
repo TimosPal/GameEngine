@@ -14,9 +14,12 @@ public:
 
 	bool init();
 	void use();
+	void unuse();
 
 private:
-	bool m_isActive;
+	static Program* programInUse;
+
+	bool m_isActive = false;
 
 	Shader m_vert;
 	Shader m_frag;

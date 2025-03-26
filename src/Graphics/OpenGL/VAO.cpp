@@ -2,6 +2,8 @@
 
 namespace Engine {
 
+VAO* VAO::m_boundVAO = nullptr;
+
 VAO::VAO()
 {
 	glGenVertexArrays(1, &m_glVAO);
@@ -14,19 +16,17 @@ VAO::~VAO()
 
 void VAO::bind()
 {
-	if (m_isBound)
+	if (m_boundVAO == this)
 		return;
 
-	m_isBound = true;
 	glBindVertexArray(m_glVAO);
 }
 
 void VAO::unbind()
 {
-	if (m_isBound)
+	if (m_boundVAO != this)
 		return;
 
-	m_isBound = false;
 	glBindVertexArray(0);
 }
 

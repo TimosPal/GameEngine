@@ -18,11 +18,13 @@ public:
 
 	~VBO() 
 	{
+		m_isActive = false;
 		glDeleteBuffers(1, &m_glVBO);
 	}
 
 	void init()
 	{
+		m_isActive = true;
 		glGenBuffers(1, &m_glVBO);
 		
 		bind();
@@ -54,24 +56,25 @@ public:
 	void updateData(const VertexData<T>& data)
 	{
 		m_data = data;
+
+		bind();
 		glBufferData(GL_ARRAY_BUFFER, m_data.getFlatVec().size() * sizeof(T), m_data.getFlatVec().data(), m_drawingType);
+		unbind();
 	}
 
 	void bind()
 	{
-		if (m_isBound)
+		if (boundVBO == this)
 			return;
 
-		m_isBound = true;
 		glBindBuffer(GL_ARRAY_BUFFER, m_glVBO);
 	}
 
 	void unbind()
 	{
-		if (!m_isBound)
+		if (boundVBO != this)
 			return;
 
-		m_isBound = false;
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
@@ -80,12 +83,14 @@ public:
 	unsigned int getGLVBO() const { return m_glVBO; }
 
 private:
+	inline static VBO* boundVBO = nullptr;
+
 	unsigned int m_glVBO;
 	int m_drawingType;
 
 	VertexData<T> m_data;
 
-	bool m_isBound = false;
+	bool m_isActive = false;
 
 	// Utility function to get the correct OpenGL type
 	constexpr GLenum getGLType()

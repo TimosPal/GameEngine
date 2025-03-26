@@ -5,6 +5,8 @@
 
 namespace Engine {
 
+Program* Program::programInUse = nullptr;
+
 Program::Program(Shader& vert, Shader& frag)
 	: m_vert(vert), m_frag(frag), m_isActive(false)
 {
@@ -56,7 +58,24 @@ void Program::destroy()
 
 void Program::use()
 {
+	if (programInUse == this)
+	{
+		return;
+	}
+
+	programInUse = this;
 	glUseProgram(m_glProgram);
+}
+
+void Program::unuse()
+{
+	if (programInUse != this)
+	{
+		return;
+	}
+
+	programInUse = nullptr;
+	glUseProgram(0);
 }
 
 } // Engine

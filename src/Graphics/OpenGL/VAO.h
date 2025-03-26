@@ -15,9 +15,9 @@ public:
 	void bind();
 	void unbind();
 private:
-	unsigned int m_glVAO;
+	static VAO* m_boundVAO;
 
-	bool m_isBound = false;
+	unsigned int m_glVAO;
 };
 
 } // Engine
