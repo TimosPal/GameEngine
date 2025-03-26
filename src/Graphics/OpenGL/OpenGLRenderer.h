@@ -10,6 +10,8 @@ class OpenGLRenderer : public IRenderer
 public:
 	bool init() override;
 	void clear() override;
+	
+	void createRenderable();
 private:
 
 };

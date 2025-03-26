@@ -17,6 +17,9 @@ Program::~Program()
 
 bool Program::init()
 {
+	m_vert.init();
+	m_frag.init();
+
 	m_glProgram = glCreateProgram();
 
 	unsigned int vertexShader = m_vert.getGLID();

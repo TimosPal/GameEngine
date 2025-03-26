@@ -1,6 +1,7 @@
 #ifndef VBO_H
 #define VBO_H
 
+#include "VertexData.h"
 #include <Utility/Assertions.h>
 #include <glad/glad.h>
 
@@ -11,9 +12,8 @@ template<typename T>
 class VBO
 {
 public:
-	VBO(const std::vector<T>& data, int attributeIndex, int elementsPerStride, int drawingType = GL_STATIC_DRAW)
-		: m_elementsPerStride(elementsPerStride), m_drawingType(drawingType), m_attributeIndex(attributeIndex),
-		m_data(data), m_glVBO(-1)
+	VBO(const VertexData<T>& data, int drawingType = GL_STATIC_DRAW)
+		: m_drawingType(drawingType), m_data(data), m_glVBO(-1)
 	{}
 
 	~VBO() 
@@ -26,9 +26,20 @@ public:
 		glGenBuffers(1, &m_glVBO);
 		
 		bind();
-		glBufferData(GL_ARRAY_BUFFER, m_data.size() * sizeof(T), m_data.data(), m_drawingType);
-		glVertexAttribPointer(m_attributeIndex, m_elementsPerStride, getGLType(), GL_FALSE, sizeof(T) * m_elementsPerStride, nullptr);
-		glEnableVertexAttribArray(m_attributeIndex);
+		glBufferData(GL_ARRAY_BUFFER, m_data.getFlatVec().size() * sizeof(T), m_data.getFlatVec().data(), m_drawingType);
+		// Initialize each attribute.
+		for (const auto& attributeInfo : m_data.getInfo())
+		{
+			glVertexAttribPointer(
+				attributeInfo.attributeLocation, // Attribute location
+				attributeInfo.elementsCount, // Attribute elements count
+				getGLType(), // Attribute type
+				GL_FALSE,
+				m_data.getVertexSize(), // #Bytes per vertex
+				(void*)(attributeInfo.startingOffset * sizeof(T)) // Attribute starting offset
+			);
+			glEnableVertexAttribArray(attributeInfo.attributeLocation);
+		}
 	}
 
 	void bind()
@@ -37,18 +48,15 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, m_glVBO);
 	}
 
-	int getVertCount() const { return m_data.size() / m_elementsPerStride; }
+	int getVertCount() const { return m_data.getFlatVec().size(); }
 
 	unsigned int getGLVBO() const { return m_glVBO; }
 
 private:
 	unsigned int m_glVBO;
-
-	int m_elementsPerStride;
 	int m_drawingType;
-	int m_attributeIndex;
 
-	std::vector<T> m_data;
+	VertexData<T> m_data;
 
 	// Utility function to get the correct OpenGL type
 	constexpr GLenum getGLType()

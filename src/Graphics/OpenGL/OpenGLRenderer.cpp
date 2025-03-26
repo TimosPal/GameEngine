@@ -8,6 +8,7 @@
 #include "Program.h"
 #include "VBO.h"
 #include "VAO.h"
+#include "VertexData.h"
 
 #include <Resources/ResourceManager.h>
 #include <Resources/ShaderResource.h>
@@ -50,6 +51,11 @@ static float randomFloat(float min, float max) {
 	return dis(gen);
 }
 
+void OpenGLRenderer::createRenderable()
+{
+
+}
+
 void OpenGLRenderer::clear()
 {
 	// Set the clear color to dark gray
@@ -58,8 +64,7 @@ void OpenGLRenderer::clear()
 	// Clear the color buffer, depth buffer, and stencil buffer (if used)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-
-	// TEMP
+	// ======================================================================
 	auto& vertexResource = ResourceManager<ShaderResource>::getInstance().load("defaultVert", "./assets/shaders/default.vert");
 	const char* vertexShaderSource = vertexResource.getString().c_str();
 
@@ -67,27 +72,21 @@ void OpenGLRenderer::clear()
 	const char* fragmentShaderSource = fragmentResource.getString().c_str();
 
 	Shader vertShader(vertexResource, Shader::Type::Vertex);
-	vertShader.init();
 	Shader fragShader(fragmentResource, Shader::Type::Fragment);
-	fragShader.init();
-
 	Program prog(vertShader, fragShader);
 	prog.init();
 
-	std::vector<float> vertices(6);
-	vertices[0] = randomFloat(-1.0f, 1.0f); // x1
-	vertices[1] = randomFloat(-1.0f, 1.0f); // y1
-	
-	vertices[2] = randomFloat(-1.0f, 1.0f); // x2
-	vertices[3] = randomFloat(-1.0f, 1.0f); // y2
-	
-	vertices[4] = randomFloat(-1.0f, 1.0f); // x3
-	vertices[5] = randomFloat(-1.0f, 1.0f); // y3
+	std::vector<VertexData<float>::Vertex> data = { 
+		{{ randomFloat(-1.0f, 1.0f),  randomFloat(-1.0f, 1.0f)}},
+		{{ randomFloat(-1.0f, 1.0f),  randomFloat(-1.0f, 1.0f)}},
+		{{ randomFloat(-1.0f, 1.0f),  randomFloat(-1.0f, 1.0f)}}
+	};
+	VertexData vertexData(data);
 	
 	VAO vao;
 	vao.bind();
 
-	VBO<float> vbo(vertices, 0, 2);
+	VBO vbo(vertexData);
 	vbo.init();
 	
 	prog.use();
