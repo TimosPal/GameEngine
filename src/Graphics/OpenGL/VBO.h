@@ -19,6 +19,7 @@ public:
 	~VBO() 
 	{
 		m_isActive = false;
+		boundVBO = nullptr;
 		glDeleteBuffers(1, &m_glVBO);
 	}
 
@@ -67,6 +68,7 @@ public:
 		if (boundVBO == this)
 			return;
 
+		boundVBO = this;
 		glBindBuffer(GL_ARRAY_BUFFER, m_glVBO);
 	}
 
@@ -75,6 +77,7 @@ public:
 		if (boundVBO != this)
 			return;
 
+		boundVBO = nullptr;
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 

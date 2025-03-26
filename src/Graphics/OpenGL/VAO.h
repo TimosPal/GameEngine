@@ -15,7 +15,7 @@ public:
 	void bind();
 	void unbind();
 private:
-	static VAO* m_boundVAO;
+	static VAO* boundVAO;
 
 	unsigned int m_glVAO;
 };

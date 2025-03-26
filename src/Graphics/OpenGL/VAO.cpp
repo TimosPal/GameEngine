@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-VAO* VAO::m_boundVAO = nullptr;
+VAO* VAO::boundVAO = nullptr;
 
 VAO::VAO()
 {
@@ -11,22 +11,25 @@ VAO::VAO()
 
 VAO::~VAO()
 {
+	boundVAO = nullptr;
 	glDeleteVertexArrays(1, &m_glVAO);
 }
 
 void VAO::bind()
 {
-	if (m_boundVAO == this)
+	if (boundVAO == this)
 		return;
 
+	boundVAO = this;
 	glBindVertexArray(m_glVAO);
 }
 
 void VAO::unbind()
 {
-	if (m_boundVAO != this)
+	if (boundVAO != this)
 		return;
 
+	boundVAO = nullptr;
 	glBindVertexArray(0);
 }
 

@@ -53,6 +53,7 @@ void Program::destroy()
 	glDeleteProgram(m_glProgram);
 
 	// Shaders are already deleted from the init function.
+	programInUse = nullptr;
 	m_isActive = false;
 }
 
