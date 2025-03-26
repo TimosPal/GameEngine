@@ -7,7 +7,7 @@
 namespace Engine {
 
 // Since GL needs a buffer of type T, we cant have different types for various attributes.
-template<typename T>
+template<typename T = float>
 class VertexData
 {
 public:
@@ -25,8 +25,8 @@ public:
 	{
 		int prevOffset = 0;
 		int location = 0;
-
-		if (data.size() > 0) {
+		if (!data.empty()) 
+		{
 			for (const VertexAttribute& attribute : data[0]) {
 				m_info.push_back(
 					{

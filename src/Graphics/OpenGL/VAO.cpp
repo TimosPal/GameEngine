@@ -9,13 +9,25 @@ VAO::VAO()
 
 VAO::~VAO()
 {
-	glDeleteBuffers(1, &m_glVAO);
+	glDeleteVertexArrays(1, &m_glVAO);
 }
 
 void VAO::bind()
 {
-	// TODO: save previous bind state?
+	if (m_isBound)
+		return;
+
+	m_isBound = true;
 	glBindVertexArray(m_glVAO);
+}
+
+void VAO::unbind()
+{
+	if (m_isBound)
+		return;
+
+	m_isBound = false;
+	glBindVertexArray(0);
 }
 
 } // Engine

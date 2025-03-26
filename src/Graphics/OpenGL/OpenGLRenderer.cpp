@@ -4,11 +4,9 @@
 #include <Utility/Logger.h>
 #include <Events/FrameBufferResizeEvent.h>
 #include <Core/Application.h>
-#include "Shader.h"
-#include "Program.h"
-#include "VBO.h"
-#include "VAO.h"
+
 #include "VertexData.h"
+#include "Drawable.h"
 
 #include <Resources/ResourceManager.h>
 #include <Resources/ShaderResource.h>
@@ -77,20 +75,17 @@ void OpenGLRenderer::clear()
 	prog.init();
 
 	std::vector<VertexData<float>::Vertex> data = { 
-		{{ randomFloat(-1.0f, 1.0f),  randomFloat(-1.0f, 1.0f)}},
-		{{ randomFloat(-1.0f, 1.0f),  randomFloat(-1.0f, 1.0f)}},
-		{{ randomFloat(-1.0f, 1.0f),  randomFloat(-1.0f, 1.0f)}}
+		{{ -0.5f, -0.5f}, {0.7f, 0.3f, 0.8f}},
+		{{  0.5f, -0.5f}, {0.7f, 0.3f, 0.8f}},
+		{{  0.0f,  0.5f}, {0.7f, 0.3f, 0.8f}}
 	};
 	VertexData vertexData(data);
 	
-	VAO vao;
-	vao.bind();
-
 	VBO vbo(vertexData);
 	vbo.init();
-	
-	prog.use();
-	glDrawArrays(GL_TRIANGLES, 0, vbo.getVertCount());
+
+	Drawable obj(vbo, prog);
+	obj.render();
 }
 
 } // Engine

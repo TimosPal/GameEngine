@@ -27,6 +27,13 @@ public:
 		
 		bind();
 		glBufferData(GL_ARRAY_BUFFER, m_data.getFlatVec().size() * sizeof(T), m_data.getFlatVec().data(), m_drawingType);
+		unbind();
+	}
+
+	void setAttributes()
+	{
+		bind();
+
 		// Initialize each attribute.
 		for (const auto& attributeInfo : m_data.getInfo())
 		{
@@ -40,12 +47,32 @@ public:
 			);
 			glEnableVertexAttribArray(attributeInfo.attributeLocation);
 		}
+
+		unbind();
+	}
+
+	void updateData(const VertexData<T>& data)
+	{
+		m_data = data;
+		glBufferData(GL_ARRAY_BUFFER, m_data.getFlatVec().size() * sizeof(T), m_data.getFlatVec().data(), m_drawingType);
 	}
 
 	void bind()
 	{
-		// TODO: save previous bind state?
+		if (m_isBound)
+			return;
+
+		m_isBound = true;
 		glBindBuffer(GL_ARRAY_BUFFER, m_glVBO);
+	}
+
+	void unbind()
+	{
+		if (!m_isBound)
+			return;
+
+		m_isBound = false;
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	int getVertCount() const { return m_data.getFlatVec().size(); }
@@ -58,6 +85,8 @@ private:
 
 	VertexData<T> m_data;
 
+	bool m_isBound = false;
+
 	// Utility function to get the correct OpenGL type
 	constexpr GLenum getGLType()
 	{
@@ -66,6 +95,7 @@ private:
 		else if constexpr (std::is_same_v<T, double>) return GL_DOUBLE;
 		else STATIC_ASSERT_FALSE("Invalid VBO type");
 	}
+
 };
 
 } // Engine

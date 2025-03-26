@@ -13,8 +13,11 @@ public:
 	~VAO();
 
 	void bind();
+	void unbind();
 private:
 	unsigned int m_glVAO;
+
+	bool m_isBound = false;
 };
 
 } // Engine
