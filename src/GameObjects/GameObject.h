@@ -45,7 +45,8 @@ public:
 	template<typename ComponentDerived>
 	bool addComponent()
 	{
-		return addComponent<ComponentDerived>(ComponentDerived());
+		ComponentDerived component;
+		return addComponent<ComponentDerived>(component);
 	}
 
 	template<typename ComponentDerived>

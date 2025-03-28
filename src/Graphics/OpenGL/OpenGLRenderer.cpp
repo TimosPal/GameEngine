@@ -57,29 +57,27 @@ void OpenGLRenderer::submit(const RenderData& data)
 
 void OpenGLRenderer::render()
 {
-	//auto& vertexResource = ResourceManager<ShaderResource>::getInstance().load("defaultVert", "./assets/shaders/default.vert");
-	//auto& fragmentResource = ResourceManager<ShaderResource>::getInstance().load("defaultFrag", "./assets/shaders/default.frag");
+	auto& vertexResource = ResourceManager<ShaderResource>::getInstance().load("defaultVert", "./assets/shaders/default.vert");
+	auto& fragmentResource = ResourceManager<ShaderResource>::getInstance().load("defaultFrag", "./assets/shaders/default.frag");
 
-	//Shader vertShader(vertexResource, Shader::Type::Vertex);
-	//Shader fragShader(fragmentResource, Shader::Type::Fragment);
-	//Program prog(vertShader, fragShader);
-	//prog.init();
-
-	//std::vector<VertexData<float>::Vertex> data = {
-	//	{{ -0.5f, -0.5f}, {0.7f, 0.3f, 0.8f}},
-	//	{{  0.5f, -0.5f}, {0.7f, 0.3f, 0.8f}},
-	//	{{  0.0f,  0.5f}, {0.7f, 0.3f, 0.8f}}
-	//};
-	//VertexData vertexData(data);
-
-	//VBO vbo(vertexData, GL_STATIC_DRAW);
-	//Drawable obj(vbo, prog);
-	//obj.render();
+	Shader vertShader(vertexResource, Shader::Type::Vertex);
+	Shader fragShader(fragmentResource, Shader::Type::Fragment);
+	Program prog(vertShader, fragShader);
+	prog.init();
 
 	// Render all renderables
 	for (const auto& renderable : m_renderables)
 	{
-		
+		std::vector<VertexData<float>::Vertex> data = {
+			{{ -0.5f, -0.5f}, {renderable.r, renderable.g, renderable.b}},
+			{{  0.5f, -0.5f}, {renderable.r, renderable.g, renderable.b}},
+			{{  0.0f,  0.5f}, {renderable.r, renderable.g, renderable.b}}
+		};
+		VertexData vertexData(data);
+
+		VBO vbo(vertexData, GL_STATIC_DRAW);
+		Drawable obj(vbo, prog);
+		obj.render();		
 	}
 
 	m_renderables.clear();
