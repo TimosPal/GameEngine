@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include <Utility/Logger.h>
 #include <Utility/Assertions.h>
 #include <Input/InputManager.h>
 
@@ -37,6 +36,7 @@ void Application::run()
 		m_world.update();
 
 		m_renderer.clear();
+		m_renderer.render();
 		m_window.swapBuffers();
 	}
 }

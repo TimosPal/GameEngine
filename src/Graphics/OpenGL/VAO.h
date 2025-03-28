@@ -1,8 +1,6 @@
 #ifndef VAO_H
 #define VAO_H
 
-#include <glad/glad.h>
-
 namespace Engine {
 
 // NOTE: This class could be abstracted in the future, if more APIs are to be used.

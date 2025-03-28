@@ -43,3 +43,6 @@ add_subdirectory(sandbox)
 add_compile_definitions(GRAPHICS_API=API_OPENGL)
 add_compile_definitions(WINDOW_LIBRARY=WINDOW_GLFW)
 add_compile_definitions(DEBUG_MODE)
+
+# Remove GLFW include from GameEngine, included manually in own order.
+target_compile_definitions(GameEngine PRIVATE GLFW_INCLUDE_NONE)

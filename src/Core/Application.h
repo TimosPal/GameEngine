@@ -1,17 +1,13 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-#include <memory>
 #include <Window/IWindow.h>
-
-#include "Configuration.h"
-
+#include <Core/Configuration.h>
 #include <Core/World.h>
-#include <Events/EventQueue.h>
-#include <Events/FrameBufferResizeEvent.h>
 #include <Utility/Logger.h>
 
-#include <Graphics/IRenderer.h>
+#include <Events/EventQueue.h>
+#include <Events/FrameBufferResizeEvent.h>
 
 #if GRAPHICS_API == API_OPENGL
 	#include <Graphics/OpenGL/OpenGLRenderer.h>	
@@ -72,6 +68,8 @@ public:
 		}
 	}
 
+	RendererAPI& getRenderer() { return m_renderer; }
+
 	// Use this method for custom app startup configurations.
 	virtual void start() {}
 
@@ -91,4 +89,4 @@ private:
 
 } // Engine
 
-#endif 
+#endif //!APPLICATION_H

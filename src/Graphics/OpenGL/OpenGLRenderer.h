@@ -2,6 +2,7 @@
 #define OPENGL_RENDERER_H
 
 #include <Graphics/IRenderer.h>
+#include <Graphics/RenderData.h>
 
 namespace Engine {
 
@@ -10,10 +11,11 @@ class OpenGLRenderer : public IRenderer
 public:
 	bool init() override;
 	void clear() override;
+	void submit(const RenderData& data) override;
+	void render() override;
 	
-	void createRenderable();
 private:
-
+	std::vector<RenderData> m_renderables;
 };
 
 } // Engine

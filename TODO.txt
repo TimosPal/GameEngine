@@ -6,6 +6,7 @@
 - In event queue, define unique event types (eg resize event spamming shouldnt be avoided)
 - GO manager removal 3 vecs too slow
 - GO manager forced to use heap allocations to return valid ptrs in createNewGO func
+- Extend VBO to use other types on GPU (not constant per atrtibute for whole vertex)
 
 # Refactoring
 - Change from int to specific types (uint32 etc)
@@ -17,6 +18,7 @@
 - Not sure if i like the glviewPort update to be done through callbacks from the glfw window.
 - Event handling needs a bit more work -> some events should not be asychronous (eg window resize should lead to an imediate redraw)
   Maybe i could set if an event is sychronous or not.
+- Limited VBO buffers to float only, should be able to use other types. For now it's easier to avoid templates.
 
 # Bugs
 - currently there is no way to update window width and height when an update occures. Should make an instance function to retrieve the object and set data in callback

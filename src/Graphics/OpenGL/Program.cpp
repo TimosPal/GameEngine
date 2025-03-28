@@ -1,5 +1,4 @@
 #include "Program.h"
-#include "Program.h"
 
 #include <glad/glad.h>
 
@@ -8,7 +7,7 @@ namespace Engine {
 Program* Program::programInUse = nullptr;
 
 Program::Program(Shader& vert, Shader& frag)
-	: m_vert(vert), m_frag(frag), m_isActive(false)
+	: m_vert(vert), m_frag(frag), m_isActive(false), m_glProgram(-1)
 {
 }
 
