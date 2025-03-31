@@ -14,8 +14,10 @@ public:
 
     void load() override 
     {
+        // FIXME: if internal is init already, m_loaded should be init properly not to false!
         if (!m_loaded)
         {
+			LOG_INFO("Loading internal resource: {}", m_name);
             m_internal.init(); 
             m_loaded = true;
         }
@@ -23,6 +25,7 @@ public:
 
     void unload() override 
     {
+        LOG_INFO("Unloading internal resource: {}", m_name);
         m_loaded = false;
         m_internal.destroy();
     }

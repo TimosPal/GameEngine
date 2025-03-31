@@ -4,10 +4,6 @@
 #include <Events/FrameBufferResizeEvent.h>
 #include <Core/Application.h>
 
-#include <Resources/ResourceManager.h>
-#include <Resources/SourceCodeResource.h>
-#include <Resources/InternalResource.h>
-
 #include <Graphics/VertexData.h>
 #include "Drawable.h"
 
@@ -49,27 +45,13 @@ void OpenGLRenderer::submit(const RenderData& data)
 
 void OpenGLRenderer::render()
 {
-	auto& vertexResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultVert", "./assets/shaders/default.vert"));
-	auto& fragmentResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultFrag", "./assets/shaders/default.frag"));
-
-	Shader vertShader(&vertexResource, Shader::Type::Vertex);
-	auto& vertShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("vertShader", vertShader));
-
-	Shader fragShader(&fragmentResource, Shader::Type::Fragment);
-	auto& fragShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("fragShader", fragShader));
-
-	Program prog(&vertShaderResource, &fragShaderResource);
-	auto& progResource = ResourceManager<InternalResource<Program>>::getInstance().store(InternalResource("quadProgram", prog));
-
 	// Render all renderables
 	for (const auto& renderable : m_renderables)
 	{
-		progResource.load();
-
 		VertexData vertexData(renderable.vertexData);
 
 		VBO vbo(vertexData, GL_STATIC_DRAW);
-		Drawable obj(vbo, progResource.getInternalObject());
+		Drawable obj(vbo, renderable.program);
 		obj.render();		
 	}
 
