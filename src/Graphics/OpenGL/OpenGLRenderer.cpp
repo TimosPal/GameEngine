@@ -5,7 +5,8 @@
 #include <Core/Application.h>
 
 #include <Resources/ResourceManager.h>
-#include <Resources/ShaderResource.h>
+#include <Resources/SourceCodeResource.h>
+#include <Resources/InternalResource.h>
 
 #include <Graphics/VertexData.h>
 #include "Drawable.h"
@@ -15,8 +16,6 @@
 #if WINDOW_LIBRARY == WINDOW_GLFW
 #include <GLFW/glfw3.h>
 #endif
-
-#include <random>
 
 namespace Engine {
 
@@ -43,13 +42,6 @@ bool OpenGLRenderer::init()
 	return true;
 }
 
-static float randomFloat(float min, float max) {
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dis(min, max);
-	return dis(gen);
-}
-
 void OpenGLRenderer::submit(const RenderData& data)
 {
 	m_renderables.push_back(data);
@@ -57,26 +49,27 @@ void OpenGLRenderer::submit(const RenderData& data)
 
 void OpenGLRenderer::render()
 {
-	auto& vertexResource = ResourceManager<ShaderResource>::getInstance().load("defaultVert", "./assets/shaders/default.vert");
-	auto& fragmentResource = ResourceManager<ShaderResource>::getInstance().load("defaultFrag", "./assets/shaders/default.frag");
+	auto& vertexResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultVert", "./assets/shaders/default.vert"));
+	auto& fragmentResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultFrag", "./assets/shaders/default.frag"));
 
-	Shader vertShader(vertexResource, Shader::Type::Vertex);
-	Shader fragShader(fragmentResource, Shader::Type::Fragment);
-	Program prog(vertShader, fragShader);
-	prog.init();
+	Shader vertShader(&vertexResource, Shader::Type::Vertex);
+	auto& vertShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("vertShader", vertShader));
+
+	Shader fragShader(&fragmentResource, Shader::Type::Fragment);
+	auto& fragShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("fragShader", fragShader));
+
+	Program prog(&vertShaderResource, &fragShaderResource);
+	auto& progResource = ResourceManager<InternalResource<Program>>::getInstance().store(InternalResource("quadProgram", prog));
 
 	// Render all renderables
 	for (const auto& renderable : m_renderables)
 	{
-		std::vector<VertexData<float>::Vertex> data = {
-			{{ -0.5f, -0.5f}, {renderable.r, renderable.g, renderable.b}},
-			{{  0.5f, -0.5f}, {renderable.r, renderable.g, renderable.b}},
-			{{  0.0f,  0.5f}, {renderable.r, renderable.g, renderable.b}}
-		};
-		VertexData vertexData(data);
+		progResource.load();
+
+		VertexData vertexData(renderable.vertexData);
 
 		VBO vbo(vertexData, GL_STATIC_DRAW);
-		Drawable obj(vbo, prog);
+		Drawable obj(vbo, progResource.getInternalObject());
 		obj.render();		
 	}
 

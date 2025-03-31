@@ -1,19 +1,15 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <Resources/ShaderResource.h>
+#include <Graphics/IShader.h>
 
 namespace Engine {
 
-// NOTE: This class could be abstracted in the future, if more APIs are to be used.
-class Shader
+class Shader : public IShader
 {
 public:
-	enum class Type {
-		Vertex, Fragment
-	};
-
-	Shader(ShaderResource& shader, Type type);
+	Shader();
+	Shader(SourceCodeResource* shader, IShader::Type type);
 	~Shader();
 
 	bool init();
@@ -21,11 +17,7 @@ public:
 
 	unsigned int getGLID() const { return m_glShader; }
 private:
-	ShaderResource& m_shader;
-
-	bool m_isActive;
 	unsigned int m_glShader;
-	Type m_type;
 };
 
 } // Engine

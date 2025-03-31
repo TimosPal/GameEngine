@@ -8,12 +8,14 @@ namespace Engine {
 
 struct RenderData
 {
-	float r, g, b;
-	float x, y, z;
 	VertexData<float> vertexData;
 
-	RenderData(float r, float g, float b, float x, float y, float z, VertexData<float> vertexData)
-		: r(r), g(g), b(b), x(x), y(y), z(z), vertexData(vertexData) {
+	RenderData(
+		VertexData<float> vertexData
+	)
+		: 
+		vertexData(vertexData)
+	{
 	}
 };
 

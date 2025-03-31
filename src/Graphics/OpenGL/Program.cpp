@@ -4,10 +4,13 @@
 
 namespace Engine {
 
-Program* Program::programInUse = nullptr;
+Program::Program()
+	: IProgram(nullptr, nullptr), m_glProgram(-1)
+{
+}
 
-Program::Program(Shader& vert, Shader& frag)
-	: m_vert(vert), m_frag(frag), m_isActive(false), m_glProgram(-1)
+Program::Program(InternalResource<Shader>* vert, InternalResource<Shader>* frag)
+	: IProgram(vert, frag), m_glProgram(-1)
 {
 }
 
@@ -18,13 +21,13 @@ Program::~Program()
 
 bool Program::init()
 {
-	m_vert.init();
-	m_frag.init();
+	m_vert->load();
+	m_frag->load();
 
 	m_glProgram = glCreateProgram();
 
-	unsigned int vertexShader = m_vert.getGLID();
-	unsigned int fragmentShader = m_frag.getGLID();
+	unsigned int vertexShader = m_vert->getInternalObject().getGLID();
+	unsigned int fragmentShader = m_frag->getInternalObject().getGLID();
 
 	glAttachShader(m_glProgram, vertexShader);
 	glAttachShader(m_glProgram, fragmentShader);
@@ -39,8 +42,8 @@ bool Program::init()
 		return false;
 	}
 
-	m_vert.destroy();
-	m_frag.destroy();
+	m_vert->unload();
+	m_frag->unload();
 
 	m_isActive = true;
 

@@ -62,16 +62,19 @@ public:
 		m_components[id] = std::make_shared<ComponentDerived>(component);
 		m_componentTypes.insert(id); // Does not mean it will always be an active component.
 
+		// Add parent reference.
+		m_components[id]->setOwner(*this);
+
 		return true;
 	}
 
 	Identifier getInstanceID() const { return m_id; }
 
 	template<typename ComponentDerived>
-	std::shared_ptr<IComponentBase> getComponent()
+	std::shared_ptr<ComponentDerived> getComponent()
 	{
 		Identifier id = ComponentDerived::getTypeID();
-		return getComponent(id);
+		return std::static_pointer_cast<ComponentDerived>(getComponent(id));
 	}
 
 	std::shared_ptr<IComponentBase> getComponent(Identifier id);

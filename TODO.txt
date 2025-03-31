@@ -25,6 +25,7 @@
 - Components in GOs update method is wrong! Shouldnt run each update per go like this. [x]
 - go manager does not handle object creation within start and update methods properly [x]
 - With current implementation, if user stores GO in global state, after internal moving the reference will be invalid ptr. How to store GOs without losing reference. [x]
+- ID system does not retrieve lost ids. If i make many Resources each one wastes an id even if its temporary.
 
 # Features
 - combos in actions system.

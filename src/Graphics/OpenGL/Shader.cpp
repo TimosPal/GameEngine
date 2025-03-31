@@ -5,8 +5,13 @@
 
 namespace Engine {
 
-Shader::Shader(ShaderResource& shader, Type type)
-	: m_shader(shader), m_isActive(false), m_type(type)
+Shader::Shader()
+	: IShader(), m_glShader(-1)
+{
+}
+
+Shader::Shader(SourceCodeResource* shader, IShader::Type type)
+	: IShader(shader, type), m_glShader(-1)
 {}
 
 Shader::~Shader()
@@ -19,7 +24,7 @@ bool Shader::init()
 	auto gl_vertex_type = (m_type == Type::Vertex) ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
 	m_glShader = glCreateShader(gl_vertex_type);
 
-	const char* shaderSourceCodeCString = m_shader.getString().c_str();
+	const char* shaderSourceCodeCString = m_shader->getData().c_str();
 	glShaderSource(m_glShader, 1, &shaderSourceCodeCString, NULL);
 	glCompileShader(m_glShader);
 

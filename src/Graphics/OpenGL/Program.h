@@ -1,32 +1,26 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+#include <Graphics/IProgram.h>
 #include "Shader.h"
 
 namespace Engine {
 
 // NOTE: This class could be abstracted in the future, if more APIs are to be used.
-class Program
+class Program : public IProgram<Shader>
 {
 public:
-	Program(Shader& vert, Shader& frag);
+	Program();
+	Program(InternalResource<Shader>* vert, InternalResource<Shader>* frag);
 	~Program();
 
 	bool init();
+	void destroy();
 	void use();
 	void unuse();
 
 private:
-	static Program* programInUse;
-
-	bool m_isActive = false;
-
-	Shader m_vert;
-	Shader m_frag;
-
 	unsigned int m_glProgram;
-	
-	void destroy();
 };
 
 } // Engine

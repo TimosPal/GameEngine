@@ -7,6 +7,8 @@
 namespace Engine {  
 namespace GameObjects {  
 
+class GameObject;
+
 class IComponentBase  
 {  
 public:
@@ -18,11 +20,13 @@ public:
 	virtual Identifier getInstanceTypeID() const = 0;  
 	virtual std::unique_ptr<IComponentBase> clone() const = 0;
 
-	virtual std::string toString() const {
-		// TODO: cache result.
-		std::string name = classToString(*this);
-		return name;
-	}
+	virtual std::string toString() const;
+
+	void setOwner(GameObjects::GameObject& owner);
+	GameObject& getOwner() const;
+
+protected:
+	GameObject* m_owner = nullptr;
 };  
 
 template<typename Derived>  

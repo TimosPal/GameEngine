@@ -12,11 +12,13 @@ namespace GameObjects {
 class SpriteComponent : public IComponent<SpriteComponent>
 {
 public:
-	SpriteComponent(float r, float g, float b) : IComponent<SpriteComponent>() 
+	SpriteComponent(float r, float g, float b, float x, float y) : IComponent<SpriteComponent>() 
 	{
 		m_r = r;
 		m_g = g;
 		m_b = b;
+		m_x = x;
+		m_y = y;
 	};
 
 	virtual void start() override {};
@@ -25,20 +27,22 @@ public:
 	{
 		// Create 2d quad.
 		std::vector<VertexData<float>::Vertex> verticesRaw = {
-		{{ -0.5f, -0.5f}, {0.7f, 0.3f, 0.8f}},
-		{{  0.5f, -0.5f}, {0.7f, 0.3f, 0.8f}},
-		{{  0.0f,  0.5f}, {0.7f, 0.3f, 0.8f}}
+		{{ m_x + -0.02f, m_y + -0.02f}, {m_r, m_g, m_b}},
+		{{ m_x +  0.02f, m_y + -0.02f}, {m_r, m_g, m_b}},
+		{{ m_x +  0.0f, m_y +  0.02f}, {m_r, m_g, m_b}}
 		};
 		VertexData<float> vertexData(verticesRaw);
 
 		// Submit to renderer.
-		RenderData data(m_r, m_g, m_b, 0, 0, 0, vertexData);
+		RenderData data(vertexData);
 		Application::getInstance()->getRenderer().submit(data);
 	};
 
-private:
 	// TODO: Move to a struct. 
+	// Not public.
 	float m_r, m_g, m_b;
+	float m_x, m_y;
+private:
 };
 
 } // GameObjects
