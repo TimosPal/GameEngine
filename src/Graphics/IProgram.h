@@ -18,6 +18,8 @@ public:
 	virtual void use() = 0;
 	virtual void unuse() = 0;
 
+	virtual void setUniform(const std::string& uniformName, float value) = 0;
+
 protected:
 	// NOTE: to be used for checking bound usage only, not dereferencing.
 	inline static IProgram* programInUse = nullptr;

@@ -19,6 +19,10 @@ SourceCodeResource::SourceCodeResource()
 {
 }
 
+SourceCodeResource::~SourceCodeResource(){
+    unload();
+}
+
 SourceCodeResource::SourceCodeResource(const std::string& name, const std::string& path)
     : Resource(Type::SourceCode, name), m_path(path)
 {
@@ -26,17 +30,22 @@ SourceCodeResource::SourceCodeResource(const std::string& name, const std::strin
 
 void SourceCodeResource::load()
 {
-    bool openedFile;
-    m_data = fileToString(m_path, openedFile);
-
-    m_loaded = openedFile;
+    if (!m_loaded)
+    {
+        LOG_INFO("Loading source code resource: {}", m_path);
+        m_data = fileToString(m_path, m_loaded);
+        m_loaded = true;
+    }
 }
 
 void SourceCodeResource::unload()
 {
-    m_loaded = false;
-
-    m_data = "";
+    if (m_loaded)
+    {
+        LOG_INFO("Unloading source code resource: {}", m_path);
+        m_loaded = false;
+        m_data = "";
+    }
 }
 
 

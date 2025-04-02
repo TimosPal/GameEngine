@@ -3,6 +3,7 @@
 
 #include "VAO.h"
 #include "VBO.h"
+#include "EBO.h"
 #include "Program.h"
 
 namespace Engine {
@@ -10,14 +11,16 @@ namespace Engine {
 class Drawable
 {
 public:
-	Drawable(VBO& vbo, Program& program);
+	Drawable(VBO& vbo, EBO& ebo, Program& program);
+	~Drawable();
 
 	void render();
 
 private:
 	VAO m_vao;
-	VBO& m_vbo; // Managed by Renderer
-	Program& m_program; // Managed by Renderer
+	VBO& m_vbo;
+	EBO& m_ebo;
+	Program& m_program;
 };
 
 } // Engine

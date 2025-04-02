@@ -10,6 +10,7 @@ namespace Engine {
 class VBO
 {
 public:
+	VBO(int drawingType);
 	VBO(const VertexData<float>& data, int drawingType);
 
 	~VBO();

@@ -115,8 +115,13 @@ public:
 			);
 			go.addComponent<GameObjects::SpriteComponent>(spriteComponent);
 			go.addComponent<Unit>();
+
+			count++;
+			LOG_INFO("Count: {}", count);
 		}
 	};
+
+	int count = 0;
 
 };
 
@@ -132,6 +137,17 @@ public:
 		GameObjects::GameObject newGo;
 		auto& go = Application::getWorld().getGOManager().createGameObject(newGo);
 		go.addComponent<Controller>();
+
+		GameObjects::GameObject newGo2;
+		auto& go2 = Application::getWorld().getGOManager().createGameObject(newGo2);
+		GameObjects::SpriteComponent spriteComponent(
+			0.0f,
+			0.0f,
+			0.8f,
+			0.0f,
+			0.0f
+		);
+		go2.addComponent<GameObjects::SpriteComponent>(spriteComponent);
 	}
 
 };

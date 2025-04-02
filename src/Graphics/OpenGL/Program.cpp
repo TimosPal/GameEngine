@@ -1,6 +1,7 @@
 #include "Program.h"
 
 #include <glad/glad.h>
+#include "GLWrapper.h"
 
 namespace Engine {
 
@@ -15,29 +16,27 @@ Program::Program(InternalResource<Shader>* vert, InternalResource<Shader>* frag)
 }
 
 Program::~Program()
-{
-	destroy();
-}
+{}
 
 bool Program::init()
 {
 	m_vert->load();
 	m_frag->load();
 
-	m_glProgram = glCreateProgram();
+	GL_RET(glCreateProgram(), m_glProgram);
 
 	unsigned int vertexShader = m_vert->getInternalObject().getGLID();
 	unsigned int fragmentShader = m_frag->getInternalObject().getGLID();
 
-	glAttachShader(m_glProgram, vertexShader);
-	glAttachShader(m_glProgram, fragmentShader);
-	glLinkProgram(m_glProgram);
+	GL(glAttachShader(m_glProgram, vertexShader));
+	GL(glAttachShader(m_glProgram, fragmentShader));
+	GL(glLinkProgram(m_glProgram));
 
 	int success;
 	char infoLog[512];
-	glGetProgramiv(m_glProgram, GL_LINK_STATUS, &success);
+	GL(glGetProgramiv(m_glProgram, GL_LINK_STATUS, &success));
 	if (!success) {
-		glGetProgramInfoLog(m_glProgram, 512, NULL, infoLog);
+		GL(glGetProgramInfoLog(m_glProgram, 512, NULL, infoLog));
 		LOG_ERROR("LINKING FAILED: {}", infoLog);
 		return false;
 	}
@@ -52,33 +51,64 @@ bool Program::init()
 
 void Program::destroy()
 {
-	glDeleteProgram(m_glProgram);
+	if (!m_isActive)
+		return;
+
+	GL(glDeleteProgram(m_glProgram));
 
 	// Shaders are already deleted from the init function.
-	programInUse = nullptr;
+	if (programInUse == this)
+	{
+		programInUse = nullptr;
+	}
 	m_isActive = false;
+	m_glProgram = 0;
 }
 
 void Program::use()
 {
-	if (programInUse == this)
+	if (!m_isActive || programInUse == this)
 	{
 		return;
 	}
 
 	programInUse = this;
-	glUseProgram(m_glProgram);
+	GL(glUseProgram(m_glProgram));
 }
 
 void Program::unuse()
 {
-	if (programInUse != this)
+	if (!m_isActive || programInUse != this)
 	{
 		return;
 	}
 
 	programInUse = nullptr;
-	glUseProgram(0);
+	GL(glUseProgram(0));
+}
+
+int Program::getUniformLocation(const std::string& uniformName)
+{
+	// Find uniform location from cache if possible
+	auto it = m_uniformLocations.find(uniformName);
+	int location;
+	if (it != m_uniformLocations.end()) {
+		location = it->second;
+	}
+	else {
+		GL_RET(glGetUniformLocation(m_glProgram, uniformName.c_str()), location);
+		m_uniformLocations[uniformName] = location;
+	}
+
+	return location;
+}
+
+void Program::setUniform(const std::string& uniformName, float value)
+{
+	// NOTE: unbinding after use is uneeded overhead, user will most likely use the shader.
+	// after a value change.
+	use();
+	GL(glUniform1f(getUniformLocation(uniformName), value));
 }
 
 } // Engine

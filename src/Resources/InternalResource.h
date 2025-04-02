@@ -12,6 +12,11 @@ public:
     InternalResource() : Resource(Resource::Type::Internal, "NoName") {}
     InternalResource(const std::string& name, const InternalDerived& internal) : Resource(Resource::Type::Internal, name), m_internal(internal) {}
 
+    ~InternalResource()
+    {
+        unload();
+    }
+
     void load() override 
     {
         // FIXME: if internal is init already, m_loaded should be init properly not to false!
@@ -23,11 +28,14 @@ public:
         }
     }
 
-    void unload() override 
+    void unload() override
     {
-        LOG_INFO("Unloading internal resource: {}", m_name);
-        m_loaded = false;
-        m_internal.destroy();
+        if (m_loaded)
+        {
+            LOG_INFO("Unloading internal resource: {}", m_name);
+            m_loaded = false;
+            m_internal.destroy();
+        }
     }
 
     InternalDerived& getInternalObject() { return m_internal; }

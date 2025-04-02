@@ -5,6 +5,10 @@
 #include <Utility/Assertions.h>
 #include <Input/InputManager.h>
 
+#include <Resources/ResourceManager.h>
+#include <Resources/InternalResource.h>
+#include <Resources/SourceCodeResource.h>
+
 namespace Engine {
 
 Application* Application::m_instance = nullptr;
@@ -43,6 +47,10 @@ void Application::run()
 
 void Application::terminate()
 {
+	ResourceManager<SourceCodeResource>::getInstance().cleanup("Source codes");
+	ResourceManager<InternalResource<Program>>::getInstance().cleanup("Programs");
+	
+	// Window terminated last so the current API context is active for proper cleanup
 	m_window.terminate();
 }
 

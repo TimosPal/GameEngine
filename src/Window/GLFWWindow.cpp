@@ -75,6 +75,10 @@ bool GLFWWindow::init()
 		return false;
 	}
 
+	#if GRAPHICS_API == API_OPENGL
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+	#endif
+
 	glfwSetErrorCallback(errorCallback);
 	m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), NULL, NULL);
 	if (!m_window)

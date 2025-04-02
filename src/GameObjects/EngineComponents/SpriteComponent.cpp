@@ -40,15 +40,21 @@ void SpriteComponent::update()
 {
 	// Create 2d quad.
 	std::vector<VertexData<float>::Vertex> verticesRaw = {
-	{{ m_x + -0.02f, m_y + -0.02f}, {m_r, m_g, m_b}},
-	{{ m_x + 0.02f, m_y + -0.02f}, {m_r, m_g, m_b}},
-	{{ m_x + 0.0f, m_y + 0.02f}, {m_r, m_g, m_b}}
+	{{-0.2f + m_x, -0.2f + m_y}, {m_r, m_g, m_b}}, // Bottom-left  
+	{{-0.2f + m_x,  0.2f + m_y}, {m_r, m_g, m_b}}, // Top-left  
+	{{ 0.2f + m_x,  0.2f + m_y}, {m_r, m_g, m_b}}, // Top-right  
+	{{ 0.2f + m_x, -0.2f + m_y}, {m_r, m_g, m_b}}  // Bottom-right  
 	};
-	VertexData<float> vertexData(verticesRaw);
+
+	// Indexing data. (Reduces 6 vertices to 4)
+	std::vector<unsigned int> indicesRaw = {
+		0, 2, 1,  // First triangle (Clockwise)  
+		0, 3, 2   // Second triangle (Clockwise)  
+	};
 
 	// Submit to renderer.
-	RenderData data(vertexData, cachedProgResource->getInternalObject());
-	Application::getInstance()->getRenderer().submit(data);
+	RenderData data(verticesRaw, indicesRaw, cachedProgResource->getInternalObject());
+	Application::getInstance()->getRenderer().submit(std::move(data));
 };
 
 } // GameObjects

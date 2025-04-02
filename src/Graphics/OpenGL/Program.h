@@ -4,9 +4,10 @@
 #include <Graphics/IProgram.h>
 #include "Shader.h"
 
+#include <unordered_map>
+
 namespace Engine {
 
-// NOTE: This class could be abstracted in the future, if more APIs are to be used.
 class Program : public IProgram<Shader>
 {
 public:
@@ -14,13 +15,19 @@ public:
 	Program(InternalResource<Shader>* vert, InternalResource<Shader>* frag);
 	~Program();
 
-	bool init();
-	void destroy();
-	void use();
-	void unuse();
+	bool init() override;
+	void destroy() override;
+	void use() override;
+	void unuse() override;
+
+	void setUniform(const std::string& uniformName, float value) override;
 
 private:
 	unsigned int m_glProgram;
+
+	std::unordered_map<std::string, int> m_uniformLocations;
+
+	int getUniformLocation(const std::string& uniformName);
 };
 
 } // Engine

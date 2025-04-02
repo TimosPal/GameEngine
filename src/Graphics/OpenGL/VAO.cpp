@@ -1,6 +1,7 @@
 #include "VAO.h"
 
 #include <glad/glad.h>
+#include "GLWrapper.h"
 
 namespace Engine {
 
@@ -8,13 +9,14 @@ VAO* VAO::boundVAO = nullptr;
 
 VAO::VAO()
 {
-	glGenVertexArrays(1, &m_glVAO);
+	GL(glGenVertexArrays(1, &m_glVAO));
 }
 
 VAO::~VAO()
 {
-	boundVAO = nullptr;
-	glDeleteVertexArrays(1, &m_glVAO);
+	if (boundVAO == this)
+		boundVAO = nullptr;
+	GL(glDeleteVertexArrays(1, &m_glVAO));
 }
 
 void VAO::bind()
@@ -23,7 +25,7 @@ void VAO::bind()
 		return;
 
 	boundVAO = this;
-	glBindVertexArray(m_glVAO);
+	GL(glBindVertexArray(m_glVAO));
 }
 
 void VAO::unbind()
@@ -32,7 +34,7 @@ void VAO::unbind()
 		return;
 
 	boundVAO = nullptr;
-	glBindVertexArray(0);
+	GL(glBindVertexArray(0));
 }
 
 } // Engine

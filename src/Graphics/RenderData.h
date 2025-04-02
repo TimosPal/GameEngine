@@ -14,13 +14,17 @@ namespace Engine {
 
 struct RenderData
 {
-	VertexData<float> vertexData;
+	std::vector<VertexData<float>::Vertex> vertices; // TODO: Expensive copy
+	std::vector<unsigned int> indices;
 	ProgramImpl& program;
 
-	RenderData(VertexData<float> vertexData, ProgramImpl& program)
-		: vertexData(vertexData), program(program)
-	{
-	}
+	RenderData(
+		const std::vector<VertexData<float>::Vertex>& vertices,
+		const std::vector<unsigned int>& indices,
+		ProgramImpl& program
+	)
+		: vertices(vertices), program(program), indices(indices)
+	{}
 };
 
 } // Engine

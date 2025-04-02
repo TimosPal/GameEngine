@@ -11,6 +11,7 @@ struct SourceCodeResource : public Resource
 public:
     SourceCodeResource();
 	SourceCodeResource(const std::string& name, const std::string& path);
+    ~SourceCodeResource();
 
     void load() override;
     void unload() override;

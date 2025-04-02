@@ -20,25 +20,21 @@ public:
 	using VertexAttribute = std::vector<T>;
 	using Vertex = std::vector<VertexAttribute>;
 
+	VertexData()
+		: m_vertexSize(0)
+	{}
+
 	VertexData(std::vector<Vertex>& data) 
 		: m_vertexSize(0)
 	{
-		int prevOffset = 0;
-		int location = 0;
-		if (!data.empty()) 
-		{
-			for (const VertexAttribute& attribute : data[0]) {
-				m_info.push_back(
-					{
-						prevOffset, // Offset
-						int(attribute.size()), // #elements
-						location++ // Location
-					}
-				);
+		updateData(data);
+	}
 
-				prevOffset += attribute.size();
-				m_vertexSize += int(attribute.size()) * sizeof(T);
-			}
+	void addData(std::vector<Vertex>& data)
+	{
+		if (!data.empty() && m_info.empty())
+		{
+			initAttributeInfo(data[0]);
 		}
 
 		for (const auto& vert : data)
@@ -47,6 +43,24 @@ public:
 			{
 				m_data.insert(m_data.end(), attribute.begin(), attribute.end());
 			}
+		}
+	}
+
+	void initAttributeInfo(const Vertex& vertex)
+	{
+		int prevOffset = 0;
+		int location = 0;
+		for (const VertexAttribute& attribute : vertex) {
+			m_info.push_back(
+				{
+					prevOffset, // Offset
+					int(attribute.size()), // #elements
+					location++ // Location
+				}
+			);
+
+			prevOffset += attribute.size();
+			m_vertexSize += int(attribute.size()) * sizeof(T);
 		}
 	}
 

@@ -69,6 +69,14 @@ public:
 		}
 	}
 
+	void cleanup(const std::string& name)
+	{
+		LOG_INFO("Resource manager shutdown: {}", name);
+		// Unload resources.
+		m_resources.clear();
+		m_handles.clear();
+	}
+
 private:
 	std::unordered_map<Identifier, ResourceType> m_resources;
 	std::unordered_map<std::string, Identifier> m_handles;

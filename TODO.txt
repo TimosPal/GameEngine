@@ -7,6 +7,7 @@
 - GO manager removal 3 vecs too slow
 - GO manager forced to use heap allocations to return valid ptrs in createNewGO func
 - Extend VBO to use other types on GPU (not constant per atrtibute for whole vertex)
+- VBO EBO maybe they dont need to hold data after sending to GPU.
 
 # Refactoring
 - Change from int to specific types (uint32 etc)
@@ -19,6 +20,7 @@
 - Event handling needs a bit more work -> some events should not be asychronous (eg window resize should lead to an imediate redraw)
   Maybe i could set if an event is sychronous or not.
 - Limited VBO buffers to float only, should be able to use other types. For now it's easier to avoid templates.
+- Resource manager -> load could be a higher level function that calls a loadImpl or unloadImpl, sets bools and checks conditions reducing code repetition.
 
 # Bugs
 - currently there is no way to update window width and height when an update occures. Should make an instance function to retrieve the object and set data in callback
@@ -30,6 +32,9 @@
   Could init m_isActive by quering the internal object. Could make Resource : IResource (interface for load unload -> init destroy becomes the same),
   and InternalResource : Resource. Then i could store the internal resource in the handler and return the resource.
   Case for thinking: if we init prog before the resource storage.
+- Cleanup resources / shaders / programs. Calling destroy on destructors causes problems with coppies / moved objects, either implement custom move logic and destruction checks or
+  manually call destory when cleaning up.
+- If i make buffer reallocations after the VAO is set this can cause orphan buffer pointers. Should use subData or buffer mapping.
 
 # Features
 - combos in actions system.

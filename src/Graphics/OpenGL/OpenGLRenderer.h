@@ -11,7 +11,7 @@ class OpenGLRenderer : public IRenderer
 public:
 	bool init() override;
 	void clear() override;
-	void submit(const RenderData& data) override;
+	void submit(RenderData&& data) override;
 	void render() override;
 	
 private:
