@@ -1,4 +1,4 @@
-#include "SourceCodeResource.h"
+#include "SourceHandler.h"
 
 #include <Utility/IdentifierGenerator.h>
 
@@ -15,7 +15,7 @@ const std::string& SourceCodeResource::getData()
 }
 
 SourceCodeResource::SourceCodeResource()
-    : Resource(Type::SourceCode, "NoName"), m_path("NoPath")
+    : IResourceHandler(Type::SourceCode, "NoName"), m_path("NoPath")
 {
 }
 
@@ -24,7 +24,7 @@ SourceCodeResource::~SourceCodeResource(){
 }
 
 SourceCodeResource::SourceCodeResource(const std::string& name, const std::string& path)
-    : Resource(Type::SourceCode, name), m_path(path)
+    : IResourceHandler(Type::SourceCode, name), m_path(path)
 {
 }
 

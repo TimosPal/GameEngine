@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <Resources/TextureResource.h>
+#include <Resources/TextureHandler.h>
 
 namespace Engine {
 

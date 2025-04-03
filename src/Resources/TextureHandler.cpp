@@ -1,9 +1,9 @@
-#include "TextureResource.h"
+#include "TextureHandler.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-#include "Resource.h"
+#include "IResourceHandler.h"
 #include <iostream>
 #include <vector>
 
@@ -12,7 +12,7 @@
 namespace Engine {
 
     TextureResource::TextureResource(const std::string& name, const std::string& filePath)
-        : Resource(Type::Image, name), m_filePath(filePath), m_width(0), m_height(0), m_channels(0), m_data(nullptr)
+        : IResourceHandler(Type::Image, name), m_filePath(filePath), m_width(0), m_height(0), m_channels(0), m_data(nullptr)
     {}
 
     TextureResource::~TextureResource()

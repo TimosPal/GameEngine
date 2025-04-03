@@ -1,11 +1,11 @@
 #ifndef TEXTURE_RESOURCE_H
 #define TEXTURE_RESOURCE_H
 
-#include "Resource.h"
+#include "IResourceHandler.h"
 
 namespace Engine {
 
-class TextureResource : public Resource {
+class TextureResource : public IResourceHandler {
 public:
     TextureResource(const std::string& name, const std::string& filePath);
     ~TextureResource();

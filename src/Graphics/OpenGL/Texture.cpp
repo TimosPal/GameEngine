@@ -1,10 +1,12 @@
 #include "Texture.h"
 
+#include <glad/glad.h>
+
 namespace Engine {
 
 Texture::Texture()
 {
-	//glGenTextures(1, &m_glTexture);
+	glGenTextures(1, &m_glTexture);
 }
 
 Texture::Texture(TextureResource* texture)

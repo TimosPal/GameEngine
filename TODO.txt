@@ -42,6 +42,4 @@
 
 # Main concerns in refactoring
 - Include cleanup
-- Load / unload + Init / Destroy -> higher level class needs to be enforced on Resources and ResourceHandlers
 - Analyse useless coppies in Renderer side
-- Program used in Application.cpp + SpriteComponent instead of ProgramImpl (API agnostic type)

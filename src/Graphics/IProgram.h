@@ -2,19 +2,18 @@
 #define IPROGRAM_H
 
 #include "IShader.h"
-#include <Resources/InternalResource.h>
+#include <Resources/InternalHandler.h>
+#include <Resources/IResource.h>
 
 namespace Engine {
 
 template<typename ShaderDerived>
-class IProgram
+class IProgram : public IResource
 {
 public:
 	IProgram() : m_isActive(false), m_vert(nullptr), m_frag(nullptr) {};
 	IProgram(InternalResource<ShaderDerived>* vert, InternalResource<ShaderDerived>* frag) : m_isActive(false), m_vert(vert), m_frag(frag) {};
 
-	virtual bool init() = 0;
-	virtual void destroy() = 0;
 	virtual void use() = 0;
 	virtual void unuse() = 0;
 

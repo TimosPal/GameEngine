@@ -12,8 +12,8 @@ public:
 	Shader(SourceCodeResource* shader, IShader::Type type);
 	~Shader();
 
-	bool init();
-	void destroy();
+	bool init() override;
+	void destroy() override;
 
 	unsigned int getGLID() const { return m_glShader; }
 private:

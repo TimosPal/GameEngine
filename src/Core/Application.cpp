@@ -6,8 +6,8 @@
 #include <Input/InputManager.h>
 
 #include <Resources/ResourceManager.h>
-#include <Resources/InternalResource.h>
-#include <Resources/SourceCodeResource.h>
+#include <Resources/InternalHandler.h>
+#include <Resources/SourceHandler.h>
 
 #include <Graphics/GraphicsIncludes.h>
 

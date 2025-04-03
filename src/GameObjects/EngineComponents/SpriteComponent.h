@@ -2,7 +2,7 @@
 #define SPRITE_COMPONENT_H
 
 #include <GameObjects/IComponent.h>
-#include <Resources/InternalResource.h>
+#include <Resources/InternalHandler.h>
 
 #include <Graphics/GraphicsIncludes.h>
 

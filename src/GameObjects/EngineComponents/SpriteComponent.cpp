@@ -4,8 +4,8 @@
 #include <Core/Application.h>
 
 #include <Resources/ResourceManager.h>
-#include <Resources/SourceCodeResource.h>
-#include <Resources/TextureResource.h>
+#include <Resources/SourceHandler.h>
+#include <Resources/TextureHandler.h>
 
 #include <Graphics/GraphicsIncludes.h>
 

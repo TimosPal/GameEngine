@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "Resource.h"
+#include "IResourceHandler.h"
 
 namespace Engine {
 

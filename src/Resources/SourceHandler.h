@@ -1,12 +1,12 @@
 #ifndef SOURCE_CODE_RESOURCE_H
 #define SOURCE_CODE_RESOURCE_H
 
-#include "Resource.h"
+#include "IResourceHandler.h"
 #include <Utility/Util.h>
 
 namespace Engine {
 
-struct SourceCodeResource : public Resource
+struct SourceCodeResource : public IResourceHandler
 {
 public:
     SourceCodeResource();
