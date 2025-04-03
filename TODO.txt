@@ -21,7 +21,6 @@
 - Resource manager -> load should return bools -> handled in manager appropriately
 - Can clone/getID funcs like in IEvent / IComponent be refactored into a higher class?
 - OpenGL namespace
-- WindowImpl put into file just like GraphicsAPI
 
 
 # Bugs

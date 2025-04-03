@@ -9,6 +9,8 @@
 #include <Resources/InternalResource.h>
 #include <Resources/SourceCodeResource.h>
 
+#include <Graphics/GraphicsIncludes.h>
+
 namespace Engine {
 
 Application* Application::m_instance = nullptr;

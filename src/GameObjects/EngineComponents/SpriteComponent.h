@@ -4,12 +4,7 @@
 #include <GameObjects/IComponent.h>
 #include <Resources/InternalResource.h>
 
-#if GRAPHICS_API == API_OPENGL
-	#include <Graphics/OpenGL/Program.h>
-	using ProgramImpl = Engine::Program;
-#else
-	#error Invalid graphics API
-#endif
+#include <Graphics/GraphicsIncludes.h>
 
 namespace Engine {
 namespace GameObjects {

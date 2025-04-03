@@ -7,12 +7,7 @@
 #include <Resources/SourceCodeResource.h>
 #include <Resources/TextureResource.h>
 
-#if GRAPHICS_API == API_OPENGL
-	#include <Graphics/OpenGL/Shader.h>
-	using ShaderImpl = Engine::Shader;
-#else
-	#error Invalid graphics API
-#endif
+#include <Graphics/GraphicsIncludes.h>
 
 namespace Engine {
 namespace GameObjects {

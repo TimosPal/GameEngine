@@ -2,13 +2,7 @@
 #define RENDER_DATA_H
 
 #include <Graphics/VertexData.h>
-
-#if GRAPHICS_API == API_OPENGL
-	#include "OpenGL/Program.h"
-	using ProgramImpl = Engine::Program;
-#else
-	#error Invalid graphics API
-#endif
+#include <Graphics/GraphicsIncludes.h>
 
 namespace Engine {
 

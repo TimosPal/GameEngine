@@ -3,6 +3,20 @@
 
 #include <string>
 
+#if GRAPHICS_API == API_OPENGL
+	#include <Graphics/OpenGL/OpenGLRenderer.h>	
+	using RendererAPI = Engine::OpenGLRenderer;
+#else
+	#error Invalid graphics API
+#endif
+
+#if WINDOW_LIBRARY == WINDOW_GLFW
+	#include <Window/GLFWWindow.h>
+	using WindowLib = Engine::GLFWWindow;
+#else
+	#error Invalid window library
+#endif
+
 namespace Engine {
 
 constexpr int default_width = 800;
