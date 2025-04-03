@@ -14,10 +14,10 @@ public:
 	};
 
 	IShader() : m_shader(nullptr), m_type(Type::None), m_isActive(false) {}
-	IShader(SourceCodeResource* shader, Type type) : m_shader(shader), m_type(type), m_isActive(false) {}
+	IShader(SourceHandler* shader, Type type) : m_shader(shader), m_type(type), m_isActive(false) {}
 
 protected:
-	SourceCodeResource* m_shader;
+	SourceHandler* m_shader;
 
 	Type m_type;
 	bool m_isActive;

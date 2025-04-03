@@ -17,8 +17,6 @@
 - Not sure if i like the glviewPort update to be done through callbacks from the glfw window.
 - Event handling needs a bit more work -> some events should not be asychronous (eg window resize should lead to an imediate redraw)
   Maybe i could set if an event is sychronous or not.
-- Resource manager -> load could be a higher level function that calls a loadImpl or unloadImpl, sets bools and checks conditions reducing code repetition.
-- Resource manager -> load should return bools -> handled in manager appropriately
 - Can clone/getID funcs like in IEvent / IComponent be refactored into a higher class?
 - OpenGL namespace
 
@@ -43,3 +41,5 @@
 # Main concerns in refactoring
 - Include cleanup
 - Analyse useless coppies in Renderer side
+- Resource manager -> load could be a higher level function that calls a loadImpl or unloadImpl, sets bools and checks conditions reducing code repetition.
+- Resource manager -> load should return bools -> handled in manager appropriately

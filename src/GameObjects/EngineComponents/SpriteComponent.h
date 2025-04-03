@@ -22,7 +22,7 @@ public:
 	float m_r, m_g, m_b;
 	float m_x, m_y;
 private:
-	static InternalResource<ProgramImpl>* cachedProgResource;
+	static InternalHandler<ProgramImpl>* cachedProgHandler;
 };
 
 } // GameObjects

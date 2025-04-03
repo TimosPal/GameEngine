@@ -12,7 +12,7 @@
 namespace Engine {
 namespace GameObjects {
 
-InternalResource<ProgramImpl> * SpriteComponent::cachedProgResource = nullptr;
+InternalHandler<ProgramImpl> * SpriteComponent::cachedProgHandler = nullptr;
 
 SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 	: IComponent<SpriteComponent>()
@@ -29,22 +29,22 @@ void SpriteComponent::start()
 	TextureResource texture("TestTexture", "./assets/textures/wall.jpg");
 	texture.load();
 
-	if (!cachedProgResource)
+	if (!cachedProgHandler)
 	{
-		auto& vertexResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultVert", "./assets/shaders/default.vert"));
-		auto& fragmentResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultFrag", "./assets/shaders/default.frag"));
+		auto& vertexHandler = ResourceManager<SourceHandler>::getInstance().store(SourceHandler("defaultVert", "./assets/shaders/default.vert"));
+		auto& fragmentHandler = ResourceManager<SourceHandler>::getInstance().store(SourceHandler("defaultFrag", "./assets/shaders/default.frag"));
 
-		ShaderImpl vertShader(&vertexResource, ShaderImpl::Type::Vertex);
-		auto& vertShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("vertShader", vertShader));
+		ShaderImpl vertShader(&vertexHandler, ShaderImpl::Type::Vertex);
+		auto& vertShaderResource = ResourceManager<InternalHandler<Shader>>::getInstance().store(InternalHandler("vertShader", vertShader));
 
-		ShaderImpl fragShader(&fragmentResource, ShaderImpl::Type::Fragment);
-		auto& fragShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("fragShader", fragShader));
+		ShaderImpl fragShader(&fragmentHandler, ShaderImpl::Type::Fragment);
+		auto& fragShaderResource = ResourceManager<InternalHandler<Shader>>::getInstance().store(InternalHandler("fragShader", fragShader));
 
 		ProgramImpl prog(&vertShaderResource, &fragShaderResource);
-		auto& progResource = ResourceManager<InternalResource<ProgramImpl>>::getInstance().store(InternalResource("quadProgram", prog));
-		progResource.load();
+		auto& progHandler = ResourceManager<InternalHandler<ProgramImpl>>::getInstance().store(InternalHandler("quadProgram", prog));
+		progHandler.load();
 
-		cachedProgResource = &progResource; // Cache resource to be used in later calls.
+		cachedProgHandler = &progHandler; // Cache resource to be used in later calls.
 	}
 };
 
@@ -66,7 +66,7 @@ void SpriteComponent::update()
 	};
 
 	// Submit to renderer.
-	RenderData data(verticesRaw, indicesRaw, cachedProgResource->getInternalObject());
+	RenderData data(verticesRaw, indicesRaw, cachedProgHandler->getResource());
 	Application::getInstance()->getRenderer().submit(std::move(data));
 };
 

@@ -5,14 +5,14 @@
 
 namespace Engine {
 
-template <typename InternalDerived>
-struct InternalResource : public IResourceHandler
+template <typename IResourceDerived>
+struct InternalHandler : public IResourceHandler
 {
 public:
-    InternalResource() : IResourceHandler(IResourceHandler::Type::Internal, "NoName") {}
-    InternalResource(const std::string& name, const InternalDerived& internal) : IResourceHandler(IResourceHandler::Type::Internal, name), m_internal(internal) {}
+    InternalHandler() : IResourceHandler(IResourceHandler::Type::Internal, "NoName") {}
+    InternalHandler(const std::string& name, const IResourceDerived& internal) : IResourceHandler(IResourceHandler::Type::Internal, name), m_internal(internal) {}
 
-    ~InternalResource()
+    ~InternalHandler()
     {
         unload();
     }
@@ -23,8 +23,11 @@ public:
         if (!m_loaded)
         {
 			LOG_INFO("Loading internal resource: {}", m_name);
-            m_internal.init(); 
-            m_loaded = true;
+            m_loaded = m_internal.init();
+            if (!m_loaded)
+            {
+                LOG_ERROR("Resource not loaded: {}", m_name);
+            }
         }
     }
 
@@ -38,10 +41,10 @@ public:
         }
     }
 
-    InternalDerived& getInternalObject() { return m_internal; }
+    IResourceDerived& getResource() { return m_internal; }
 
 private:
-    InternalDerived m_internal;
+    IResourceDerived m_internal;
 };
 
 } // Engine

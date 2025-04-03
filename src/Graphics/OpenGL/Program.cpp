@@ -10,7 +10,7 @@ Program::Program()
 {
 }
 
-Program::Program(InternalResource<Shader>* vert, InternalResource<Shader>* frag)
+Program::Program(InternalHandler<Shader>* vert, InternalHandler<Shader>* frag)
 	: IProgram(vert, frag), m_glProgram(-1)
 {
 }
@@ -25,8 +25,8 @@ bool Program::init()
 
 	GL_RET(glCreateProgram(), m_glProgram);
 
-	unsigned int vertexShader = m_vert->getInternalObject().getGLID();
-	unsigned int fragmentShader = m_frag->getInternalObject().getGLID();
+	unsigned int vertexShader = m_vert->getResource().getGLID();
+	unsigned int fragmentShader = m_frag->getResource().getGLID();
 
 	GL(glAttachShader(m_glProgram, vertexShader));
 	GL(glAttachShader(m_glProgram, fragmentShader));

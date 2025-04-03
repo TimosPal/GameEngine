@@ -10,7 +10,7 @@ Shader::Shader()
 {
 }
 
-Shader::Shader(SourceCodeResource* shader, IShader::Type type)
+Shader::Shader(SourceHandler* shader, IShader::Type type)
 	: IShader(shader, type), m_glShader(-1)
 {}
 

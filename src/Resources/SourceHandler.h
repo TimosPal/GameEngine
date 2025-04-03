@@ -1,17 +1,17 @@
-#ifndef SOURCE_CODE_RESOURCE_H
-#define SOURCE_CODE_RESOURCE_H
+#ifndef SOURCE_HANDLER_H
+#define SOURCE_HANDLER_H
 
 #include "IResourceHandler.h"
 #include <Utility/Util.h>
 
 namespace Engine {
 
-struct SourceCodeResource : public IResourceHandler
+struct SourceHandler : public IResourceHandler
 {
 public:
-    SourceCodeResource();
-	SourceCodeResource(const std::string& name, const std::string& path);
-    ~SourceCodeResource();
+    SourceHandler();
+    SourceHandler(const std::string& name, const std::string& path);
+    ~SourceHandler();
 
     void load() override;
     void unload() override;
@@ -26,4 +26,4 @@ private:
 
 } // Engine
 
-#endif // !SOURCE_CODE_RESOURCE_H
+#endif // !SOURCE_HANDLER_H

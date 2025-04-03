@@ -4,7 +4,7 @@
 
 namespace Engine {
 
-const std::string& SourceCodeResource::getData()
+const std::string& SourceHandler::getData()
 {
     if (!m_loaded)
     {
@@ -14,21 +14,21 @@ const std::string& SourceCodeResource::getData()
     return m_data;
 }
 
-SourceCodeResource::SourceCodeResource()
+SourceHandler::SourceHandler()
     : IResourceHandler(Type::SourceCode, "NoName"), m_path("NoPath")
 {
 }
 
-SourceCodeResource::~SourceCodeResource(){
+SourceHandler::~SourceHandler(){
     unload();
 }
 
-SourceCodeResource::SourceCodeResource(const std::string& name, const std::string& path)
+SourceHandler::SourceHandler(const std::string& name, const std::string& path)
     : IResourceHandler(Type::SourceCode, name), m_path(path)
 {
 }
 
-void SourceCodeResource::load()
+void SourceHandler::load()
 {
     if (!m_loaded)
     {
@@ -38,7 +38,7 @@ void SourceCodeResource::load()
     }
 }
 
-void SourceCodeResource::unload()
+void SourceHandler::unload()
 {
     if (m_loaded)
     {

@@ -12,7 +12,7 @@ class IProgram : public IResource
 {
 public:
 	IProgram() : m_isActive(false), m_vert(nullptr), m_frag(nullptr) {};
-	IProgram(InternalResource<ShaderDerived>* vert, InternalResource<ShaderDerived>* frag) : m_isActive(false), m_vert(vert), m_frag(frag) {};
+	IProgram(InternalHandler<ShaderDerived>* vert, InternalHandler<ShaderDerived>* frag) : m_isActive(false), m_vert(vert), m_frag(frag) {};
 
 	virtual void use() = 0;
 	virtual void unuse() = 0;
@@ -25,8 +25,8 @@ protected:
 
 	bool m_isActive;
 
-	InternalResource<ShaderDerived>* m_vert;
-	InternalResource<ShaderDerived>* m_frag;
+	InternalHandler<ShaderDerived>* m_vert;
+	InternalHandler<ShaderDerived>* m_frag;
 };
 
 } // Engine

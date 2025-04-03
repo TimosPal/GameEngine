@@ -49,8 +49,8 @@ void Application::run()
 
 void Application::terminate()
 {
-	ResourceManager<SourceCodeResource>::getInstance().cleanup("Source codes");
-	ResourceManager<InternalResource<ProgramImpl>>::getInstance().cleanup("Programs");
+	ResourceManager<SourceHandler>::getInstance().cleanup("Source codes");
+	ResourceManager<InternalHandler<ProgramImpl>>::getInstance().cleanup("Programs");
 	
 	// Window terminated last so the current API context is active for proper cleanup
 	m_window.terminate();
