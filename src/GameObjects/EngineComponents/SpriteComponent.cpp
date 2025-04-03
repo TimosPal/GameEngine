@@ -1,9 +1,23 @@
 #include "SpriteComponent.h"
 
+#include <Utility/Logger.h>
+#include <Core/Application.h>
+
+#include <Resources/ResourceManager.h>
+#include <Resources/SourceCodeResource.h>
+#include <Resources/TextureResource.h>
+
+#if GRAPHICS_API == API_OPENGL
+	#include <Graphics/OpenGL/Shader.h>
+	using ShaderImpl = Engine::Shader;
+#else
+	#error Invalid graphics API
+#endif
+
 namespace Engine {
 namespace GameObjects {
 
-InternalResource<Program> * SpriteComponent::cachedProgResource = nullptr;
+InternalResource<ProgramImpl> * SpriteComponent::cachedProgResource = nullptr;
 
 SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 	: IComponent<SpriteComponent>()
@@ -17,19 +31,22 @@ SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 
 void SpriteComponent::start() 
 {
+	TextureResource texture("TestTexture", "./assets/textures/wall.jpg");
+	texture.load();
+
 	if (!cachedProgResource)
 	{
 		auto& vertexResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultVert", "./assets/shaders/default.vert"));
 		auto& fragmentResource = ResourceManager<SourceCodeResource>::getInstance().store(SourceCodeResource("defaultFrag", "./assets/shaders/default.frag"));
 
-		Shader vertShader(&vertexResource, Shader::Type::Vertex);
+		ShaderImpl vertShader(&vertexResource, ShaderImpl::Type::Vertex);
 		auto& vertShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("vertShader", vertShader));
 
-		Shader fragShader(&fragmentResource, Shader::Type::Fragment);
+		ShaderImpl fragShader(&fragmentResource, ShaderImpl::Type::Fragment);
 		auto& fragShaderResource = ResourceManager<InternalResource<Shader>>::getInstance().store(InternalResource("fragShader", fragShader));
 
-		Program prog(&vertShaderResource, &fragShaderResource);
-		auto& progResource = ResourceManager<InternalResource<Program>>::getInstance().store(InternalResource("quadProgram", prog));
+		ProgramImpl prog(&vertShaderResource, &fragShaderResource);
+		auto& progResource = ResourceManager<InternalResource<ProgramImpl>>::getInstance().store(InternalResource("quadProgram", prog));
 		progResource.load();
 
 		cachedProgResource = &progResource; // Cache resource to be used in later calls.
@@ -39,11 +56,12 @@ void SpriteComponent::start()
 void SpriteComponent::update()
 {
 	// Create 2d quad.
+	// [x,y][r,g,b][u,v]
 	std::vector<VertexData<float>::Vertex> verticesRaw = {
-	{{-0.2f + m_x, -0.2f + m_y}, {m_r, m_g, m_b}}, // Bottom-left  
-	{{-0.2f + m_x,  0.2f + m_y}, {m_r, m_g, m_b}}, // Top-left  
-	{{ 0.2f + m_x,  0.2f + m_y}, {m_r, m_g, m_b}}, // Top-right  
-	{{ 0.2f + m_x, -0.2f + m_y}, {m_r, m_g, m_b}}  // Bottom-right  
+	{{-0.05f + m_x, -0.05f + m_y}, {m_r, m_g, m_b}, {0.0f, 0.0f}}, // Bottom-left  
+	{{-0.05f + m_x,  0.05f + m_y}, {m_r, m_g, m_b}, {0.0f, 1.0f}}, // Top-left  
+	{{ 0.05f + m_x,  0.05f + m_y}, {m_r, m_g, m_b}, {1.0f, 1.0f}}, // Top-right  
+	{{ 0.05f + m_x, -0.05f + m_y}, {m_r, m_g, m_b}, {1.0f, 0.0f}}  // Bottom-right  
 	};
 
 	// Indexing data. (Reduces 6 vertices to 4)

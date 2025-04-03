@@ -23,14 +23,17 @@ set(GLFW_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE) # Force static linking
 add_subdirectory(external/glfw)
 add_subdirectory(external/spdlog)
 
+# Image loading
+add_library(stb INTERFACE)
+target_include_directories(stb INTERFACE external/stb)
+
 # Add GLAD as a static library since a cmake isnt provided by the repo.
 find_package(OpenGL REQUIRED)
 add_library(glad STATIC external/glad/src/glad.c)
 target_include_directories(glad PUBLIC external/glad/include)
 
 # Link GameEngine with GLFW and OpenGL
-target_link_libraries(GameEngine PUBLIC glfw spdlog::spdlog glad OpenGL::GL)
-
+target_link_libraries(GameEngine PUBLIC glfw spdlog::spdlog glad OpenGL::GL stb)
 # Include directories
 target_include_directories(GameEngine PRIVATE
     ${CMAKE_SOURCE_DIR}/src

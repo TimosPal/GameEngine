@@ -1,41 +1,48 @@
 # Perfomance
-- Could change IWindow, Application, Logger to be polymorphic template to reduce overhead of virtual calls.
-- Where i use IDS + maps i could use just arrays if i never use any other ID func (1,2,...,n) -> maybe not beneficial
+- Instead of maps i could utilize identifiers as array keys. (Have to implement a tracker of deleted free identifiers)
 - Cache class string name per class
-- Switch cases for event handling if ids were constexpr
-- In event queue, define unique event types (eg resize event spamming shouldnt be avoided)
-- GO manager removal 3 vecs too slow
+- Switch cases for event handling if ids were constexpr (Now done with if statements)
+- In event queue, define unique event types (eg resize event spamming should be avoided)
+- GO manager removal too slow (Currently have 3 vectors for created objects)
 - GO manager forced to use heap allocations to return valid ptrs in createNewGO func
-- Extend VBO to use other types on GPU (not constant per atrtibute for whole vertex)
-- VBO EBO maybe they dont need to hold data after sending to GPU.
+- Extend VBO to use other types on GPU (not constant per atrtibute for whole vertex), CPU buffer might be all floats -> GPU buffer might have better controll.
+- VBO EBO -> current classes hold data, might not need to keep track of said cpu data if updated on GPU.
+- Dont reallocate buffers on vert / indeces buffers -> update using subdata or map buffers
+- Buffers can store vertex attributes in [111222333] instead of [123123123] format (better if some data change, could be an option)
+
 
 # Refactoring
 - Change from int to specific types (uint32 etc)
-- vec2 for mouse cords
-- IO utility abstract to 1 class if possible, no need to re-write clone/getID funcs like in IEvent / IComponent
-- Add assertions [x]
-- Abstract window and API types in APP. [x]
-- Instead of using derived classes for renderer and window lib can utilize CRTP (eg Window<GLFWWindow> m_window), better interface abstraction.
+- vec2 for mouse cords, or where applicable
 - Not sure if i like the glviewPort update to be done through callbacks from the glfw window.
 - Event handling needs a bit more work -> some events should not be asychronous (eg window resize should lead to an imediate redraw)
   Maybe i could set if an event is sychronous or not.
-- Limited VBO buffers to float only, should be able to use other types. For now it's easier to avoid templates.
 - Resource manager -> load could be a higher level function that calls a loadImpl or unloadImpl, sets bools and checks conditions reducing code repetition.
+- Resource manager -> load should return bools -> handled in manager appropriately
+- Can clone/getID funcs like in IEvent / IComponent be refactored into a higher class?
+- OpenGL namespace
+- WindowImpl put into file just like GraphicsAPI
+
 
 # Bugs
 - currently there is no way to update window width and height when an update occures. Should make an instance function to retrieve the object and set data in callback
-- Components in GOs update method is wrong! Shouldnt run each update per go like this. [x]
-- go manager does not handle object creation within start and update methods properly [x]
-- With current implementation, if user stores GO in global state, after internal moving the reference will be invalid ptr. How to store GOs without losing reference. [x]
-- ID system does not retrieve lost ids. If i make many Resources each one wastes an id even if its temporary.
+- ID system does not retrieve lost ids -> could run out of ids if temp objects waste them constantly (per frame?)
 - If a program is init outside of a resource handler (or any resource for that matter) and then stored, double loading will occure (might make double buffers etc)
-  Could init m_isActive by quering the internal object. Could make Resource : IResource (interface for load unload -> init destroy becomes the same),
+  Could init value of m_isActive by quering the internal object. For now objects must me loaded from the resource handler not outside of it!!!
+  Could make Resource : IResource (interface for load unload -> init destroy becomes the same),
   and InternalResource : Resource. Then i could store the internal resource in the handler and return the resource.
-  Case for thinking: if we init prog before the resource storage.
-- Cleanup resources / shaders / programs. Calling destroy on destructors causes problems with coppies / moved objects, either implement custom move logic and destruction checks or
-  manually call destory when cleaning up.
+  Problematic case: if we init prog / any other resource before the resource storage -> invalid resource init.
+- Calling destroy on destructors causes problems with coppies / moved objects (eg a moved Shader's destructor might attempt to delete the shader -> should make GL calls protected)
 - If i make buffer reallocations after the VAO is set this can cause orphan buffer pointers. Should use subData or buffer mapping.
+
 
 # Features
 - combos in actions system.
 - more callback support (key, mouse)
+
+
+# Main concerns in refactoring
+- Include cleanup
+- Load / unload + Init / Destroy -> higher level class needs to be enforced on Resources and ResourceHandlers
+- Analyse useless coppies in Renderer side
+- Program used in Application.cpp + SpriteComponent instead of ProgramImpl (API agnostic type)

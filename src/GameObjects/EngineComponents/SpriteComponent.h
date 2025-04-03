@@ -2,13 +2,14 @@
 #define SPRITE_COMPONENT_H
 
 #include <GameObjects/IComponent.h>
-#include <Core/Application.h>
-
-#include <Utility/Logger.h>
-
-#include <Resources/ResourceManager.h>
-#include <Resources/SourceCodeResource.h>
 #include <Resources/InternalResource.h>
+
+#if GRAPHICS_API == API_OPENGL
+	#include <Graphics/OpenGL/Program.h>
+	using ProgramImpl = Engine::Program;
+#else
+	#error Invalid graphics API
+#endif
 
 namespace Engine {
 namespace GameObjects {
@@ -26,7 +27,7 @@ public:
 	float m_r, m_g, m_b;
 	float m_x, m_y;
 private:
-	static InternalResource<Program>* cachedProgResource;
+	static InternalResource<ProgramImpl>* cachedProgResource;
 };
 
 } // GameObjects
