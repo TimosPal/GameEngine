@@ -17,6 +17,8 @@ Texture::~Texture()
 
 bool Texture::init()
 {
+	m_isActive = true;
+
 	GL(glGenTextures(1, &m_glTexture));
 	bind();
 
@@ -48,8 +50,6 @@ bool Texture::init()
 
 	unbind();
 
-	m_isActive = true;
-
 	return true;
 }
 
@@ -70,10 +70,8 @@ void Texture::bind()
 		return;
 	}
 
-	glActiveTexture(GL_TEXTURE0);  
-	GL(glBindTexture(GL_TEXTURE_2D, m_glTexture));
-
 	textureInUse = this;
+	GL(glBindTexture(GL_TEXTURE_2D, m_glTexture));
 }
 
 void Texture::unbind()
@@ -83,9 +81,8 @@ void Texture::unbind()
 		return;
 	}
 
-	GL(glBindTexture(GL_TEXTURE_2D, 0));
-
 	textureInUse = nullptr;
+	GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
 } // Engine

@@ -135,7 +135,7 @@ void OpenGLRenderer::render()
 		indexOffset += renderable.vertices.size();
 	}
 
-	//m_renderables[0].texture.bind();
+	m_renderables[0].texture.bind();
 
 	vbo.updateData(vertexBatch);
 	ebo.updateData(indicesBatch);
@@ -143,7 +143,7 @@ void OpenGLRenderer::render()
 
 	obj.render();	
 
-	//m_renderables[0].texture.unbind();
+	m_renderables[0].texture.unbind();
 
 	m_renderables.clear();
 }
