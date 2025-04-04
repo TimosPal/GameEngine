@@ -2,7 +2,7 @@
 #define SPRITE_COMPONENT_H
 
 #include <GameObjects/IComponent.h>
-#include <Resources/InternalHandler.h>
+#include <Resources/Handlers/GenericHandler.h>
 
 #include <Graphics/GraphicsIncludes.h>
 
@@ -22,7 +22,7 @@ public:
 	float m_r, m_g, m_b;
 	float m_x, m_y;
 private:
-	static InternalHandler<ProgramImpl>* cachedProgHandler;
+	static GenericHandler<ProgramImpl>* cachedProgHandler;
 };
 
 } // GameObjects

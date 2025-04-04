@@ -12,7 +12,7 @@ class Program : public IProgram<Shader>
 {
 public:
 	Program();
-	Program(InternalHandler<Shader>* vert, InternalHandler<Shader>* frag);
+	Program(GenericHandler<Shader>* vert, GenericHandler<Shader>* frag);
 	~Program();
 
 	bool init() override;

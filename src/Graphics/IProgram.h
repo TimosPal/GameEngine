@@ -2,8 +2,8 @@
 #define IPROGRAM_H
 
 #include "IShader.h"
-#include <Resources/InternalHandler.h>
-#include <Resources/IResource.h>
+#include <Resources/Handlers/GenericHandler.h>
+#include <Resources/SystemResources/IResource.h>
 
 namespace Engine {
 
@@ -12,7 +12,7 @@ class IProgram : public IResource
 {
 public:
 	IProgram() : m_isActive(false), m_vert(nullptr), m_frag(nullptr) {};
-	IProgram(InternalHandler<ShaderDerived>* vert, InternalHandler<ShaderDerived>* frag) : m_isActive(false), m_vert(vert), m_frag(frag) {};
+	IProgram(GenericHandler<ShaderDerived>* vert, GenericHandler<ShaderDerived>* frag) : m_isActive(false), m_vert(vert), m_frag(frag) {};
 
 	virtual void use() = 0;
 	virtual void unuse() = 0;
@@ -25,8 +25,8 @@ protected:
 
 	bool m_isActive;
 
-	InternalHandler<ShaderDerived>* m_vert;
-	InternalHandler<ShaderDerived>* m_frag;
+	GenericHandler<ShaderDerived>* m_vert;
+	GenericHandler<ShaderDerived>* m_frag;
 };
 
 } // Engine

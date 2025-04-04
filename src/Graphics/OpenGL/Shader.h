@@ -9,7 +9,7 @@ class Shader : public IShader
 {
 public:
 	Shader();
-	Shader(SourceHandler* shader, IShader::Type type);
+	Shader(GenericHandler<SourceResource>* shader, IShader::Type type);
 	~Shader();
 
 	bool init() override;

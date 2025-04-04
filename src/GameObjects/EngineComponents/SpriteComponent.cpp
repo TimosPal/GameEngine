@@ -4,15 +4,15 @@
 #include <Core/Application.h>
 
 #include <Resources/ResourceManager.h>
-#include <Resources/SourceHandler.h>
-#include <Resources/TextureHandler.h>
+#include <Resources/SystemResources/TextureResource.h>
+#include <Resources/SystemResources/SourceResource.h>
 
 #include <Graphics/GraphicsIncludes.h>
 
 namespace Engine {
 namespace GameObjects {
 
-InternalHandler<ProgramImpl> * SpriteComponent::cachedProgHandler = nullptr;
+GenericHandler<ProgramImpl> * SpriteComponent::cachedProgHandler = nullptr;
 
 SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 	: IComponent<SpriteComponent>()
@@ -27,22 +27,29 @@ SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 void SpriteComponent::start() 
 {
 	TextureResource texture("TestTexture", "./assets/textures/wall.jpg");
-	texture.load();
+	auto& textureHandler = ResourceManager<GenericHandler<TextureResource>>::getInstance().store(GenericHandler("textureTest", texture));
+	textureHandler.load();
 
 	if (!cachedProgHandler)
 	{
-		auto& vertexHandler = ResourceManager<SourceHandler>::getInstance().store(SourceHandler("defaultVert", "./assets/shaders/default.vert"));
-		auto& fragmentHandler = ResourceManager<SourceHandler>::getInstance().store(SourceHandler("defaultFrag", "./assets/shaders/default.frag"));
+		SourceResource vertSource("./assets/shaders/default.vert");
+		auto& vertexSourceHandler = ResourceManager<GenericHandler<SourceResource>>::getInstance().store(GenericHandler("defaultVertSource", vertSource));
 
-		ShaderImpl vertShader(&vertexHandler, ShaderImpl::Type::Vertex);
-		auto& vertShaderResource = ResourceManager<InternalHandler<Shader>>::getInstance().store(InternalHandler("vertShader", vertShader));
+		SourceResource fragSource("./assets/shaders/default.frag");
+		auto& fragmentSourceHandler = ResourceManager<GenericHandler<SourceResource>>::getInstance().store(GenericHandler("defaultFragSource", fragSource));
 
-		ShaderImpl fragShader(&fragmentHandler, ShaderImpl::Type::Fragment);
-		auto& fragShaderResource = ResourceManager<InternalHandler<Shader>>::getInstance().store(InternalHandler("fragShader", fragShader));
+		ShaderImpl vertShader(&vertexSourceHandler, ShaderImpl::Type::Vertex);
+		auto& vertShaderResource = ResourceManager<GenericHandler<Shader>>::getInstance().store(GenericHandler("vertShader", vertShader));
+
+		ShaderImpl fragShader(&fragmentSourceHandler, ShaderImpl::Type::Fragment);
+		auto& fragShaderResource = ResourceManager<GenericHandler<Shader>>::getInstance().store(GenericHandler("fragShader", fragShader));
 
 		ProgramImpl prog(&vertShaderResource, &fragShaderResource);
-		auto& progHandler = ResourceManager<InternalHandler<ProgramImpl>>::getInstance().store(InternalHandler("quadProgram", prog));
+		auto& progHandler = ResourceManager<GenericHandler<ProgramImpl>>::getInstance().store(GenericHandler("quadProgram", prog));
 		progHandler.load();
+
+		vertexSourceHandler.unload();
+		fragmentSourceHandler.unload();
 
 		cachedProgHandler = &progHandler; // Cache resource to be used in later calls.
 	}

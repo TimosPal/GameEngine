@@ -10,7 +10,7 @@ Program::Program()
 {
 }
 
-Program::Program(InternalHandler<Shader>* vert, InternalHandler<Shader>* frag)
+Program::Program(GenericHandler<Shader>* vert, GenericHandler<Shader>* frag)
 	: IProgram(vert, frag), m_glProgram(-1)
 {
 }

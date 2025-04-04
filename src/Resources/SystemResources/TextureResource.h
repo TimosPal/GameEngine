@@ -1,17 +1,18 @@
 #ifndef TEXTURE_RESOURCE_H
 #define TEXTURE_RESOURCE_H
 
-#include "IResourceHandler.h"
+#include "IResource.h"
+#include <Utility/Util.h>
 
 namespace Engine {
 
-class TextureResource : public IResourceHandler {
-public:
+struct TextureResource : public IResource
+{
+    TextureResource();
     TextureResource(const std::string& name, const std::string& filePath);
-    ~TextureResource();
 
-    void load() override;
-    void unload() override;
+    bool init() override;
+    void destroy() override;
 
     const unsigned char* getData() const { return m_data; }
     int getWidth() const { return m_width; }
@@ -28,4 +29,4 @@ private:
 
 } // Engine
 
-#endif // TEXTURE_RESOURCE_H
+#endif // !TEXTURE_RESOURCE_H

@@ -41,5 +41,3 @@
 # Main concerns in refactoring
 - Include cleanup
 - Analyse useless coppies in Renderer side
-- Resource manager -> load could be a higher level function that calls a loadImpl or unloadImpl, sets bools and checks conditions reducing code repetition.
-- Resource manager -> load should return bools -> handled in manager appropriately

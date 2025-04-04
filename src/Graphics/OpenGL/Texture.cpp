@@ -9,7 +9,7 @@ Texture::Texture()
 	glGenTextures(1, &m_glTexture);
 }
 
-Texture::Texture(TextureResource* texture)
+Texture::Texture(GenericHandler<TextureResource>* texture)
 {
 }
 

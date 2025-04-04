@@ -10,7 +10,7 @@ Shader::Shader()
 {
 }
 
-Shader::Shader(SourceHandler* shader, IShader::Type type)
+Shader::Shader(GenericHandler<SourceResource>* shader, IShader::Type type)
 	: IShader(shader, type), m_glShader(-1)
 {}
 
@@ -22,7 +22,8 @@ bool Shader::init()
 	auto gl_vertex_type = (m_type == Type::Vertex) ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
 	GL_RET(glCreateShader(gl_vertex_type), m_glShader);
 
-	const char* shaderSourceCodeCString = m_shader->getData().c_str();
+	m_shader->load();
+	const char* shaderSourceCodeCString = m_shader->getResource().getData().c_str();
 	GL(glShaderSource(m_glShader, 1, &shaderSourceCodeCString, NULL));
 	GL(glCompileShader(m_glShader));
 

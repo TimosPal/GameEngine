@@ -1,7 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <Resources/TextureHandler.h>
+#include <Resources/Handlers/GenericHandler.h>
+#include <Resources/SystemResources/TextureResource.h>
 
 namespace Engine {
 
@@ -9,7 +10,7 @@ class Texture
 {
 public:
 	Texture();
-	Texture(TextureResource* texture);
+	Texture(GenericHandler<TextureResource>* texture);
 	~Texture();
 
 	bool init();

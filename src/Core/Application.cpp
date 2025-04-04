@@ -6,8 +6,7 @@
 #include <Input/InputManager.h>
 
 #include <Resources/ResourceManager.h>
-#include <Resources/InternalHandler.h>
-#include <Resources/SourceHandler.h>
+#include <Resources/Handlers/GenericHandler.h>
 
 #include <Graphics/GraphicsIncludes.h>
 
@@ -49,8 +48,8 @@ void Application::run()
 
 void Application::terminate()
 {
-	ResourceManager<SourceHandler>::getInstance().cleanup("Source codes");
-	ResourceManager<InternalHandler<ProgramImpl>>::getInstance().cleanup("Programs");
+	ResourceManager<GenericHandler<SourceResource>>::getInstance().cleanup("Source codes");
+	ResourceManager<GenericHandler<ProgramImpl>>::getInstance().cleanup("Programs");
 	
 	// Window terminated last so the current API context is active for proper cleanup
 	m_window.terminate();

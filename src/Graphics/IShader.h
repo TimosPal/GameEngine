@@ -1,8 +1,9 @@
 #ifndef ISHADER_H
 #define ISHADER_H
 
-#include <Resources/SourceHandler.h>
-#include <Resources/IResource.h>
+#include <Resources/SystemResources/SourceResource.h>
+#include <Resources/Handlers/GenericHandler.h>
+#include <Resources/SystemResources/IResource.h>
 
 namespace Engine {
 
@@ -14,10 +15,10 @@ public:
 	};
 
 	IShader() : m_shader(nullptr), m_type(Type::None), m_isActive(false) {}
-	IShader(SourceHandler* shader, Type type) : m_shader(shader), m_type(type), m_isActive(false) {}
+	IShader(GenericHandler<SourceResource>* shader, Type type) : m_shader(shader), m_type(type), m_isActive(false) {}
 
 protected:
-	SourceHandler* m_shader;
+	GenericHandler<SourceResource>* m_shader;
 
 	Type m_type;
 	bool m_isActive;
