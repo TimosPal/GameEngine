@@ -12,8 +12,8 @@
 namespace Engine {
 namespace GameObjects {
 
-SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
-	: IComponent<SpriteComponent>()
+SpriteComponent::SpriteComponent(std::string texturePath, float r, float g, float b, float x, float y)
+	: IComponent<SpriteComponent>(), m_texturePath(texturePath)
 {
 	m_r = r;
 	m_g = g;
@@ -50,7 +50,7 @@ void SpriteComponent::start()
 
 	if (!cachedTextureHandler)
 	{
-		TextureResource textureResource("./assets/textures/bee.png");
+		TextureResource textureResource(m_texturePath);
 		auto& textureResourceHandler = ResourceManager<GenericHandler<TextureResource>>::getInstance().store(GenericHandler("textureResourceTest", textureResource));
 
 		TextureImpl texture(&textureResourceHandler);

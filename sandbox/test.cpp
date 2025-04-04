@@ -107,6 +107,7 @@ public:
 			GameObjects::GameObject newGo;
 			auto& go = Application::getInstance()->getWorld().getGOManager().createGameObject(newGo);
 			GameObjects::SpriteComponent spriteComponent(
+				"./assets/textures/bee.png",
 				0.0f,
 				0.0f,
 				0.8f,
@@ -142,6 +143,7 @@ public:
 		GameObjects::GameObject newGo2;
 		auto& go2 = Application::getWorld().getGOManager().createGameObject(newGo2);
 		GameObjects::SpriteComponent spriteComponent(
+			"./assets/textures/bee.png",
 			0.0f,
 			0.0f,
 			0.8f,

@@ -12,7 +12,7 @@ namespace GameObjects {
 class SpriteComponent : public IComponent<SpriteComponent>
 {
 public:
-	SpriteComponent(float r, float g, float b, float x, float y);
+	SpriteComponent(std::string texturePath, float r, float g, float b, float x, float y);
 
 	virtual void start() override;
 	virtual void update() override;
@@ -24,6 +24,8 @@ public:
 private:
 	inline static GenericHandler<ProgramImpl>* cachedProgHandler = nullptr;
 	inline static GenericHandler<TextureImpl>* cachedTextureHandler = nullptr;
+
+	std::string m_texturePath;
 };
 
 } // GameObjects
