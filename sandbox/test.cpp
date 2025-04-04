@@ -44,10 +44,10 @@ public:
 		spriteRend->m_b = startingB * (1 - percentage);
 
 		// Generate random angle change
-		float newAngle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14f * 0.05f;
+		float newAngle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14f * 0.02f;
 		startAngle += newAngle; // Keeps the movement continuous
 
-		float speed = 0.01f;
+		float speed = 0.003f;
 
 		// Compute orbit movement
 		float moveX = speed * cos(startAngle);
@@ -117,7 +117,8 @@ public:
 			go.addComponent<Unit>();
 
 			count++;
-			LOG_INFO("Count: {}", count);
+			if (count % 50 == 0)
+				LOG_INFO("Count: {}", count);
 		}
 	};
 

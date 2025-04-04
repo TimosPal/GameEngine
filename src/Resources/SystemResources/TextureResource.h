@@ -9,7 +9,7 @@ namespace Engine {
 struct TextureResource : public IResource
 {
     TextureResource();
-    TextureResource(const std::string& name, const std::string& filePath);
+    TextureResource(const std::string& filePath);
 
     bool init() override;
     void destroy() override;

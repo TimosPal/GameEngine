@@ -22,7 +22,8 @@ public:
 	float m_r, m_g, m_b;
 	float m_x, m_y;
 private:
-	static GenericHandler<ProgramImpl>* cachedProgHandler;
+	inline static GenericHandler<ProgramImpl>* cachedProgHandler = nullptr;
+	inline static GenericHandler<TextureImpl>* cachedTextureHandler = nullptr;
 };
 
 } // GameObjects

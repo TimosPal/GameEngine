@@ -1,6 +1,5 @@
 #include "Program.h"
 
-#include <glad/glad.h>
 #include "GLWrapper.h"
 
 namespace Engine {

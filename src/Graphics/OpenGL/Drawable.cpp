@@ -1,6 +1,5 @@
 #include "Drawable.h"
 
-#include <glad/glad.h>
 #include "GLWrapper.h"
 
 #include <Utility/Logger.h>

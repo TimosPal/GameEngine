@@ -12,8 +12,6 @@
 namespace Engine {
 namespace GameObjects {
 
-GenericHandler<ProgramImpl> * SpriteComponent::cachedProgHandler = nullptr;
-
 SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 	: IComponent<SpriteComponent>()
 {
@@ -26,10 +24,6 @@ SpriteComponent::SpriteComponent(float r, float g, float b, float x, float y)
 
 void SpriteComponent::start() 
 {
-	TextureResource texture("TestTexture", "./assets/textures/wall.jpg");
-	auto& textureHandler = ResourceManager<GenericHandler<TextureResource>>::getInstance().store(GenericHandler("textureTest", texture));
-	textureHandler.load();
-
 	if (!cachedProgHandler)
 	{
 		SourceResource vertSource("./assets/shaders/default.vert");
@@ -53,6 +47,18 @@ void SpriteComponent::start()
 
 		cachedProgHandler = &progHandler; // Cache resource to be used in later calls.
 	}
+
+	if (!cachedTextureHandler)
+	{
+		TextureResource textureResource("./assets/textures/bee.png");
+		auto& textureResourceHandler = ResourceManager<GenericHandler<TextureResource>>::getInstance().store(GenericHandler("textureResourceTest", textureResource));
+
+		TextureImpl texture(&textureResourceHandler);
+		auto& textureHandler = ResourceManager<GenericHandler<TextureImpl>>::getInstance().store(GenericHandler("textureTest", texture));
+		textureHandler.load();
+
+		cachedTextureHandler = &textureHandler; // Cache resource to be used in later calls.
+	}
 };
 
 void SpriteComponent::update()
@@ -73,7 +79,12 @@ void SpriteComponent::update()
 	};
 
 	// Submit to renderer.
-	RenderData data(verticesRaw, indicesRaw, cachedProgHandler->getResource());
+	RenderData data(
+		verticesRaw,
+		indicesRaw,
+		cachedProgHandler->getResource(),
+		cachedTextureHandler->getResource()
+	);
 	Application::getInstance()->getRenderer().submit(std::move(data));
 };
 

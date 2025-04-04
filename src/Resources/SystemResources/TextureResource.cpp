@@ -6,10 +6,10 @@
 namespace Engine {
 
 TextureResource::TextureResource()
-    : TextureResource("", "")
+    : TextureResource("")
 {}
 
-TextureResource::TextureResource(const std::string& name, const std::string& filePath)
+TextureResource::TextureResource(const std::string& filePath)
     : m_filePath(filePath), m_width(0), m_height(0), m_channels(0), m_data(nullptr)
 {}
 

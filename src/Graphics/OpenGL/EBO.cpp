@@ -1,6 +1,5 @@
 #include "EBO.h"
 
-#include <glad/glad.h>
 
 #include <Utility/Logger.h>
 #include "GLWrapper.h"

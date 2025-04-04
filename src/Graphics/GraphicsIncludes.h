@@ -8,8 +8,11 @@
 	#include <Graphics/OpenGL/Program.h>
 	using ProgramImpl = Engine::Program;
 
-	#include "OpenGL/Shader.h"
+	#include <Graphics/OpenGL/Shader.h>
 	using ShaderImpl = Engine::Shader;
+
+	#include <Graphics/OpenGL/Texture.h>
+	using TextureImpl = Engine::Texture;
 #else
 	#error Invalid graphics API
 #endif

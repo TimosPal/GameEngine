@@ -5,9 +5,10 @@ namespace Engine {
 RenderData::RenderData(
 	const std::vector<VertexData<float>::Vertex>& vertices,
 	const std::vector<unsigned int>& indices,
-	ProgramImpl& program
+	ProgramImpl& program,
+	TextureImpl& texture
 )
-	: vertices(vertices), program(program), indices(indices)
+	: vertices(vertices), program(program), indices(indices), texture(texture)
 {
 }
 

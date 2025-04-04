@@ -9,6 +9,7 @@
 - VBO EBO -> current classes hold data, might not need to keep track of said cpu data if updated on GPU.
 - Dont reallocate buffers on vert / indeces buffers -> update using subdata or map buffers
 - Buffers can store vertex attributes in [111222333] instead of [123123123] format (better if some data change, could be an option)
+- Support multiple texture support in Texture class (Currently only using Texture0 slot out of 16)
 
 
 # Refactoring
@@ -19,6 +20,8 @@
   Maybe i could set if an event is sychronous or not.
 - Can clone/getID funcs like in IEvent / IComponent be refactored into a higher class?
 - OpenGL namespace
+- RenderData submition could use identifiers for API specifics implementations avoiding the need for using type aliases. API specific renderer
+  could then be used to create the render data. (eg OpenGLRenderData, VulkanRenderData, etc)
 
 
 # Bugs
@@ -41,3 +44,5 @@
 # Main concerns in refactoring
 - Include cleanup
 - Analyse useless coppies in Renderer side
+- Internal storing of resources like Programs / Textures (Things that need binding) can be astracted so you dont need to repeat the same logic
+- Handle bad load of resources in GL objects.

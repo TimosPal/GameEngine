@@ -50,6 +50,7 @@ void Application::terminate()
 {
 	ResourceManager<GenericHandler<SourceResource>>::getInstance().cleanup("Source codes");
 	ResourceManager<GenericHandler<ProgramImpl>>::getInstance().cleanup("Programs");
+	ResourceManager<GenericHandler<TextureImpl>>::getInstance().cleanup("Textures");
 	
 	// Window terminated last so the current API context is active for proper cleanup
 	m_window.terminate();

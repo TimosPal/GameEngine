@@ -1,12 +1,14 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <Graphics/ITexture.h>
+
 #include <Resources/Handlers/GenericHandler.h>
 #include <Resources/SystemResources/TextureResource.h>
 
 namespace Engine {
 
-class Texture
+class Texture : ITexture
 {
 public:
 	Texture();

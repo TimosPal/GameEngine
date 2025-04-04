@@ -9,7 +9,6 @@
 
 #include "GLWrapper.h"
 
-#include <glad/glad.h>
 #include <iostream>
 
 #if WINDOW_LIBRARY == WINDOW_GLFW
@@ -100,6 +99,9 @@ bool OpenGLRenderer::init()
 		LOG_WARNING("OpenGL Debug Context Not Available");
 	}
 
+	GL(glEnable(GL_BLEND));  // Enable blending
+	GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blending function for transparency
+
 	return true;
 }
 
@@ -133,11 +135,15 @@ void OpenGLRenderer::render()
 		indexOffset += renderable.vertices.size();
 	}
 
+	//m_renderables[0].texture.bind();
+
 	vbo.updateData(vertexBatch);
 	ebo.updateData(indicesBatch);
 	Drawable obj(vbo, ebo, m_renderables[0].program);
 
-	obj.render();		
+	obj.render();	
+
+	//m_renderables[0].texture.unbind();
 
 	m_renderables.clear();
 }

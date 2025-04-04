@@ -11,11 +11,13 @@ struct RenderData
 	std::vector<VertexData<float>::Vertex> vertices; // TODO: Expensive copy
 	std::vector<unsigned int> indices;
 	ProgramImpl& program;
+	TextureImpl& texture;
 
 	RenderData(
 		const std::vector<VertexData<float>::Vertex>& vertices,
 		const std::vector<unsigned int>& indices,
-		ProgramImpl& program
+		ProgramImpl& program,
+		TextureImpl& texture
 	);
 };
 

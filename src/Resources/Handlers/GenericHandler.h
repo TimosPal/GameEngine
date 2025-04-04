@@ -12,8 +12,8 @@ template <typename IResourceDerived>
 struct GenericHandler : public IResourceHandler
 {
 public:
-    GenericHandler() : IResourceHandler(IResourceHandler::Type::Internal, "NoName") {}
-    GenericHandler(const std::string& name, const IResourceDerived& internal) : IResourceHandler(IResourceHandler::Type::Internal, name), m_internal(internal) {}
+    GenericHandler() : IResourceHandler("NoName") {}
+    GenericHandler(const std::string& name, const IResourceDerived& internal) : IResourceHandler(name), m_internal(internal) {}
 
     ~GenericHandler()
     {
