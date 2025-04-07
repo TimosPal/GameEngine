@@ -25,7 +25,10 @@ Quad2D::Quad2D(float x, float y, float width, float height, float r, float g, fl
             {0, 1, 2}, // Shader Location0 Location1 Location2
             {2, 3, 2}, // Vec2(X, Y), Vec3(R, G, B), Vec2(U, V)
             7 // Total elements per vertex
-        }
+        },
+
+        // Vertex count
+        4 
 	)
 {}
 

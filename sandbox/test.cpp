@@ -9,7 +9,7 @@
 
 #include <cmath>    // For sin() and cos()
 
-Configuration config{ 800, 600, "MyAppTest" };
+Configuration config{ 1000, 800, "MyAppTest" };
 
 class Unit : public GameObjects::IComponent<Unit>
 {
@@ -59,8 +59,8 @@ public:
 		float mouse_y_screen = InputManager::getInstance().getMousePosY();
 
 		// Get screen dimensions (assumed to be available in your system)
-		float screenWidth = 800;  // Example screen width in pixels
-		float screenHeight = 600; // Example screen height in pixels
+		float screenWidth = 1000;  // Example screen width in pixels
+		float screenHeight = 800; // Example screen height in pixels
 
 		// Convert mouse position to normalized coordinates (-1 to 1)
 		float mouse_x = (mouse_x_screen / screenWidth) * 2.0f - 1.0f;
@@ -77,7 +77,7 @@ public:
 			dir_y /= length;
 		}
 
-		float attractionStrength = 0.0005f; // Small pull towards mouse
+		float attractionStrength = 0.005f; // Small pull towards mouse
 		moveX += dir_x * attractionStrength;
 		moveY += dir_y * attractionStrength;
 
@@ -105,8 +105,8 @@ public:
 	{
 		if (InputManager::getInstance().isActionTriggered(Action("Spawn", Key::Space, KeyState::Type::Hold)))
 		{
-			float mX = InputManager::getInstance().getMousePosX() / 800.0f;
-			float mY = InputManager::getInstance().getMousePosY() / 600.0f;
+			float mX = InputManager::getInstance().getMousePosX() / 1000.0f;
+			float mY = InputManager::getInstance().getMousePosY() / 800.0f;
 
 			// 0 - 1 -> x2 - 1 = 0 - 2 = -1 1
 
@@ -149,17 +149,23 @@ public:
 		auto& go = Application::getWorld().getGOManager().createGameObject(newGo);
 		go.addComponent<Controller>();
 
-		GameObjects::GameObject newGo2;
-		auto& go2 = Application::getWorld().getGOManager().createGameObject(newGo2);
-		GameObjects::SpriteComponent spriteComponent(
-			"./assets/textures/bee.png",
-			0.0f,
-			0.0f,
-			0.8f,
-			0.0f,
-			0.0f
-		);
-		go2.addComponent<GameObjects::SpriteComponent>(spriteComponent);
+		//for (size_t i = 0; i < 100; i++)
+		//{
+		//	for (size_t j = 0; j < 100; j++)
+		//	{
+		//		GameObjects::GameObject newGo2;
+		//		auto& go2 = Application::getWorld().getGOManager().createGameObject(newGo2);
+		//		GameObjects::SpriteComponent spriteComponent(
+		//			"./assets/textures/bee.png",
+		//			0.0f,
+		//			0.0f,
+		//			0.0f,
+		//			-0.5 + i * 0.01f,
+		//			-0.5 + j * 0.01f
+		//		);
+		//		go2.addComponent<GameObjects::SpriteComponent>(spriteComponent);
+		//	}
+		//}
 	}
 
 };

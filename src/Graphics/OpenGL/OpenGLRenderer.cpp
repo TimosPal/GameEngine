@@ -121,19 +121,19 @@ void OpenGLRenderer::render()
 	for (auto& renderable : m_renderables)
 	{
 		// Append vertex into batch
-		vertexBatch.insert(vertexBatch.end(), renderable.mesh.vertices.begin(), renderable.mesh.vertices.end());
+		vertexBatch.insert(vertexBatch.end(), renderable.mesh.getVertices().begin(), renderable.mesh.getVertices().end());
 
 		// Adjust indices to account for existing vertices in batch
-		for (unsigned int i : renderable.mesh.indices)
+		for (unsigned int i : renderable.mesh.getIndices())
 		{
 			indicesBatch.push_back(i + indexOffset);
 		}
-		indexOffset += renderable.mesh.vertices.size();
+		indexOffset += renderable.mesh.getVertexCount();
 	}
 	
 	m_renderables[0].texture.bind();
 	int drawingType = GL_DYNAMIC_DRAW;
-	static VBO vbo(m_renderables[0].mesh.info, drawingType);
+	static VBO vbo(m_renderables[0].mesh.getAttributeInfo(), drawingType);
 	static EBO ebo(drawingType);
 
 	vbo.updateData(&vertexBatch);
