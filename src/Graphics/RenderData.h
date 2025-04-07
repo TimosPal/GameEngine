@@ -1,21 +1,19 @@
 #ifndef RENDER_DATA_H
 #define RENDER_DATA_H
 
-#include <Graphics/VertexData.h>
+#include <Graphics/Mesh.h>
 #include <Graphics/GraphicsIncludes.h>
 
 namespace Engine {
 
 struct RenderData
 {
-	std::vector<VertexData<float>::Vertex> vertices; // TODO: Expensive copy
-	std::vector<unsigned int> indices;
+	Mesh& mesh;
 	ProgramImpl& program;
 	TextureImpl& texture;
 
 	RenderData(
-		const std::vector<VertexData<float>::Vertex>& vertices,
-		const std::vector<unsigned int>& indices,
+		Mesh& mesh,
 		ProgramImpl& program,
 		TextureImpl& texture
 	);

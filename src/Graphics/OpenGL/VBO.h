@@ -1,7 +1,7 @@
 #ifndef VBO_H
 #define VBO_H
 
-#include <Graphics/VertexData.h>
+#include <Graphics/Mesh.h>
 #include <Utility/Assertions.h>
 
 namespace Engine {
@@ -10,27 +10,27 @@ namespace Engine {
 class VBO
 {
 public:
-	VBO(int drawingType);
-	VBO(const VertexData<float>& data, int drawingType);
-
+	VBO(Mesh::AttributeInfo info, int drawingType);
+	VBO(std::vector<float>* data, Mesh::AttributeInfo info, int drawingType);
 	~VBO();
 
 	void setAttributes();
-	void updateData(const VertexData<float>& data);
+	void updateData(std::vector<float>* data);
 	void bind();
 	void unbind();
 
-	int getVertCount() const { return int(m_data.getFlatVec().size()); }
+	int getVertCount() const { return 0; }
 	unsigned int getGLVBO() const { return m_glVBO; }
 
 private:
 	static VBO* boundVBO;
+	bool m_isActive = false;
 
 	unsigned int m_glVBO;
 	int m_drawingType;
-	bool m_isActive = false;
 
-	VertexData<float> m_data;
+	std::vector<float>* m_data;
+	Mesh::AttributeInfo m_info;
 
 	void init();
 };

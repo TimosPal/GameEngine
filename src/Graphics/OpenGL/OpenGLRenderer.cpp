@@ -4,7 +4,6 @@
 #include <Events/FrameBufferResizeEvent.h>
 #include <Core/Application.h>
 
-#include <Graphics/VertexData.h>
 #include "Drawable.h"
 
 #include "GLWrapper.h"
@@ -112,33 +111,34 @@ void OpenGLRenderer::submit(RenderData&& data)
 
 void OpenGLRenderer::render()
 {
-	int drawingType = GL_DYNAMIC_DRAW;
-	VBO vbo(drawingType);
-	EBO ebo(drawingType);
-
 	if (m_renderables.size() <= 0)
 		return;
 
 	// Batch all renderables (Assumes single shader for now)
-	VertexData<float> vertexBatch;
+	std::vector<float> vertexBatch;
 	std::vector<unsigned int> indicesBatch;
 	int indexOffset = 0;
 	for (auto& renderable : m_renderables)
 	{
-		vertexBatch.addData(renderable.vertices);
+		// Append vertex into batch
+		vertexBatch.insert(vertexBatch.end(), renderable.mesh.vertices.begin(), renderable.mesh.vertices.end());
 
 		// Adjust indices to account for existing vertices in batch
-		for (unsigned int i : renderable.indices)
+		for (unsigned int i : renderable.mesh.indices)
 		{
 			indicesBatch.push_back(i + indexOffset);
 		}
-		indexOffset += renderable.vertices.size();
+		indexOffset += renderable.mesh.vertices.size();
 	}
-
+	
 	m_renderables[0].texture.bind();
+	int drawingType = GL_DYNAMIC_DRAW;
+	static VBO vbo(m_renderables[0].mesh.info, drawingType);
+	static EBO ebo(drawingType);
 
-	vbo.updateData(vertexBatch);
-	ebo.updateData(indicesBatch);
+	vbo.updateData(&vertexBatch);
+	ebo.updateData(&indicesBatch);
+
 	Drawable obj(vbo, ebo, m_renderables[0].program);
 
 	obj.render();	

@@ -6,6 +6,8 @@
 
 #include <Graphics/GraphicsIncludes.h>
 
+#include <Graphics/Quad2D.h>
+
 namespace Engine {
 namespace GameObjects {
 
@@ -26,6 +28,8 @@ private:
 	inline static GenericHandler<TextureImpl>* cachedTextureHandler = nullptr;
 
 	std::string m_texturePath;
+
+	Quad2D m_quad;
 };
 
 } // GameObjects

@@ -25,18 +25,19 @@ public:
 		}
 	}
 
+	std::shared_ptr<GameObjects::SpriteComponent> spriteRend;
 
 	virtual void start() override
 	{
 		startingR = 0.5f + static_cast<float>(rand()) / RAND_MAX;
 		startingG = 0.5f + static_cast<float>(rand()) / RAND_MAX;
 		startingB = 0.5f + static_cast<float>(rand()) / RAND_MAX;
+
+		spriteRend = getOwner().getComponent<GameObjects::SpriteComponent>();
 	};
 
 	virtual void update() override
 	{
-		auto spriteRend = getOwner().getComponent<GameObjects::SpriteComponent>();
-
 		// Update colors (unchanged)
 		float percentage = 0.7f;
 		spriteRend->m_r = startingR * (1 - percentage) + spriteRend->m_y * percentage;
@@ -47,7 +48,7 @@ public:
 		float newAngle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14f * 0.02f;
 		startAngle += newAngle; // Keeps the movement continuous
 
-		float speed = 0.003f;
+		float speed = 0.005f;
 
 		// Compute orbit movement
 		float moveX = speed * cos(startAngle);
@@ -76,7 +77,7 @@ public:
 			dir_y /= length;
 		}
 
-		float attractionStrength = 0.005f; // Small pull towards mouse
+		float attractionStrength = 0.0005f; // Small pull towards mouse
 		moveX += dir_x * attractionStrength;
 		moveY += dir_y * attractionStrength;
 
@@ -104,22 +105,30 @@ public:
 	{
 		if (InputManager::getInstance().isActionTriggered(Action("Spawn", Key::Space, KeyState::Type::Hold)))
 		{
-			GameObjects::GameObject newGo;
-			auto& go = Application::getInstance()->getWorld().getGOManager().createGameObject(newGo);
-			GameObjects::SpriteComponent spriteComponent(
-				"./assets/textures/bee.png",
-				0.0f,
-				0.0f,
-				0.8f,
-				0.0f,
-				0.0f
-			);
-			go.addComponent<GameObjects::SpriteComponent>(spriteComponent);
-			go.addComponent<Unit>();
+			float mX = InputManager::getInstance().getMousePosX() / 800.0f;
+			float mY = InputManager::getInstance().getMousePosY() / 600.0f;
 
-			count++;
-			if (count % 50 == 0)
-				LOG_INFO("Count: {}", count);
+			// 0 - 1 -> x2 - 1 = 0 - 2 = -1 1
+
+			for (size_t i = 0; i < 20; i++)
+			{
+				GameObjects::GameObject newGo;
+				auto& go = Application::getInstance()->getWorld().getGOManager().createGameObject(newGo);
+				GameObjects::SpriteComponent spriteComponent(
+					"./assets/textures/bee.png",
+					0.0f,
+					0.0f,
+					0.0f,
+					2 * mX - 1,
+					2 * (1 - mY) - 1
+				);
+				go.addComponent<GameObjects::SpriteComponent>(spriteComponent);
+				go.addComponent<Unit>();
+
+				count++;
+				if (count % 50 == 0)
+					LOG_INFO("Count: {}", count);
+			}
 		}
 	};
 

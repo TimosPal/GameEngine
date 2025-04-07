@@ -10,20 +10,20 @@ class EBO
 {
 public:
 	EBO(int drawingType);
-	EBO(const std::vector<unsigned int>& indices, int drawingType);
+	EBO(std::vector<unsigned int>* indices, int drawingType);
 	~EBO();
 
 	void bind();
 	void unbind();
 
-	void updateData(const std::vector<unsigned int>& data);
-	int getIndicesCount() const { return int(m_indices.size()); }
+	void updateData(std::vector<unsigned int>* data);
+	int getIndicesCount() const { return int(m_indices->size()); }
 private:
 	static EBO* boundEBO;
 
 	unsigned int m_glEBO;
 
-	std::vector<unsigned int> m_indices;
+	std::vector<unsigned int>* m_indices;
 	int m_drawingType;
 };
 

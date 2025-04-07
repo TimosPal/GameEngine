@@ -16,14 +16,14 @@ constexpr GLenum getGLType()
 	else STATIC_ASSERT_FALSE("Invalid VBO type");
 }
 
-VBO::VBO(int drawingType)
-	: m_drawingType(drawingType), m_data(), m_glVBO(-1)
+VBO::VBO(Mesh::AttributeInfo info, int drawingType)
+	: m_info(info), m_drawingType(drawingType), m_data(nullptr), m_glVBO(-1)
 {
 	init();
 }
 
-VBO::VBO(const VertexData<float>& data, int drawingType)
-	: m_drawingType(drawingType), m_data(data), m_glVBO(-1)
+VBO::VBO(std::vector<float>* data, Mesh::AttributeInfo info, int drawingType)
+	: m_info(info), m_drawingType(drawingType), m_data(data), m_glVBO(-1)
 {
 	init();
 }
@@ -41,28 +41,31 @@ void VBO::setAttributes()
 	bind();
 
 	// Initialize each attribute.
-	for (const auto& attributeInfo : m_data.getInfo())
+	int offset = 0;
+	for (int i = 0; i < m_info.shaderLocations.size(); i++)
 	{
 		GL(glVertexAttribPointer(
-			attributeInfo.attributeLocation, // Attribute location
-			attributeInfo.elementsCount, // Attribute elements count
+			m_info.shaderLocations[i], // Attribute location
+			m_info.elementsCount[i], // Attribute elements count
 			getGLType<float>(), // Attribute type
 			GL_FALSE,
-			m_data.getVertexSize(), // #Bytes per vertex
-			(void*)(attributeInfo.startingOffset * sizeof(float)) // Attribute starting offset
+			m_info.totalElementsPerVertex * sizeof(float), // #Bytes per vertex
+			(void*)(offset * sizeof(float)) // Attribute starting offset
 		));
-		GL(glEnableVertexAttribArray(attributeInfo.attributeLocation));
+		GL(glEnableVertexAttribArray(m_info.shaderLocations[i]));
+
+		offset += m_info.elementsCount[i];
 	}
 
 	unbind();
 }
 
-void VBO::updateData(const VertexData<float>& data)
+void VBO::updateData(std::vector<float>* data)
 {
 	m_data = data;
 
 	bind();
-	GL(glBufferData(GL_ARRAY_BUFFER, m_data.getFlatVec().size() * sizeof(float), m_data.getFlatVec().data(), m_drawingType));
+	GL(glBufferData(GL_ARRAY_BUFFER, m_data->size() * sizeof(float), m_data->data(), m_drawingType));
 	unbind();
 }
 
@@ -89,9 +92,12 @@ void VBO::init()
 	m_isActive = true;
 	GL(glGenBuffers(1, &m_glVBO));
 
-	bind();
-	GL(glBufferData(GL_ARRAY_BUFFER, m_data.getFlatVec().size() * sizeof(float), m_data.getFlatVec().data(), m_drawingType));
-	unbind();
+	if (m_data)
+	{
+		bind();
+		GL(glBufferData(GL_ARRAY_BUFFER, m_data->size() * sizeof(float), m_data->data(), m_drawingType));
+		unbind();
+	}
 }
 
 }

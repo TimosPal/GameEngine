@@ -13,7 +13,7 @@ namespace Engine {
 namespace GameObjects {
 
 SpriteComponent::SpriteComponent(std::string texturePath, float r, float g, float b, float x, float y)
-	: IComponent<SpriteComponent>(), m_texturePath(texturePath)
+	: IComponent<SpriteComponent>(), m_texturePath(texturePath), m_quad(x, y, 0.02f, 0.02f, r, g, b)
 {
 	m_r = r;
 	m_g = g;
@@ -63,25 +63,15 @@ void SpriteComponent::start()
 
 void SpriteComponent::update()
 {
-	// Create 2d quad.
-	// [x,y][r,g,b][u,v]
-	std::vector<VertexData<float>::Vertex> verticesRaw = {
-	{{-0.05f + m_x, -0.05f + m_y}, {m_r, m_g, m_b}, {0.0f, 0.0f}}, // Bottom-left  
-	{{-0.05f + m_x,  0.05f + m_y}, {m_r, m_g, m_b}, {0.0f, 1.0f}}, // Top-left  
-	{{ 0.05f + m_x,  0.05f + m_y}, {m_r, m_g, m_b}, {1.0f, 1.0f}}, // Top-right  
-	{{ 0.05f + m_x, -0.05f + m_y}, {m_r, m_g, m_b}, {1.0f, 0.0f}}  // Bottom-right  
-	};
-
-	// Indexing data. (Reduces 6 vertices to 4)
-	std::vector<unsigned int> indicesRaw = {
-		0, 2, 1,  // First triangle (Clockwise)  
-		0, 3, 2   // Second triangle (Clockwise)  
-	};
+	m_quad.updateX(m_x);
+	m_quad.updateY(m_y);
+	m_quad.updateR(m_r);
+	m_quad.updateG(m_g);
+	m_quad.updateB(m_b);
 
 	// Submit to renderer.
 	RenderData data(
-		verticesRaw,
-		indicesRaw,
+		m_quad,
 		cachedProgHandler->getResource(),
 		cachedTextureHandler->getResource()
 	);

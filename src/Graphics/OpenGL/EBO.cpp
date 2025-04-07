@@ -9,18 +9,18 @@ namespace Engine {
 EBO* EBO::boundEBO = nullptr;
 
 EBO::EBO(int drawingType)
-    : m_drawingType(drawingType)
+	: m_drawingType(drawingType), m_indices(nullptr)
 {
     glGenBuffers(1, &m_glEBO);
 }
 
-EBO::EBO(const std::vector<unsigned int>& indices, int drawingType)
+EBO::EBO(std::vector<unsigned int>* indices, int drawingType)
     : m_indices(indices), m_drawingType(drawingType)
 {
     GL(glGenBuffers(1, &m_glEBO));
 
     bind();
-    GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), m_drawingType));
+    GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices->size() * sizeof(unsigned int), m_indices->data(), m_drawingType));
     unbind();
 }
 
@@ -53,12 +53,12 @@ void EBO::unbind()
     boundEBO = nullptr;
 }
 
-void EBO::updateData(const std::vector<unsigned int>& data)
+void EBO::updateData(std::vector<unsigned int>* data)
 {
     m_indices = data;
 
     bind();
-    GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), m_drawingType));
+    GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices->size() * sizeof(unsigned int), m_indices->data(), m_drawingType));
     unbind();
 }
 
