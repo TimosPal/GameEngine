@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <Graphics/Mesh.h>
+#include "Attributes.h"
 
 namespace Engine {
 

@@ -5,6 +5,7 @@
 #include <Core/Application.h>
 
 #include "Drawable.h"
+#include <Graphics/Quad2D.h>
 
 #include "GLWrapper.h"
 
@@ -111,39 +112,64 @@ void OpenGLRenderer::submit(RenderData&& data)
 
 void OpenGLRenderer::render()
 {
-	if (m_renderables.size() <= 0)
-		return;
-
-	// Batch all renderables (Assumes single shader for now)
-	std::vector<float> vertexBatch;
-	std::vector<unsigned int> indicesBatch;
-	int indexOffset = 0;
+	int vertOffset = 0;
 	for (auto& renderable : m_renderables)
 	{
-		// Append vertex into batch
-		vertexBatch.insert(vertexBatch.end(), renderable.mesh.getVertices().begin(), renderable.mesh.getVertices().end());
+		// TODO: cull renderables that are not visible
 
-		// Adjust indices to account for existing vertices in batch
-		for (unsigned int i : renderable.mesh.getIndices())
-		{
-			indicesBatch.push_back(i + indexOffset);
+		AttributeInfo::AttributeProgramMask mask = 0;
+		auto it = m_buffers.find(mask);
+		if (it == m_buffers.end()) {
+			it = m_buffers.emplace(
+				mask,
+				std::make_tuple(
+					VertexBatch{},
+					VBO{ renderable.mesh.getAttributeInfo(), GL_DYNAMIC_DRAW },
+					IndexBatch{},
+					EBO{ GL_DYNAMIC_DRAW }
+				)
+			).first;
 		}
-		indexOffset += renderable.mesh.getVertexCount();
+		auto& [vertexBatch, vbo, indexBatch, ebo] = it->second;
+
+		const auto& newVerts = renderable.mesh.getVertices();
+		const auto& newIndices = renderable.mesh.getIndices();
+
+		// Append vertex
+		size_t bufferVertOffset = vertexBatch.size();
+		vertexBatch.resize(bufferVertOffset + newVerts.size());
+		std::memcpy(vertexBatch.data() + bufferVertOffset, newVerts.data(), newVerts.size() * sizeof(float));
+
+		// Append indices
+		size_t bufferIndexOffset = indexBatch.size();
+		indexBatch.resize(bufferIndexOffset + newIndices.size());
+		std::memcpy(indexBatch.data() + bufferIndexOffset, newIndices.data(), newIndices.size() * sizeof(unsigned int));
+
+		// Adjust only the new indices
+		for (size_t i = bufferIndexOffset; i < indexBatch.size(); i++)
+		{
+			indexBatch[i] += vertOffset;
+		}
+		vertOffset += renderable.mesh.getVertexCount();
 	}
 	
-	m_renderables[0].texture.bind();
-	int drawingType = GL_DYNAMIC_DRAW;
-	static VBO vbo(m_renderables[0].mesh.getAttributeInfo(), drawingType);
-	static EBO ebo(drawingType);
+	// Render all batched buffers.
+	for (auto& [_, buffer] : m_buffers)
+	{
+		m_renderables[0].texture.bind();
 
-	vbo.updateData(&vertexBatch);
-	ebo.updateData(&indicesBatch);
+		auto& [vertexBatch, vbo, indexBatch, ebo] = buffer;
+		vbo.updateData(&vertexBatch);
+		ebo.updateData(&indexBatch);
 
-	Drawable obj(vbo, ebo, m_renderables[0].program);
+		Drawable obj(vbo, ebo, m_renderables[0].program);
+		obj.render();	
 
-	obj.render();	
+		m_renderables[0].texture.unbind();
 
-	m_renderables[0].texture.unbind();
+		vertexBatch.clear();
+		indexBatch.clear();
+	}
 
 	m_renderables.clear();
 }

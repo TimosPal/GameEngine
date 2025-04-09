@@ -3,16 +3,13 @@
 
 #include <vector>
 
+#include "Attributes.h"
+
 namespace Engine {
 
 struct Mesh {
-	struct AttributeInfo {
-		std::vector<int> shaderLocations;
-		std::vector<int> elementsCount;
-		int totalElementsPerVertex;
-	};
 
-	Mesh(std::vector<float>&& vertices, std::vector<unsigned int>&& indices, AttributeInfo info, int vertexCount) 
+	Mesh(std::vector<float>&& vertices, std::vector<unsigned int>&& indices, AttributeInfo&& info, int vertexCount)
 		: vertices(vertices), indices(indices), info(info), vertexCount(vertexCount)
 	{}
 
@@ -24,7 +21,9 @@ struct Mesh {
 protected:
 	std::vector<float> vertices;
 	std::vector<unsigned int> indices;
+
 	AttributeInfo info;
+
 	int vertexCount;
 };
 

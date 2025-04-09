@@ -16,13 +16,13 @@ constexpr GLenum getGLType()
 	else STATIC_ASSERT_FALSE("Invalid VBO type");
 }
 
-VBO::VBO(Mesh::AttributeInfo info, int drawingType)
+VBO::VBO(AttributeInfo info, int drawingType)
 	: m_info(info), m_drawingType(drawingType), m_data(nullptr), m_glVBO(-1)
 {
 	init();
 }
 
-VBO::VBO(std::vector<float>* data, Mesh::AttributeInfo info, int drawingType)
+VBO::VBO(std::vector<float>* data, AttributeInfo info, int drawingType)
 	: m_info(info), m_drawingType(drawingType), m_data(data), m_glVBO(-1)
 {
 	init();

@@ -4,11 +4,14 @@
 #include <Graphics/Mesh.h>
 #include <Graphics/GraphicsIncludes.h>
 
+#include "Attributes.h"
+
 namespace Engine {
 
 struct RenderData
 {
 	Mesh& mesh;
+	
 	ProgramImpl& program;
 	TextureImpl& texture;
 

@@ -14,27 +14,28 @@ Quad2D::Quad2D(float x, float y, float width, float height, float r, float g, fl
 			x + width, y - height, r, g, b, 1.0f, 0.0f  // Bottom-right  
 		}),
 
-		// Indexing data. (Reduces 6 vertices to 4)
+        // Indexing data. (Reduces 6 vertices to 4)
         std::vector<unsigned int>({
-		    0, 2, 1,  // First triangle (Clockwise)  
-		    0, 3, 2   // Second triangle (Clockwise)  
-		}),
+            0, 2, 1,  // First triangle (Clockwise)  
+            0, 3, 2   // Second triangle (Clockwise)  
+        }),
 
         // Define the attribute information for the quad
         {
-            {0, 1, 2}, // Shader Location0 Location1 Location2
-            {2, 3, 2}, // Vec2(X, Y), Vec3(R, G, B), Vec2(U, V)
-            7 // Total elements per vertex
+            { 0, 1, 2 }, // Shader Location0 Location1 Location2
+            { 2, 3, 2 }, // Vec2(X, Y), Vec3(R, G, B), Vec2(U, V)
+            7, // Total elements per vertex
+            AttributeInfo::ATTRIB_POS | AttributeInfo::ATTRIB_COLOR | AttributeInfo::ATTRIB_UV // Enabled attributes
         },
 
-        // Vertex count
+        // 4 vertices for the quad
         4 
 	)
 {}
 
 void Quad2D::updateX(float x)
 {
-    int vertSize = getAttributeInfo().totalElementsPerVertex;
+    int vertSize = info.totalElementsPerVertex;
     int offset = 0;  // Offset for x
 
     // Update the x positions of the vertices (considering width)
@@ -46,7 +47,7 @@ void Quad2D::updateX(float x)
 
 void Quad2D::updateY(float y)
 {
-    int vertSize = getAttributeInfo().totalElementsPerVertex;
+    int vertSize = info.totalElementsPerVertex;
     int offset = 1;  // Offset for y
 
     // Update the y positions of the vertices (considering height)
@@ -58,7 +59,7 @@ void Quad2D::updateY(float y)
 
 void Quad2D::updateR(float r)
 {
-    int vertSize = getAttributeInfo().totalElementsPerVertex;
+    int vertSize = info.totalElementsPerVertex;
     int offset = 2;  // Offset for r
 
     // Update the red color value for all 4 vertices
@@ -70,7 +71,7 @@ void Quad2D::updateR(float r)
 
 void Quad2D::updateG(float g)
 {
-    int vertSize = getAttributeInfo().totalElementsPerVertex;
+    int vertSize = info.totalElementsPerVertex;
     int offset = 3;  // Offset for g
 
     // Update the green color value for all 4 vertices
@@ -82,7 +83,7 @@ void Quad2D::updateG(float g)
 
 void Quad2D::updateB(float b)
 {
-    int vertSize = getAttributeInfo().totalElementsPerVertex;
+    int vertSize = info.totalElementsPerVertex;
     int offset = 4;  // Offset for b
 
     // Update the blue color value for all 4 vertices

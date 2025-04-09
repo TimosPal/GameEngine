@@ -4,14 +4,16 @@
 #include <Graphics/Mesh.h>
 #include <Utility/Assertions.h>
 
+#include <Graphics/Attributes.h>
+
 namespace Engine {
 
 // NOTE: This class could be abstracted in the future, if more APIs are to be used.
 class VBO
 {
 public:
-	VBO(Mesh::AttributeInfo info, int drawingType);
-	VBO(std::vector<float>* data, Mesh::AttributeInfo info, int drawingType);
+	VBO(AttributeInfo info, int drawingType);
+	VBO(std::vector<float>* data, AttributeInfo info, int drawingType);
 	~VBO();
 
 	void setAttributes();
@@ -30,7 +32,7 @@ private:
 	int m_drawingType;
 
 	std::vector<float>* m_data;
-	Mesh::AttributeInfo m_info;
+	AttributeInfo m_info;
 
 	void init();
 };
