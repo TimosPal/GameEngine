@@ -25,8 +25,11 @@ Quad2D::Quad2D(float x, float y, float width, float height, float r, float g, fl
             { 0, 1, 2 }, // Shader Location0 Location1 Location2
             { 2, 3, 2 }, // Vec2(X, Y), Vec3(R, G, B), Vec2(U, V)
             7, // Total elements per vertex
-            AttributeInfo::ATTRIB_POS | AttributeInfo::ATTRIB_COLOR | AttributeInfo::ATTRIB_UV // Enabled attributes
+            
         },
+
+        // Enabled attributes
+        VertexAttrib::ATTRIB_POS | VertexAttrib::ATTRIB_COLOR | VertexAttrib::ATTRIB_UV,
 
         // 4 vertices for the quad
         4 

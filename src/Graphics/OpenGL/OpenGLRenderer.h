@@ -23,8 +23,11 @@ private:
 
 	using VertexBatch = std::vector<float>;
 	using IndexBatch = std::vector<unsigned int>;
-	using Buffer = std::tuple<VertexBatch, VBO, IndexBatch, EBO>;
+	using Buffer = std::tuple<VertexBatch, VBO, IndexBatch, EBO, Program*>;
 	std::unordered_map<AttributeInfo::AttributeProgramMask, Buffer> m_buffers;
+
+	void batchRenderables();
+	void renderBatches();
 };
 
 } // Engine

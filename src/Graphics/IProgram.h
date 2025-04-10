@@ -5,6 +5,8 @@
 #include <Resources/Handlers/GenericHandler.h>
 #include <Resources/SystemResources/IResource.h>
 
+#include <Graphics/Attributes.h>
+
 namespace Engine {
 
 template<typename ShaderDerived>
@@ -19,11 +21,15 @@ public:
 
 	virtual void setUniform(const std::string& uniformName, float value) = 0;
 
+	AttributeInfo::ProgramMask getAttributesMask() { return m_attributesMask; }
+
 protected:
 	// NOTE: to be used for checking bound usage only, not dereferencing.
 	inline static IProgram* programInUse = nullptr;
 
 	bool m_isActive;
+
+	AttributeInfo::ProgramMask m_attributesMask;
 
 	GenericHandler<ShaderDerived>* m_vert;
 	GenericHandler<ShaderDerived>* m_frag;

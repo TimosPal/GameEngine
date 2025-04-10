@@ -110,14 +110,15 @@ void OpenGLRenderer::submit(RenderData&& data)
 	m_renderables.emplace_back(data);
 }
 
-void OpenGLRenderer::render()
+void OpenGLRenderer::batchRenderables()
 {
+	// Batches renderables in unique VBOs based on shader + vertext layouts.
+	// Index buffer is dynamically generated to adapt to batched data.
+
 	int vertOffset = 0;
 	for (auto& renderable : m_renderables)
 	{
-		// TODO: cull renderables that are not visible
-
-		AttributeInfo::AttributeProgramMask mask = 0;
+		AttributeInfo::AttributeProgramMask mask = renderable.mesh.getAttributesMask() | renderable.program.getAttributesMask();
 		auto it = m_buffers.find(mask);
 		if (it == m_buffers.end()) {
 			it = m_buffers.emplace(
@@ -126,11 +127,12 @@ void OpenGLRenderer::render()
 					VertexBatch{},
 					VBO{ renderable.mesh.getAttributeInfo(), GL_DYNAMIC_DRAW },
 					IndexBatch{},
-					EBO{ GL_DYNAMIC_DRAW }
+					EBO{ GL_DYNAMIC_DRAW },
+					&renderable.program
 				)
 			).first;
 		}
-		auto& [vertexBatch, vbo, indexBatch, ebo] = it->second;
+		auto& [vertexBatch, vbo, indexBatch, ebo, program] = it->second;
 
 		const auto& newVerts = renderable.mesh.getVertices();
 		const auto& newIndices = renderable.mesh.getIndices();
@@ -152,24 +154,39 @@ void OpenGLRenderer::render()
 		}
 		vertOffset += renderable.mesh.getVertexCount();
 	}
-	
+}
+
+void OpenGLRenderer::renderBatches()
+{
 	// Render all batched buffers.
 	for (auto& [_, buffer] : m_buffers)
 	{
 		m_renderables[0].texture.bind();
 
-		auto& [vertexBatch, vbo, indexBatch, ebo] = buffer;
+		auto& [vertexBatch, vbo, indexBatch, ebo, program] = buffer;
 		vbo.updateData(&vertexBatch);
 		ebo.updateData(&indexBatch);
 
-		Drawable obj(vbo, ebo, m_renderables[0].program);
-		obj.render();	
+		Drawable obj(vbo, ebo, *program);
+		obj.render();
 
 		m_renderables[0].texture.unbind();
 
 		vertexBatch.clear();
 		indexBatch.clear();
 	}
+}
+
+void OpenGLRenderer::render()
+{
+	// TODO:
+	// - Cull renderables
+	// - Cache drawable objects -> dont keep generating VAOs.
+	// - Shader proper ussage.
+	// - Texture proper usage.
+
+	batchRenderables();
+	renderBatches();
 
 	m_renderables.clear();
 }
