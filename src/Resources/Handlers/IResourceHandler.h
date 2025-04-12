@@ -12,7 +12,7 @@ public:
 
     // Could split IDs per resource type if needed.
     IResourceHandler(const std::string& name) 
-        : m_name(name), m_loaded(false), m_id(IdentifierGenerator<IResourceHandler>::getInstanceID<IResourceHandler>()) {}
+        : m_name(name), m_loadedCount(0), m_id(IdentifierGenerator<IResourceHandler>::getInstanceID<IResourceHandler>()) {}
 	IResourceHandler() 
         : IResourceHandler("NoName") {}
 
@@ -24,7 +24,7 @@ public:
 
 protected:
 
-    bool m_loaded;
+    int m_loadedCount;
     
     std::string m_name;
     Identifier m_id;

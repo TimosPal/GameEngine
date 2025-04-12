@@ -23,25 +23,25 @@ public:
     bool load() override 
     {
         // FIXME: if internal is init already, m_loaded should be init properly not to false!
-        if (!m_loaded)
+        if (m_loadedCount == 0)
         {
 			LOG_INFO("Loading resource: {}", m_name);
-            m_loaded = m_internal.init();
-            if (!m_loaded)
+            bool loaded = m_internal.init();
+            if (!loaded)
             {
                 LOG_ERROR("Resource not loaded: {}", m_name);
+                return false;
             }
         }
 
-        return m_loaded;
+        return ++m_loadedCount > 0;
     }
 
     void unload() override
     {
-        if (m_loaded)
+        if (m_loadedCount > 0 && --m_loadedCount == 0)
         {
             LOG_INFO("Unloading resource: {}", m_name);
-            m_loaded = false;
             m_internal.destroy();
         }
     }
